@@ -1,0 +1,24 @@
+{
+  "name": "emergence-rpg-helper",
+  "version": "0.1.0",
+  "description": "Helper for Emergence RPG Ruleset",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "M. L. Giannotta <sunyatasattva@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "fabric": "^1.6.6"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-util": "^3.0.7",
+    "lodash.assign": "^4.2.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
+}
