@@ -17,8 +17,8 @@ var cover = new Cover({
 world.addAsActiveObject(cover);
 
 var pg = new Walker({
-  left: 200,
-  top: 200,
+  left: 225,
+  top: 225,
   radius: world.tileSize / 2,
   fill: '#f1cc16',
   attributes: {
