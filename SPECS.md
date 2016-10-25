@@ -17,7 +17,11 @@
 [ ] Add objects
 [ ] Calculate aim
 [ ] Calculate range from square or from line intersection
+	@ x: Math.floor(this.left / tileSize) * tileSize + tileSize
 [ ] Allow panning
 [ ] Allow zooming
 [ ] Support for Z-axis (blocks get lighter with +z, darker with -z)
 [ ] Array representation of all tiles
+[ ] Lock rotation to 45° steps
+[ ] Show all names (and perhaps coordinates) on ALT
+[ ] When unit selected, show all percentages on ALT
