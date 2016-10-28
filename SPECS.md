@@ -17,7 +17,7 @@
 [ ] Add objects
 [ ] Calculate aim
 [ ] Calculate range from square or from line intersection
-	@ x: Math.floor(this.left / tileSize) * tileSize + tileSize
+	@ `x: Math.floor(this.left / tileSize) * tileSize + tileSize`
 [ ] Allow panning
 [ ] Allow zooming
 [ ] Support for Z-axis (blocks get lighter with +z, darker with -z)

@@ -1,9 +1,15 @@
-const fabric = require('fabric').fabric;
-const World  = require('./entities/world');
+import Vue from 'vue'
+import Game from './Game.vue'
+
 const Cover  = require('./entities/cover');
 const Walker = require('./entities/walker');
 
-var world = new World('c');
+const game = new Vue({
+  el: '#Game',
+  render: (h) => h(Game)
+});
+
+const world = game.$children[0].$refs.World.canvas;
 
 // add objects
 var cover = new Cover({
@@ -28,5 +34,3 @@ var pg = new Walker({
 });
 
 world.addAsActiveObject(pg);
-
-console.log(world.activeObjects);

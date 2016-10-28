@@ -73,7 +73,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
   
   addAsActiveObject() {
     this.add.apply(this, arguments);
-    this.activeObjects.push.apply(this.activeObjects, arguments);
+    this.fire('object:addedAsActive', arguments);
     
     return this;
   },
