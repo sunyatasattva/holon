@@ -7,7 +7,7 @@ import World from '../entities/world';
 
 const component = {
   name: 'game-world',
-  props: ['activeObjects'],
+  props: ['activeObjects', 'options'],
   watch: {
     // @todo implement custom watch for active objects so it can
     // be updated on canvas; useful when integrating network
@@ -17,6 +17,8 @@ const component = {
   },
   mounted() {
     const world = new World('c', { activeObjects: this.activeObjects });
+    
+    this.canvas = world;
     
     world.on('object:addedAsActive', (objects) => {
       this.$emit('add', objects);
@@ -37,7 +39,28 @@ const component = {
       this.$emit('select', false);
     });
     
-    this.canvas = world;
+    world.on('mouse:down', (opts) => {
+      let addingObject = this.options.isAddingObject,
+          e = opts.e,
+          coords;
+
+      if(!addingObject)
+        return;
+      else {
+        coords = this.canvas.getCoordinatesOfTile(
+          this.canvas.getTileFromCoordinates(e.clientX, e.clientY)
+        );
+        
+        addingObject.set({
+          left: coords.topLeft[0],
+          top: coords.topLeft[1]
+        });
+        
+        this.canvas.addAsActiveObject(addingObject);
+        
+        this.$emit('toggle', 'isAddingObject');
+      }
+    });
   }
 };
 

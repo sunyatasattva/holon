@@ -4,14 +4,38 @@
       <game-world
         ref='World'
         :activeObjects='activeObjects'
+        :options='options'
         v-on:add='addEntities'
-        v-on:select='select'>
+        v-on:select='select'
+        v-on:toggle='toggleOption'>
       </game-world>
     </keep-alive>
-    <info-sidebar
-      :activeObjects='activeObjects'
-      :selectedObject='selectedObject'>
-    </info-sidebar>
+    <md-sidenav class="md-right" ref="sidebar">
+      <md-tabs md-fixed>
+        <md-tab md-label="Create" md-icon="add_box">
+          <create-object 
+            :isAddingObject='options.isAddingObject'
+            v-on:add='toggleOption'
+            v-on:cancel='toggleOption("isAddingObject")'
+          />
+        </md-tab>
+
+        <md-tab md-label="Details" md-icon="gps_fixed">
+          <template v-if='selectedObject'>
+            <h2>Selected object</h2>
+            <p>
+              {{selectedObject.attributes.name}}
+            </p>
+          </template>
+          <span v-else>No object selected.</span>
+        </md-tab>
+        
+        <md-tab md-label="Options" md-icon="settings">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas amet cum vitae, omnis! Illum quas voluptatem, expedita iste, dicta ipsum ea veniam dolore in, quod saepe reiciendis nihil.</p>
+        </md-tab>
+      </md-tabs>
+    </md-sidenav>
+    
     <md-button 
        @click="toggleEditMode"
        class="md-fab md-mini md-fab-bottom-left md-primary">
@@ -24,17 +48,22 @@
 <script>
 import World from './components/World.vue';
 import Sidebar from './components/Sidebar.vue';
-  
+import CreateObject from './components/CreateObject.vue';
+
 export default {
   name: 'game',
   components: {
     'game-world': World,
-    'info-sidebar': Sidebar
+    'info-sidebar': Sidebar,
+    CreateObject
   },
   data() {
     return {
       activeObjects: [],
-      selectedObject: false
+      selectedObject: false,
+      options: {
+        isAddingObject: false
+      }
     }
   },
   methods: {
@@ -58,3 +87,15 @@ export default {
   }
 }
 </script>
+
+<style>
+  #Game {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .md-sidenav.md-active .md-backdrop {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
