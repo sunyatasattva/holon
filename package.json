@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "fabric": "^1.6.6",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "vue-material": "^0.2.0"
   },
   "devDependencies": {
     "aliasify": "^2.0.0",
@@ -46,6 +47,7 @@
     "gulp-util": "^3.0.7",
     "http-server": "^0.9.0",
     "lodash.assign": "^4.2.0",
+    "node-sass": "^3.10.1",
     "npm-run-all": "^2.3.0",
     "proxyquireify": "^3.0.1",
     "uglify-js": "^2.5.0",

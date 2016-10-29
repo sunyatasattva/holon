@@ -1,5 +1,14 @@
-import Vue from 'vue'
-import Game from './Game.vue'
+import Vue from 'vue';
+import Game from './Game.vue';
+
+// @todo swap with Keen-UI when ready for Vue 2.0
+import VueMaterial from 'vue-material'
+Vue.use(VueMaterial);
+
+Vue.material.theme.register('default', {
+  primary: 'blue',
+  accent: 'amber'
+})
 
 const Cover  = require('./entities/cover');
 const Walker = require('./entities/walker');

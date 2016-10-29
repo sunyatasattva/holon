@@ -1,5 +1,5 @@
 <template>
-  <div id='Game' ref='main'>
+  <div id='Game' ref='main' v-md-theme="'default'">
     <keep-alive>
       <game-world
         ref='World'
@@ -12,6 +12,12 @@
       :activeObjects='activeObjects'
       :selectedObject='selectedObject'>
     </info-sidebar>
+    <md-button 
+       @click="toggleEditMode"
+       class="md-fab md-mini md-fab-bottom-left md-primary">
+      <md-icon>edit</md-icon>
+      <md-tooltip md-direction="top">Toggle edit mode</md-tooltip>
+    </md-button>
   </div>
 </template>
 
@@ -37,6 +43,17 @@ export default {
     },
     select(object) {
       this.selectedObject = object;
+    },
+    toggleEditMode() {
+      this.$refs.sidebar.toggle();
+    },
+    toggleOption(option, val) {
+      if(val)
+        this.options[option] = val;
+      else
+        this.options[option] = !this.options[option];
+      
+      return this.options[option];
     }
   }
 }
