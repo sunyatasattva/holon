@@ -18,7 +18,14 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   originX: 'center',
   originY: 'center',
   
+  // @todo this entity is technically pathable (i.e. other objects)
+  // can take a path through it), but currently pathing is not really
+  // implemented and this object should block stopping movement on
+  // itself, which is what this is about for now
+  pathable: false,
+  
   showRangeOnSelected: 'movement',
+  snapToMovementRange: true,
   
   /**
    * Constructor
@@ -54,17 +61,28 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   calculateMovementRange() {
+    let movementRange,
+        dashingRange,
+        totalRange;
+    
+    movementRange = this.canvas.calculateRange(
+      this.gridPosition,
+      this.attributes.movement,
+      1
+    );
+    
+    dashingRange = this.canvas.calculateRange(
+      this.gridPosition,
+      this.attributes.movement * 2,
+      this.attributes.movement + 1
+    );
+    
+    totalRange = movementRange.concat(dashingRange);
+    
     return {
-      movementRange: this.canvas.calculateRange(
-        this.gridPosition,
-        this.attributes.movement,
-        1
-      ),
-      dashingRange: this.canvas.calculateRange(
-        this.gridPosition,
-        this.attributes.movement * 2,
-        this.attributes.movement + 1
-      )
+      movementRange: movementRange,
+      dashingRange: dashingRange,
+      totalRange: totalRange.concat(this.gridPosition)
     };
   },
   
@@ -78,6 +96,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
 
       this.canvas.renderAll();
     }
+  },
+  
+  isWithinMovementRange(targetTile) {
+    return this.maxMovementRange.totalRange.some((tile) => {
+      return tile.x === targetTile.x && tile.y === targetTile.y;
+    });
   },
   
   showMovementRange(showDashing = true) {
@@ -101,8 +125,15 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   _onObjectAdded() {
+    this.maxMovementRange = this.calculateMovementRange();
+
     this.on('moving', () => {
       this._snapToPathableGrid();
+    });
+    
+    // @todo refactor to _updateMaxMovementRange
+    this.on('modified', () => {
+      this.maxMovementRange = this.calculateMovementRange();
     });
   },
   
@@ -117,9 +148,16 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           targetCoords.y
         );
 
-      if ( this.canvas.isPathable(targetTile) ) {
-        this.allowedLeft = targetCoords.x;
-        this.allowedTop = targetCoords.y;
+    if(
+        ( this.snapToMovementRange
+        && this.isWithinMovementRange(targetTile) )
+        || !this.snapToMovementRange
+      ){
+        if( this.canvas.isOccupied(targetTile) === this
+            || this.canvas.isPathable(targetTile) ) {
+          this.allowedLeft = targetCoords.x;
+          this.allowedTop = targetCoords.y;
+        }
       }
 
       this.set({
