@@ -73,6 +73,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
     parent: this
   },
   
+  // @todo maybe group these with each other and cover
+  // tried to do it but ruler lags
   _createCoverLines(options) {
     let coverPlaneTop,
         coverPlaneRight,

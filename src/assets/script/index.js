@@ -34,3 +34,16 @@ var pg = new Walker({
 });
 
 world.addAsActiveObject(pg);
+
+var pg2 = new Walker({
+  left: 275,
+  top: 275,
+  radius: world.tileSize / 2,
+  fill: '#f1cc16',
+  attributes: {
+    movement: 2,
+    name: 'Colorado'
+  }
+});
+
+world.addAsActiveObject(pg2);

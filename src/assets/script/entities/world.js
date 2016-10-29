@@ -176,7 +176,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
 
       return acc.concat(highlightedTile);
     }, []);
-
+    
     group = new fabric.Group(highlightedTiles, {
       selectable: false,
       hasControls: false,
@@ -184,16 +184,20 @@ const World = fabric.util.createClass(fabric.Canvas, {
     });
 
     this.add(group);
-    group.sendBackwards();
+    group.moveTo(1);
 
     return group;
   },
   
-  isPathable(tile) {
-    let objectOccupyingTheTile = this.activeObjects.find( (obj) => {
+  isOccupied(tile) {
+    return this.activeObjects.find( (obj) => {
         return obj.gridPosition.x === tile.x 
                && obj.gridPosition.y === tile.y
     });
+  },
+  
+  isPathable(tile) {
+    let objectOccupyingTheTile = this.isOccupied(tile);
 
     return (!objectOccupyingTheTile
             || objectOccupyingTheTile.pathable) ? true : false;
@@ -204,11 +208,15 @@ const World = fabric.util.createClass(fabric.Canvas, {
       selectable: false,
       stroke: stroke,
       type: 'grid'
-    };
+    },
+        cols = [],
+        rows = [],
+        lines,
+        gridGroup;
     
     // Add columns
     for (let i = 0; i < (this.width / this.tileSize); i++) {
-      this.add(new Line(
+      cols.push(new Line(
         [i * this.tileSize, 0, i * this.tileSize, this.height],
         opts
       ));
@@ -216,11 +224,24 @@ const World = fabric.util.createClass(fabric.Canvas, {
       
     // Add rows
     for (let i = 0; i < (this.height / this.tileSize); i++) {
-      this.add(new Line(
+      rows.push(new Line(
         [0, i * this.tileSize, this.width, i * this.tileSize],
         opts
       ));
     }
+    
+    lines = cols.concat(rows);
+    
+    gridGroup = new fabric.Group(lines, {
+      selectable: false,
+      hasControls: false,
+      type: 'grid'
+    });
+    
+    this.add(gridGroup);
+    gridGroup.moveTo(0);
+    
+    return gridGroup;
   },
   
   _resizeToFullScreen() {
