@@ -1,6 +1,8 @@
 const fabric = require('fabric').fabric;
 const Entity = require('./entity');
 
+import Rules from '../modules/rules';
+
 /**
  * Walker class
  * @class Walker
@@ -23,6 +25,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   // implemented and this object should block stopping movement on
   // itself, which is what this is about for now
   pathable: false,
+  targetable: true,
   
   showRangeOnSelected: 'movement',
   snapToMovementRange: true,
@@ -58,6 +61,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.on('modified', () => {
       this._updateCoverStatus();
     });
+  },
+  
+  // @todo refactor this in a mixin
+  calculateChanceToHit(target) {
+    return Rules.calculateChanceToHit(this, target);
   },
   
   calculateMovementRange() {
@@ -170,12 +178,18 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     let covers = this.canvas.activeObjects.filter(
       (obj) => obj.type === 'cover'
     ),
-        covering = covers.filter((cover) => this.isAdjacentToObject(cover));
+        covering = covers.filter((cover) => {
+          return this.isAdjacentToObject(cover);
+        }).map((cover) => {
+          return this.calculateRelativeDirectionTo(cover);
+        });
     
     if (covering.length)
       this.set('fill', this.coveredColor);
     else
       this.set('fill', this.exposedColor);
+    
+    this.set('coveredSides', covering);
   }
 });
 

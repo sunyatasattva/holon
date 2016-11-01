@@ -46,9 +46,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
 
   /**
    * Constructor
-   * @param {Array} [points] Array of points
    * @param {Object} [options] Options object
-   * @return {fabric.Line} thisArg
+   * @return {Cover} thisArg
    */
   initialize: function(options = {}) {
     this.callSuper('initialize', options);

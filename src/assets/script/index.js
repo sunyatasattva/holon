@@ -38,7 +38,9 @@ var pg = new Walker({
   fill: '#f1cc16',
   attributes: {
     movement: 3,
-    name: 'Paperino'
+    name: 'Paperino',
+    aim: 75,
+    reflexes: 10
   }
 });
 
@@ -51,7 +53,9 @@ var pg2 = new Walker({
   fill: '#f1cc16',
   attributes: {
     movement: 2,
-    name: 'Colorado'
+    name: 'Colorado',
+    aim: 68,
+    reflexes: 21
   }
 });
 

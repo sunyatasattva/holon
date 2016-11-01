@@ -61,6 +61,25 @@ const component = {
         this.$emit('toggle', 'isAddingObject');
       }
     });
+    
+    world.on('mouse:over', (e) => {
+      let selectedObject = this.canvas.getActiveObject(),
+          target = e.target;
+      
+      if(selectedObject
+         && selectedObject.calculateChanceToHit
+         && target.targetable 
+         && selectedObject !== target){
+        target.displayLabel(
+          `${selectedObject.calculateChanceToHit(e.target)}%`
+        );
+      }
+    });
+    
+    world.on('mouse:out', (e) => {
+      if(e.target.currentLabel)
+        e.target.removeCurrentLabel();
+    });
   }
 };
 
