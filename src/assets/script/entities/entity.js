@@ -1,4 +1,5 @@
 const fabric = require('fabric').fabric;
+const Label = require('./label');
 
 /**
  * Cover class
@@ -37,9 +38,27 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
   },
   
+  calculateRelativeDirectionTo(to) {
+    return this.canvas.calculateRelativeDirection(this, to);
+  },
+  
+  displayLabel(str) {
+    this.currentLabel = new Label(str, {
+      icon: { icon: 'gps_fixed' },
+      left: this.left,
+      top: this.top
+    });
+    
+    return this.canvas.add(this.currentLabel);
+  },
+  
   isAdjacentToObject(obj) {
     return this.canvas.calculateOctileDistance(
       this.gridPosition, obj.gridPosition) === 1;
+  },
+  
+  removeCurrentLabel() {
+    return this.canvas.remove(this.currentLabel);
   },
   
   updateGridCoordinates() {

@@ -112,8 +112,8 @@ const World = fabric.util.createClass(fabric.Canvas, {
   calculateRelativeDirection(from, to) {
     let direction;
 
-    direction =  from.top === to.top ? '' : from.top > to.top ? 'N' : 'S';
-    direction += from.left === to.left ? '' : from.left > to.left ? 'W' : 'E';
+    direction =  from.gridPosition.y === to.gridPosition.y ? '' : from.gridPosition.y > to.gridPosition.y ? 'N' : 'S';
+    direction += from.gridPosition.x === to.gridPosition.x ? '' : from.gridPosition.x > to.gridPosition.x ? 'W' : 'E';
     
     return direction;
   },

@@ -1,7 +1,7 @@
 const fabric = require('fabric').fabric;
 
 /**
- * Cover class
+ * Line class
  * @class Line
  * @extends fabric.Line
  */
