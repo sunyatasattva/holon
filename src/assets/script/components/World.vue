@@ -42,13 +42,14 @@ const component = {
     world.on('mouse:down', (opts) => {
       let addingObject = this.options.isAddingObject,
           e = opts.e,
+          p = this.canvas.getPointer(e),
           coords;
 
       if(!addingObject)
         return;
       else {
         coords = this.canvas.getCoordinatesOfTile(
-          this.canvas.getTileFromCoordinates(e.clientX, e.clientY)
+          this.canvas.getTileFromCoordinates(p.x, p.y)
         );
         
         addingObject.set({
