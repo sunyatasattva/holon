@@ -77,8 +77,35 @@ const component = {
     });
     
     world.on('mouse:out', (e) => {
-      if(e.target.currentLabel)
+      if(e.target && e.target.currentLabel)
         e.target.removeCurrentLabel();
+    });
+    
+    world.on('mouse:wheel', (opts) => {
+      let e = opts.e,
+          newZoom = this.canvas.getZoom() + e.deltaY / 300;
+      
+      e.preventDefault();
+      
+      if(newZoom > 2 || newZoom < 0.5)
+        return;
+      
+      this.canvas.zoomToPoint(
+        { x: e.offsetX, y: e.offsetY }, 
+        newZoom
+      );
+
+      return false;
+    });
+    
+    world.on('mouse:move', (opts) => {
+      let e = opts.e;
+      
+      if(e.button === 2) {
+        this.canvas.relativePan(
+          { x: e.movementX, y: e.movementY }
+        );
+      }
     });
   }
 };

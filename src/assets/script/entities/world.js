@@ -56,7 +56,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
    * @default
    */
   pathable: false,
-
+  
   /**
    * Constructor
    * @param {Array} [points] Array of points
@@ -140,8 +140,8 @@ const World = fabric.util.createClass(fabric.Canvas, {
   
   getTileFromCoordinates(x, y) {
     return {
-      x: Math.floor(x / this.tileSize),
-      y: Math.floor(y / this.tileSize)
+      x: Math.floor( x / this.tileSize ),
+      y: Math.floor( y / this.tileSize )
     }
   },
   
@@ -254,12 +254,12 @@ const World = fabric.util.createClass(fabric.Canvas, {
   _setupRuler() {
     this.on('mouse:down', (opts) => {
       let rulerKey = Ruler.prototype.rulerKey,
-          e = opts.e;
-      
-      if(!e[rulerKey])
+          p = this.getPointer();
+
+      if(!opts.e[rulerKey])
         return;
       
-      this.add(new Ruler([e.x,e.y,e.x,e.y]));
+      this.add( new Ruler([p.x,p.y,p.x,p.y], { e: opts.e }) );
     });
     
     this.on('mouse:move', (opts) => {

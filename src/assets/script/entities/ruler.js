@@ -30,11 +30,11 @@ const Ruler = fabric.util.createClass(Line, {
    * @param {Object} [options] Options object
    * @return {Line} thisArg
    */
-  initialize: function(options = {}) {
-    this.callSuper('initialize', options);
+  initialize: function(points, options = {}) {
+    this.callSuper('initialize', points, options);
 
-    this.on('added', (opts) => {
-      this._onObjectAdded(opts);
+    this.on('added', () => {
+      this._onObjectAdded();
     });
     
     this.on('modified', () => {
@@ -98,7 +98,7 @@ const Ruler = fabric.util.createClass(Line, {
   _onObjectAdded() {
     let boundingRect = this.canvas.wrapperEl.getBoundingClientRect();
 
-    this._deselectAndLockActiveObject({ clientX: this.x1, clientY: this.y1 });
+    this._deselectAndLockActiveObject(this.e);
 
     this.set({
       x1: this.x1 - boundingRect.left,
