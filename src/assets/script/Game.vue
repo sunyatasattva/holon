@@ -6,6 +6,7 @@
         :activeObjects='activeObjects'
         :options='options'
         v-on:add='addEntities'
+        v-on:remove='removeEntity'
         v-on:select='select'
         v-on:toggle='toggleOption'>
       </game-world>
@@ -119,6 +120,18 @@ export default {
         
         this.activeObjects.length = 0;
       }
+    },
+    removeEntity(obj) {
+      let idx = this.activeObjects.indexOf(obj);
+      
+      this.$refs.World.canvas
+        .removeFromActiveObjects(obj);
+      
+      this.activeObjects.splice(idx, 1);
+
+      console.log('Object removed:', obj);
+      
+      return this.saveGame();
     },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,

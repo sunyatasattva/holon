@@ -20,6 +20,17 @@ const component = {
     
     this.canvas = world;
     
+    world.wrapperEl.tabIndex = 1;
+    
+    world.wrapperEl.addEventListener('keydown', (e) => {
+      let selectedObject;
+
+      if(e.which === 8) {
+        selectedObject = world.getActiveObject();
+        this.$emit('remove', selectedObject);
+      }
+    });
+    
     world.on('object:addedAsActive', (opts) => {
       this.$emit('add', opts.objects, opts.save);
     });
