@@ -25,6 +25,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
    * @default
    */
   coverType: 'full',
+  
+  includeDefaultValues: false,
 
   /**
    * When set to `false`, an object can not be selected for 
@@ -52,9 +54,29 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
   initialize: function(options = {}) {
     this.callSuper('initialize', options);
 
+    this.set('fill', 
+             this.coverType === 'full' ? 
+             this._coverOpts.fullFill :
+             this._coverOpts.partialFill
+            );
     this.on('added', () => {
       this._createCoverLines();
     });
+  },
+  
+  toObject: function(props = []) {
+    props = props.concat([
+      'coverType',
+      'pathable',
+      'selectable'
+    ]);
+    
+    return this.callSuper('toObject', props);
+  },
+  
+  _coverOpts: {
+    partialFill: '#fea',
+    fullFill: '#faa'
   },
   
   _coverPlaneOpts: {

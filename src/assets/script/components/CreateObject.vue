@@ -12,6 +12,20 @@
       @click='cancel'>
         Cancel
     </md-button>
+      <md-radio
+        v-model="newCoverType"
+        id="new-cover-full"
+        name="new-cover-type"
+        md-value="full">
+        Full
+      </md-radio>
+      <md-radio
+        v-model="newCoverType"
+        id="new-cover-partial"
+        name="new-cover-type"
+        md-value="partial">
+        Partial
+      </md-radio>
   </div>
 </template>
 
@@ -30,7 +44,8 @@ export default {
         obj = new Cover({
           width: world.tileSize,
           height: world.tileSize,
-          fill: '#faa'
+          coverType: this.newCoverType
+        });
         });
       }
       
