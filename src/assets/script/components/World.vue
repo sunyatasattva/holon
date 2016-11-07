@@ -9,10 +9,10 @@ const component = {
   name: 'game-world',
   props: ['activeObjects', 'options'],
   watch: {
-    // @todo implement custom watch for active objects so it can
-    // be updated on canvas; useful when integrating network
     activeObjects(activeObjects) {
       this.canvas.activeObjects = activeObjects;
+      this.canvas.updateActiveObjectsStatus();
+      this.canvas.renderAll();
     }
   },
   mounted() {

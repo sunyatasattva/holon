@@ -145,6 +145,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   _onObjectAdded() {
+    this._updateCoverStatus();
     this.maxMovementRange = this.calculateMovementRange();
 
     this.on('moving', () => {

@@ -231,6 +231,10 @@ const World = fabric.util.createClass(fabric.Canvas, {
             || objectOccupyingTheTile.pathable) ? true : false;
   },
   
+  updateActiveObjectsStatus() {
+    this.activeObjects.forEach( (o) => o._onObjectAdded() );
+  },
+  
   _createGrid({ stroke = '#ccc' } = {}) {
     let opts = {
       selectable: false,
