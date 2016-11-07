@@ -8,14 +8,17 @@ Vue.use(VueMaterial);
 Vue.material.theme.register('default', {
   primary: 'blue',
   accent: 'amber'
-})
+});
+
+import VueFire from 'vuefire';
+Vue.use(VueFire);
 
 const Cover  = require('./entities/cover');
 const Walker = require('./entities/walker');
 
 const game = new Vue({
   el: '#Game',
-  render: (h) => h(Game)
+  render: (h) => h(Game),
 });
 
 const world = game.$children[0].$refs.World.canvas;
@@ -29,7 +32,13 @@ var cover = new Cover({
   fill: '#faa',
 });
 
-world.addAsActiveObject(cover);
+var cover2 = new Cover({
+  left: 300,
+  top: 100,
+  width: world.tileSize,
+  height: world.tileSize,
+  fill: '#faa',
+});
 
 var pg = new Walker({
   left: 225,
@@ -44,8 +53,6 @@ var pg = new Walker({
   }
 });
 
-world.addAsActiveObject(pg);
-
 var pg2 = new Walker({
   left: 275,
   top: 275,
@@ -59,4 +66,4 @@ var pg2 = new Walker({
   }
 });
 
-world.addAsActiveObject(pg2);
+world.addAsActiveObject(cover, cover2, pg, pg2);

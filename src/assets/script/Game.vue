@@ -46,9 +46,13 @@
 </template>
 
 <script>
+import { fabric } from 'fabric';
 import World from './components/World.vue';
 import Sidebar from './components/Sidebar.vue';
 import CreateObject from './components/CreateObject.vue';
+import Network from './modules/networking';
+  
+const db = Network.database();
 
 export default {
   name: 'game',
@@ -63,7 +67,16 @@ export default {
       selectedObject: false,
       options: {
         isAddingObject: false
+      },
+      // @todo maybe generate a better unique ID, 
+      // doesn't matter so much
+      _clientID: (new Date).getTime()
       }
+  },
+  firebase: {
+    savedState: {
+      source: db.ref('savedState'),
+      asObject: true
     }
   },
   methods: {
