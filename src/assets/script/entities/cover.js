@@ -144,4 +144,10 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
   }
 });
 
+Cover.fromObject = function(object) {
+  return new Cover(object);
+}
+
+fabric.Cover = Cover;
+
 module.exports = Cover;

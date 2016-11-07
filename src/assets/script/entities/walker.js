@@ -18,6 +18,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   coveredColor: '#43de5d',
   coveredSides: {},
   exposedColor: '#f1cc16',
+  includeDefaultValues: false,
   originX: 'center',
   originY: 'center',
   
@@ -203,5 +204,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.set('coveredSides', covering);
   }
 });
+
+Walker.fromObject = function(object) {
+  return new Walker(object);
+}
+
+fabric.Walker = Walker;
 
 module.exports = Walker;

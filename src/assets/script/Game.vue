@@ -71,7 +71,7 @@ export default {
       // @todo maybe generate a better unique ID, 
       // doesn't matter so much
       _clientID: (new Date).getTime()
-      }
+    }
   },
   firebase: {
     savedState: {
@@ -85,6 +85,40 @@ export default {
       
       if(save)
         this.saveGame();
+    },
+    loadGame(state) {
+      const world = this.$refs.World.canvas;
+      this.removeAllActiveObjects();
+      
+      try {
+        fabric.util.enlivenObjects(
+          state.gameObjects, 
+          (objs) => {
+            world.addAsActiveObject.apply(
+              world,
+              [false, ...objs]
+            );
+          }
+        );
+      }
+      catch(e) {
+        console.error("There was an error loading the game", 
+                      e, state);
+      }
+      
+      console.log("Saved state loaded:", state);
+      
+      return this;
+    },
+    removeAllActiveObjects() {
+      if(this.activeObjects.length) {
+        this.activeObjects.forEach((o) => {
+          o.remove();
+          this.$refs.World.canvas.remove(o);
+        });
+        
+        this.activeObjects.length = 0;
+      }
     },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,
@@ -112,6 +146,14 @@ export default {
         this.options[option] = !this.options[option];
       
       return this.options[option];
+    }
+  },
+  watch: {
+    savedState(state) {
+      if(state.clientID === this.$data._clientID)
+        return;
+      else
+        this.loadGame(state);
     }
   }
 }

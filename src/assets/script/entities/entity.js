@@ -97,4 +97,13 @@ const Entity = fabric.util.createClass(fabric.Object, {
   _onObjectAdded() {}
 });
 
+Entity.fromObject = function(object) {
+  return new Entity(object);
+}
+
+// Adding to fabric namespace to allow for enliven without
+// specifying namespaces. Might want to have a custom namespace,
+// but in that case will need to change the load function
+fabric.Entity = Entity;
+
 module.exports = Entity;
