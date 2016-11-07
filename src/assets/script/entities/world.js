@@ -87,9 +87,21 @@ const World = fabric.util.createClass(fabric.Canvas, {
     this._setupRuler();
   },
   
-  addAsActiveObject() {
-    this.add.apply(this, arguments);
-    this.fire('object:addedAsActive', arguments);
+  addAsActiveObject(...objects) {
+    let save;
+    
+    if(typeof objects[0] === 'boolean') {
+      save = objects[0];
+      objects.shift();
+    }
+
+    this.add.apply(this, objects);
+    this.fire('object:addedAsActive', {
+      objects: objects,
+      save: save
+    });
+    
+    console.log("Added as active objects:", objects);
     
     return this;
   },
@@ -217,6 +229,10 @@ const World = fabric.util.createClass(fabric.Canvas, {
 
     return (!objectOccupyingTheTile
             || objectOccupyingTheTile.pathable) ? true : false;
+  },
+  
+  updateActiveObjectsStatus() {
+    this.activeObjects.forEach( (o) => o._onObjectAdded() );
   },
   
   _createGrid({ stroke = '#ccc' } = {}) {

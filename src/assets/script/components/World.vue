@@ -9,10 +9,10 @@ const component = {
   name: 'game-world',
   props: ['activeObjects', 'options'],
   watch: {
-    // @todo implement custom watch for active objects so it can
-    // be updated on canvas; useful when integrating network
     activeObjects(activeObjects) {
       this.canvas.activeObjects = activeObjects;
+      this.canvas.updateActiveObjectsStatus();
+      this.canvas.renderAll();
     }
   },
   mounted() {
@@ -20,8 +20,13 @@ const component = {
     
     this.canvas = world;
     
-    world.on('object:addedAsActive', (objects) => {
-      this.$emit('add', objects);
+    world.on('object:addedAsActive', (opts) => {
+      this.$emit('add', opts.objects, opts.save);
+    });
+    
+    world.on('object:modified', () => {
+      // @todo add auto-save setting
+      this.$parent.saveGame();
     });
     
     world.on('object:selected', (e) => {

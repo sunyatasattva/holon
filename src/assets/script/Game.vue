@@ -46,9 +46,13 @@
 </template>
 
 <script>
+import { fabric } from 'fabric';
 import World from './components/World.vue';
 import Sidebar from './components/Sidebar.vue';
 import CreateObject from './components/CreateObject.vue';
+import Network from './modules/networking';
+  
+const db = Network.database();
 
 export default {
   name: 'game',
@@ -63,12 +67,71 @@ export default {
       selectedObject: false,
       options: {
         isAddingObject: false
-      }
+      },
+      // @todo maybe generate a better unique ID, 
+      // doesn't matter so much
+      _clientID: (new Date).getTime()
+    }
+  },
+  firebase: {
+    savedState: {
+      source: db.ref('savedState'),
+      asObject: true
     }
   },
   methods: {
-    addEntities(entities) {
+    addEntities(entities, save = true) {
       this.activeObjects.push.apply(this.activeObjects, entities);
+      
+      if(save)
+        this.saveGame();
+    },
+    loadGame(state) {
+      const world = this.$refs.World.canvas;
+      this.removeAllActiveObjects();
+      
+      try {
+        fabric.util.enlivenObjects(
+          state.gameObjects, 
+          (objs) => {
+            world.addAsActiveObject.apply(
+              world,
+              [false, ...objs]
+            );
+          }
+        );
+      }
+      catch(e) {
+        console.error("There was an error loading the game", 
+                      e, state);
+      }
+      
+      console.log("Saved state loaded:", state);
+      
+      return this;
+    },
+    removeAllActiveObjects() {
+      if(this.activeObjects.length) {
+        this.activeObjects.forEach((o) => {
+          o.remove();
+          this.$refs.World.canvas.remove(o);
+        });
+        
+        this.activeObjects.length = 0;
+      }
+    },
+    saveGame() {
+      let savedState = this.$firebaseRefs.savedState,
+          objs = this.activeObjects.map( (o) => o.toObject() );
+      
+      savedState.update({ 
+        clientID: this.$data._clientID,
+        gameObjects: objs
+      });
+      
+      console.log("State saved:", savedState);
+      
+      return this;
     },
     select(object) {
       this.selectedObject = object;
@@ -83,6 +146,14 @@ export default {
         this.options[option] = !this.options[option];
       
       return this.options[option];
+    }
+  },
+  watch: {
+    savedState(state) {
+      if(state.clientID === this.$data._clientID)
+        return;
+      else
+        this.loadGame(state);
     }
   }
 }

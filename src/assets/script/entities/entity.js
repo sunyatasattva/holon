@@ -1,4 +1,5 @@
 const fabric = require('fabric').fabric;
+const extend = fabric.util.object.extend;
 const Label = require('./label');
 
 /**
@@ -61,6 +62,14 @@ const Entity = fabric.util.createClass(fabric.Object, {
     return this.canvas.remove(this.currentLabel);
   },
   
+  toObject: function(props = []) {
+    props = props.concat([
+      'gridPosition'
+    ]);
+
+    return this.callSuper('toObject', props);
+  },
+  
   updateGridCoordinates() {
     // @todo for larger entities, see if width/height > tileSize
     // and if that's the case add gridPositionEnd or maybe array
@@ -87,5 +96,14 @@ const Entity = fabric.util.createClass(fabric.Object, {
   
   _onObjectAdded() {}
 });
+
+Entity.fromObject = function(object) {
+  return new Entity(object);
+}
+
+// Adding to fabric namespace to allow for enliven without
+// specifying namespaces. Might want to have a custom namespace,
+// but in that case will need to change the load function
+fabric.Entity = Entity;
 
 module.exports = Entity;

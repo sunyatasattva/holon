@@ -1,4 +1,5 @@
 const fabric = require('fabric').fabric;
+const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 
 import Rules from '../modules/rules';
@@ -17,6 +18,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   coveredColor: '#43de5d',
   coveredSides: {},
   exposedColor: '#f1cc16',
+  includeDefaultValues: false,
   originX: 'center',
   originY: 'center',
   
@@ -25,10 +27,10 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   // implemented and this object should block stopping movement on
   // itself, which is what this is about for now
   pathable: false,
-  targetable: true,
-  
   showRangeOnSelected: 'movement',
   snapToMovementRange: true,
+  targetable: true,
+  type: 'walker',
   
   /**
    * Constructor
@@ -132,7 +134,18 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.highlightedTiles = [movementTiles, dashingTiles];
   },
   
+  toObject: function(props = []) {
+    props = props.concat([
+      'attributes',
+      'showRangeOnSelected',
+      'radius'
+    ]);
+    
+    return this.callSuper('toObject', props);
+  },
+  
   _onObjectAdded() {
+    this._updateCoverStatus();
     this.maxMovementRange = this.calculateMovementRange();
 
     this.on('moving', () => {
@@ -192,5 +205,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.set('coveredSides', covering);
   }
 });
+
+Walker.fromObject = function(object) {
+  return new Walker(object);
+}
+
+fabric.Walker = Walker;
 
 module.exports = Walker;
