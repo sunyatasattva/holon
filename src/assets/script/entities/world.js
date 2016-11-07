@@ -12,8 +12,8 @@ const World = fabric.util.createClass(fabric.Canvas, {
   activeObjects: [],
   
   size: {
-    x: 20,
-    y: 20
+    x: 50,
+    y: 50
   },
   
   /**
@@ -56,22 +56,6 @@ const World = fabric.util.createClass(fabric.Canvas, {
    * @default
    */
   pathable: false,
-  
-  /**
-   * Size of the world X axis in tiles
-   *
-   * @type {Number}
-   * @default
-   */
-  worldSizeX: 50,
-  
-  /**
-   * Size of the world Y axis in tiles
-   *
-   * @type {Number}
-   * @default
-   */
-  worldSizeY: 50,
 
   /**
    * Constructor
@@ -252,17 +236,17 @@ const World = fabric.util.createClass(fabric.Canvas, {
         gridGroup;
     
     // Add columns
-    for (let i = 0; i <= this.worldSizeX; i++) {
+    for (let i = 0; i <= this.size.x; i++) {
       cols.push(new Line(
-        [i * this.tileSize, 0, i * this.tileSize, this.worldSizeY * this.tileSize],
+        [i * this.tileSize, 0, i * this.tileSize, this.size.y * this.tileSize],
         opts
       ));
     }
       
     // Add rows
-    for (let i = 0; i <= this.worldSizeY; i++) {
+    for (let i = 0; i <= this.size.y; i++) {
       rows.push(new Line(
-        [0, i * this.tileSize, this.worldSizeX * this.tileSize, i * this.tileSize],
+        [0, i * this.tileSize, this.size.x * this.tileSize, i * this.tileSize],
         opts
       ));
     }
