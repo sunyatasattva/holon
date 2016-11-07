@@ -1,4 +1,5 @@
 const fabric = require('fabric').fabric;
+const extend = fabric.util.object.extend;
 const Label = require('./label');
 
 /**
@@ -59,6 +60,14 @@ const Entity = fabric.util.createClass(fabric.Object, {
   
   removeCurrentLabel() {
     return this.canvas.remove(this.currentLabel);
+  },
+  
+  toObject: function(props = []) {
+    props = props.concat([
+      'gridPosition'
+    ]);
+
+    return this.callSuper('toObject', props);
   },
   
   updateGridCoordinates() {

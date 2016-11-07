@@ -20,8 +20,13 @@ const component = {
     
     this.canvas = world;
     
-    world.on('object:addedAsActive', (objects) => {
-      this.$emit('add', objects);
+    world.on('object:addedAsActive', (opts) => {
+      this.$emit('add', opts.objects, opts.save);
+    });
+    
+    world.on('object:modified', () => {
+      // @todo add auto-save setting
+      this.$parent.saveGame();
     });
     
     world.on('object:selected', (e) => {

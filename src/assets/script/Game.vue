@@ -80,8 +80,24 @@ export default {
     }
   },
   methods: {
-    addEntities(entities) {
+    addEntities(entities, save = true) {
       this.activeObjects.push.apply(this.activeObjects, entities);
+      
+      if(save)
+        this.saveGame();
+    },
+    saveGame() {
+      let savedState = this.$firebaseRefs.savedState,
+          objs = this.activeObjects.map( (o) => o.toObject() );
+      
+      savedState.update({ 
+        clientID: this.$data._clientID,
+        gameObjects: objs
+      });
+      
+      console.log("State saved:", savedState);
+      
+      return this;
     },
     select(object) {
       this.selectedObject = object;
