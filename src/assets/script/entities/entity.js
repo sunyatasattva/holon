@@ -39,8 +39,9 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
   },
   
-  calculateRelativeDirectionTo(to) {
-    return this.canvas.calculateRelativeDirection(this, to);
+  calculateRelativeDirectionTo(to, center = true) {
+    return this.canvas
+          .calculateRelativeDirection(this, to, center);
   },
   
   displayLabel(str) {
@@ -94,7 +95,17 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
   },
   
-  _onObjectAdded() {}
+  _calculateCenterCoordinates() {
+    let averageX = this.gridPosition.reduce(
+      (prev, curr) => prev + curr.x, 0) / this.gridPosition.length,
+        averageY = this.gridPosition.reduce(
+      (prev, curr) => prev + curr.y, 0) / this.gridPosition.length;
+    
+    return {
+      x: averageX,
+      y: averageY
+    };
+  },
 });
 
 Entity.fromObject = function(object) {
