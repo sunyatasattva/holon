@@ -66,7 +66,7 @@ const Entity = fabric.util.createClass(fabric.Object, {
   isAdjacentToObject(obj) {
     return this.gridPosition.some((tileA) => {
       return obj.gridPosition.some((tileB) => {
-    return this.canvas.calculateOctileDistance(
+        return this.canvas.calculateOctileDistance(
           tileA, tileB) === 1;
       });
     }); 
@@ -138,6 +138,46 @@ const Entity = fabric.util.createClass(fabric.Object, {
       y: averageY
     };
   },
+  
+  _onObjectAdded() {
+    this.on('moving', () => {
+      this._snapToPathableGrid();
+    });
+    
+    this.on('scaling', () => {
+      this._snapScalingToGrid();
+    });
+  },
+  
+  _snapScalingToGrid() {
+    this.set( 'scaleX', Math.round(this.scaleX) );
+    this.set( 'scaleY', Math.round(this.scaleY) );
+    this.canvas.renderAll();
+  },
+  // @todo moving bigger objects is a bit unpretictable
+  // possibly because of Math.floor
+  _snapToPathableGrid() {
+    let tileSize = this.canvas.tileSize,
+        targetCoords = {
+        x: Math.floor(this.left / tileSize) * tileSize,
+        y: Math.floor(this.top / tileSize) * tileSize
+      },
+        targetTile = this.canvas.getTileFromCoordinates(
+          targetCoords.x,
+          targetCoords.y
+        );
+
+        if( this.canvas.isOccupied(targetTile) === this
+            || this.canvas.isPathable(targetTile) ) {
+          this.allowedLeft = targetCoords.x;
+          this.allowedTop = targetCoords.y;
+        }
+
+      this.set({
+        left: this.allowedLeft,
+        top: this.allowedTop
+      });
+  }
 });
 
 Entity.fromObject = function(object) {
