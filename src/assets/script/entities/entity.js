@@ -39,8 +39,9 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
   },
   
-  calculateRelativeDirectionTo(to) {
-    return this.canvas.calculateRelativeDirection(this, to);
+  calculateRelativeDirectionTo(to, center = true) {
+    return this.canvas
+          .calculateRelativeDirection(this, to, center);
   },
   
   displayLabel(str) {
@@ -53,9 +54,22 @@ const Entity = fabric.util.createClass(fabric.Object, {
     return this.canvas.add(this.currentLabel);
   },
   
+  getAdjacentTilesOfObject(obj) {
+    return obj.gridPosition.filter((tileA) => {
+      return this.gridPosition.some((tileB) => {
+        return this.canvas.calculateOctileDistance(
+          tileA, tileB) === 1;
+      });
+    }); 
+  },
+  
   isAdjacentToObject(obj) {
-    return this.canvas.calculateOctileDistance(
-      this.gridPosition, obj.gridPosition) === 1;
+    return this.gridPosition.some((tileA) => {
+      return obj.gridPosition.some((tileB) => {
+        return this.canvas.calculateOctileDistance(
+          tileA, tileB) === 1;
+      });
+    }); 
   },
   
   removeCurrentLabel() {
@@ -71,11 +85,30 @@ const Entity = fabric.util.createClass(fabric.Object, {
   },
   
   updateGridCoordinates() {
-    // @todo for larger entities, see if width/height > tileSize
-    // and if that's the case add gridPositionEnd or maybe array
-    // of tiles occupied.
-    return this.gridPosition = this.canvas.getTileFromCoordinates(
-      this.left, this.top);
+    // fabric calculates widths a bit badly, with an error, should
+    // dive into it
+    let tileSize = this.canvas.tileSize + 1,
+        startTile = this.canvas.getTileFromCoordinates(
+                       this.left, this.top),
+        size = {
+          x: Math.round(this.getWidth() / tileSize),
+          y: Math.round(this.getHeight() / tileSize)
+        },
+        occupiedTiles = [];
+    
+    for(let w = 0; w < size.x; w++) {
+      occupiedTiles.push(
+        { x: startTile.x + w, y: startTile.y });
+
+      for(let h = 1; h < size.y; h++) {
+        occupiedTiles.push(
+          { x: startTile.x + w, y: startTile.y + h});
+      }
+    }
+
+    this.gridPosition = occupiedTiles;
+    
+    return this.gridPosition;
   },
   
   _allowRotationOnly() {
@@ -94,7 +127,57 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
   },
   
-  _onObjectAdded() {}
+  _calculateCenterCoordinates() {
+    let averageX = this.gridPosition.reduce(
+      (prev, curr) => prev + curr.x, 0) / this.gridPosition.length,
+        averageY = this.gridPosition.reduce(
+      (prev, curr) => prev + curr.y, 0) / this.gridPosition.length;
+    
+    return {
+      x: averageX,
+      y: averageY
+    };
+  },
+  
+  _onObjectAdded() {
+    this.on('moving', () => {
+      this._snapToPathableGrid();
+    });
+    
+    this.on('scaling', () => {
+      this._snapScalingToGrid();
+    });
+  },
+  
+  _snapScalingToGrid() {
+    this.set( 'scaleX', Math.round(this.scaleX) );
+    this.set( 'scaleY', Math.round(this.scaleY) );
+    this.canvas.renderAll();
+  },
+  // @todo moving bigger objects is a bit unpretictable
+  // possibly because of Math.floor
+  _snapToPathableGrid() {
+    let tileSize = this.canvas.tileSize,
+        targetCoords = {
+        x: Math.floor(this.left / tileSize) * tileSize,
+        y: Math.floor(this.top / tileSize) * tileSize
+      },
+        targetTile = this.canvas.getTileFromCoordinates(
+          targetCoords.x,
+          targetCoords.y
+        );
+
+        if( this.canvas.isOccupied(targetTile) === this
+            || this.canvas.isPathable(targetTile) ) {
+          this.allowedLeft = targetCoords.x;
+          this.allowedTop = targetCoords.y;
+        }
+
+      this.set({
+        left: this.allowedLeft,
+        top: this.allowedTop
+      });
+  }
 });
 
 Entity.fromObject = function(object) {

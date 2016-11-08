@@ -150,6 +150,7 @@ export default {
       this.selectedObject = object;
     },
     toggleEditMode() {
+      this.$refs.World.toggleEditMode();
       this.$refs.sidebar.toggle();
     },
     toggleOption(option, val) {

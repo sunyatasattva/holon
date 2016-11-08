@@ -121,11 +121,20 @@ const World = fabric.util.createClass(fabric.Canvas, {
     return tiles;
   },
   
-  calculateRelativeDirection(from, to) {
-    let direction;
-
-    direction =  from.gridPosition.y === to.gridPosition.y ? '' : from.gridPosition.y > to.gridPosition.y ? 'N' : 'S';
-    direction += from.gridPosition.x === to.gridPosition.x ? '' : from.gridPosition.x > to.gridPosition.x ? 'W' : 'E';
+  calculateRelativeDirection(from, to, center = true) {
+    let tileA,
+        tileB,
+        direction;
+    
+    tileA = !from.gridPosition ? from : 
+            !center ? from[0] : from._calculateCenterCoordinates();
+    tileB = !to.gridPosition ? to :
+            !center ? to[0] : to._calculateCenterCoordinates();
+    
+    direction =  tileA.y === tileB.y ? '' : 
+                    tileA.y > tileB.y ? 'N' : 'S';
+    direction += tileA.x === tileB.x ? '' : 
+                    tileA.x > tileB.x ? 'W' : 'E';
     
     return direction;
   },
@@ -202,9 +211,11 @@ const World = fabric.util.createClass(fabric.Canvas, {
   },
   
   isOccupied(tile) {
-    return this.activeObjects.find( (obj) => {
-        return obj.gridPosition.x === tile.x 
-               && obj.gridPosition.y === tile.y
+    return this.activeObjects.find((obj) => {
+        return obj.gridPosition.some((position) => {
+          return position.x === tile.x 
+               && position.y === tile.y
+        });
     });
   },
   

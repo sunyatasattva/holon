@@ -67,17 +67,17 @@ const Ruler = fabric.util.createClass(Line, {
   highlightCovers() {
     let covers = this.canvas.getObjects('cover');
     
-    covers.forEach((cover) => {
-      cover.covers.forEach((line, i) => {
-        let intersection = line.plane.intersectsWithLine(this)
-
-        if (intersection.status === 'Intersection')
-          cover.covers[i].side.set('visible', true);
-        else {
-          cover.covers[i].side.set('visible', false);
-        }
-      });
-    });
+//    covers.forEach((cover) => {
+//      cover.covers.forEach((line, i) => {
+//        let intersection = line.plane.intersectsWithLine(this)
+//
+//        if (intersection.status === 'Intersection')
+//          cover.covers[i].side.set('visible', true);
+//        else {
+//          cover.covers[i].side.set('visible', false);
+//        }
+//      });
+//    });
     
     this.canvas.renderAll();
   },

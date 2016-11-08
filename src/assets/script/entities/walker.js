@@ -76,13 +76,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         totalRange;
     
     movementRange = this.canvas.calculateRange(
-      this.gridPosition,
+      this.gridPosition[0],
       this.attributes.movement,
       1
     );
     
     dashingRange = this.canvas.calculateRange(
-      this.gridPosition,
+      this.gridPosition[0],
       this.attributes.movement * 2,
       this.attributes.movement + 1
     );
@@ -145,19 +145,18 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   _onObjectAdded() {
+    this.callSuper('_onObjectAdded');
     this._updateCoverStatus();
     this.maxMovementRange = this.calculateMovementRange();
-
-    this.on('moving', () => {
-      this._snapToPathableGrid();
-    });
     
     // @todo refactor to _updateMaxMovementRange
-    this.on('modified', () => {
+    this.on('deselected', () => {
       this.maxMovementRange = this.calculateMovementRange();
     });
   },
   
+  // @todo this method is copied to Entity as well, refactor
+  // this to include only movement range
   _snapToPathableGrid() {
     let tileSize = this.canvas.tileSize,
         targetCoords = {
@@ -193,16 +192,36 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     ),
         covering = covers.filter((cover) => {
           return this.isAdjacentToObject(cover);
-        }).map((cover) => {
-          return this.calculateRelativeDirectionTo(cover);
+        })
+        .map((cover) => {
+          // @todo refactor this [0] feels like an hack
+          // introduced it because I am thinking of covers
+          // for characters larger than a tile...
+          return {
+            cover: cover,
+            tiles: this.getAdjacentTilesOfObject(cover)[0]
+          }
+        })
+        .map((cover) => {
+          return {
+            cover: cover.cover,
+            side: this.calculateRelativeDirectionTo(cover.tiles)
+          }
         });
+    
+    this.set('coveredSides', { N: 0, E: 0, S: 0, W: 0 });
     
     if (covering.length)
       this.set('fill', this.coveredColor);
     else
       this.set('fill', this.exposedColor);
     
-    this.set('coveredSides', covering);
+    covering.forEach((cover) => {
+      this.coveredSides[cover.side] = 
+        cover.cover.coverType === 'partial' ? 1 : 2;
+    });
+    
+    console.log('Cover status updated:', this.coveredSides);
   }
 });
 

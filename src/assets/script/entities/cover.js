@@ -26,6 +26,9 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
    */
   coverType: 'full',
   
+  // @todo ? Currently we don't want cover rotating, it's a bit
+  // hard to calculate and we probably don't need it.
+  hasRotatingPoint: false,
   includeDefaultValues: false,
 
   /**
@@ -37,6 +40,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
    * @default
    */
   selectable: false,
+  
+  strokeWidth: 0,
   
   /**
    * If other objects can move through this object.
@@ -60,15 +65,16 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
              this._coverOpts.partialFill
             );
     this.on('added', () => {
-      this._createCoverLines();
+      // @todo removing this for now, as it probably does not
+      // serve any real purpose... too bad a lot of work wasted.
+      // this._createCoverLines();
     });
   },
   
   toObject: function(props = []) {
     props = props.concat([
       'coverType',
-      'pathable',
-      'selectable'
+      'pathable'
     ]);
     
     return this.callSuper('toObject', props);
@@ -79,6 +85,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
     fullFill: '#faa'
   },
   
+  
+  // @deprecated
   _coverPlaneOpts: {
     stroke: '#000',
     type: 'coverPlane',
@@ -86,6 +94,7 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
     parent: this
   },
   
+  // @deprecated
   _coverSideOpts: {
     stroke: '#ffff00',
     strokeWidth: 2,
@@ -96,6 +105,7 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
   
   // @todo maybe group these with each other and cover
   // tried to do it but ruler lags
+  // @deprecated
   _createCoverLines(options) {
     let coverPlaneTop,
         coverPlaneRight,
