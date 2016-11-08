@@ -38,6 +38,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
    */
   selectable: false,
   
+  strokeWidth: 0,
+  
   /**
    * If other objects can move through this object.
    *
