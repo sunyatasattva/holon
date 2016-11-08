@@ -62,7 +62,9 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
              this._coverOpts.partialFill
             );
     this.on('added', () => {
-      this._createCoverLines();
+      // @todo removing this for now, as it probably does not
+      // serve any real purpose... too bad a lot of work wasted.
+      // this._createCoverLines();
     });
   },
   
@@ -81,6 +83,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
     fullFill: '#faa'
   },
   
+  
+  // @deprecated
   _coverPlaneOpts: {
     stroke: '#000',
     type: 'coverPlane',
@@ -88,6 +92,7 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
     parent: this
   },
   
+  // @deprecated
   _coverSideOpts: {
     stroke: '#ffff00',
     strokeWidth: 2,
@@ -98,6 +103,7 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
   
   // @todo maybe group these with each other and cover
   // tried to do it but ruler lags
+  // @deprecated
   _createCoverLines(options) {
     let coverPlaneTop,
         coverPlaneRight,
