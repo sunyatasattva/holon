@@ -76,13 +76,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         totalRange;
     
     movementRange = this.canvas.calculateRange(
-      this.gridPosition,
+      this.gridPosition[0],
       this.attributes.movement,
       1
     );
     
     dashingRange = this.canvas.calculateRange(
-      this.gridPosition,
+      this.gridPosition[0],
       this.attributes.movement * 2,
       this.attributes.movement + 1
     );
