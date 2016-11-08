@@ -71,8 +71,7 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
   toObject: function(props = []) {
     props = props.concat([
       'coverType',
-      'pathable',
-      'selectable'
+      'pathable'
     ]);
     
     return this.callSuper('toObject', props);
