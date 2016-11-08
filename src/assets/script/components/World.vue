@@ -124,6 +124,15 @@ const component = {
         );
       }
     });
+  },
+  methods: {
+    toggleEditMode() {
+      this.canvas.getObjects('cover').forEach((o) => {
+        let currentSelectableState = o.get('selectable');
+
+        o.set('selectable', !currentSelectableState);
+      });
+    }
   }
 };
 

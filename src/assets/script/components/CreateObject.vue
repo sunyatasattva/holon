@@ -125,7 +125,8 @@ export default {
         obj = new Cover({
           width: world.tileSize,
           height: world.tileSize,
-          coverType: this.newCoverType
+          coverType: this.newCoverType,
+          selectable: true
         });
       }
       else if(type === 'character'){
