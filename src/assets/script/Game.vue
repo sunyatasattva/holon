@@ -22,13 +22,11 @@
         </md-tab>
 
         <md-tab md-label="Details" md-icon="gps_fixed">
-          <template v-if='selectedObject'>
-            <h2>Selected object</h2>
-            <p>
-              {{selectedObject.attributes.name}}
-            </p>
-          </template>
-          <span v-else>No object selected.</span>
+          <object-details
+            :object='selectedObject'
+            v-on:wound='addWound'
+            v-on:heal='removeWound'
+          />
         </md-tab>
         
         <md-tab md-label="Options" md-icon="settings">
@@ -49,7 +47,7 @@
 <script>
 import { fabric } from 'fabric';
 import World from './components/World.vue';
-import Sidebar from './components/Sidebar.vue';
+import ObjectDetails from './components/ObjectDetails.vue';
 import CreateObject from './components/CreateObject.vue';
 import Network from './modules/networking';
   
@@ -59,7 +57,7 @@ export default {
   name: 'game',
   components: {
     'game-world': World,
-    'info-sidebar': Sidebar,
+    ObjectDetails,
     CreateObject
   },
   data() {
@@ -86,6 +84,9 @@ export default {
       
       if(save)
         this.saveGame();
+    },
+    addWound(target) {
+      target.setAttribute('wounds', target.attributes.wounds + 1);
     },
     loadGame(state) {
       const world = this.$refs.World.canvas;
@@ -132,6 +133,9 @@ export default {
       console.log('Object removed:', obj);
       
       return this.saveGame();
+    },
+    removeWound(target) {
+      target.setAttribute('wounds', target.attributes.wounds - 1);
     },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,

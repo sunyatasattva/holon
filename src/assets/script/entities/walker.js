@@ -11,9 +11,7 @@ import Rules from '../modules/rules';
  * @mixes fabric.Circle.prototype
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
-  attributes: {
-    movement: 1
-  },
+  attributes: {},
   
   coveredSides: {},
   defaultFill: '#f1cc16',
@@ -43,6 +41,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   initialize(options = {}) {
     this.callSuper('initialize', options);
 
+    this.attributes.wounds = this.attributes.wounds || 0;
     this._allowRotationOnly();
     this.set('allowedLeft', this.left);
     this.set('allowedTop', this.top);
@@ -170,6 +169,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.canvas
         .calculateOctileDistance(thisCenter, targetCenter) 
         <= this.attributes.vision;
+  },
+  
+  setAttribute(attr, val) {
+    this.attributes[attr] = val;
+    
+    this.fire('modified');
+    this.canvas.fire('object:modified');
   },
   
   showMovementRange(showDashing = true) {
