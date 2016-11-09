@@ -36,6 +36,10 @@ const Label = fabric.util.createClass(fabric.Group, {
     
     objects = this._createLabelGroup(str, options);
     this.callSuper('initialize', objects, options);
+    
+    this.on('added', () => {
+      this._onObjectAdded();
+    });
   },
   
   setOptions(options) {
@@ -71,6 +75,22 @@ const Label = fabric.util.createClass(fabric.Group, {
     });
     
     return [label,icon,text].filter(Boolean);
+  },
+  
+  _onObjectAdded() {
+    let textObjects = this.getObjects('text'),
+        labelObject = this.getObjects('rect')[0],
+        paddingRight = this.icon.icon ? 22 : 2,
+        textWidth;
+    
+    textWidth = textObjects
+      .map((text) => text.getWidth())
+      .reduce((p, c) => p + c, 0);
+    
+    labelObject.set('width', textWidth + paddingRight);
+    
+    // @todo currently not working (when selected, label is behind)
+    this.bringToFront();
   }
 });
 
