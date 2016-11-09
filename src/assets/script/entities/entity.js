@@ -44,14 +44,19 @@ const Entity = fabric.util.createClass(fabric.Object, {
           .calculateRelativeDirection(this, to, center);
   },
   
-  displayLabel(str) {
+  displayLabel(str, opts) {
+    if(this.currentLabel)
+      this.removeCurrentLabel();
+    
     this.currentLabel = new Label(str, {
-      icon: { icon: 'gps_fixed' },
-      left: this.left,
-      top: this.top
+      icon: { icon: opts.icon },
+      left: opts.left || this.left,
+      top: opts.top || this.top
     });
     
-    return this.canvas.add(this.currentLabel);
+    this.canvas.add(this.currentLabel);
+    
+    return this;
   },
   
   getAdjacentTilesOfObject(obj) {
@@ -73,7 +78,10 @@ const Entity = fabric.util.createClass(fabric.Object, {
   },
   
   removeCurrentLabel() {
-    return this.canvas.remove(this.currentLabel);
+    if(this.currentLabel)
+      this.canvas.remove(this.currentLabel);
+    
+    return this;
   },
   
   toObject: function(props = []) {

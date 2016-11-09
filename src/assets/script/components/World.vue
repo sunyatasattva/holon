@@ -88,9 +88,12 @@ const component = {
          && target.targetable 
          && selectedObject !== target){
         target.displayLabel(
-          `${selectedObject.calculateChanceToHit(e.target)}%`
+          `${selectedObject.calculateChanceToHit(e.target)}%`,
+          { icon: 'gps_fixed' }
         );
       }
+      else if(target.displayNameLabel)
+        target.displayNameLabel();
     });
     
     world.on('mouse:out', (e) => {

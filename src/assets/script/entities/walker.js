@@ -108,6 +108,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     }
   },
   
+  displayNameLabel() {
+    return this.displayLabel(this.attributes.name, {
+      icon: 'person'
+    });
+  },
+  
   isWithinMovementRange(targetTile) {
     return this.maxMovementRange.totalRange.some((tile) => {
       return tile.x === targetTile.x && tile.y === targetTile.y;
