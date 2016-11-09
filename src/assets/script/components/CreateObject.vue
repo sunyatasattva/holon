@@ -88,7 +88,15 @@
         <md-input-container>
           <label>Toughness</label>
           <md-input type="number"
-            v-model='newCharacterResistance'></md-input>
+            v-model='newCharacterToughness'></md-input>
+        </md-input-container>
+        
+        <md-input-container>
+          <label for="team">Team</label>
+          <md-select name="team" id="team" v-model="newCharacterTeam">
+            <md-option value="0">Allies</md-option>
+            <md-option value="1">Enemies</md-option>
+          </md-select>
         </md-input-container>
       </section>
     </div>
@@ -112,7 +120,8 @@ export default {
       newCharacterMovement: 6,
       newCharacterAction: 2,
       newCharacterVision: 12,
-      newCharacterToughness: 0
+      newCharacterToughness: 0,
+      newCharacterTeam: 0
     }
   },
   props: ['isAddingObject'],
@@ -144,7 +153,8 @@ export default {
           },
           width: world.tileSize,
           height: world.tileSize,
-          radius: world.tileSize / 2
+          radius: world.tileSize / 2,
+          team: this.newCharacterTeam
         });
       }
       

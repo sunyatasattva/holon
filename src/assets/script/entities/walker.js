@@ -15,13 +15,15 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {},
   
   coveredSides: {},
-  defaultFill: '#43de5d',
-  exposedColor: '#43a2de',
   fullyCoveredColor: Cover._coverOpts.fullFill,
   partiallyCoveredColor: Cover._coverOpts.partialFill,
   includeDefaultValues: false,
   originX: 'center',
   originY: 'center',
+  teamFills: [
+    '#43de5d',
+    '#43a2de'
+  ],
   
   // @todo this entity is technically pathable (i.e. other objects)
   // can take a path through it), but currently pathing is not really
@@ -31,6 +33,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   showRangeOnSelected: 'movement',
   snapToMovementRange: true,
   targetable: true,
+  team: 0,
   type: 'walker',
   
   /**
@@ -43,6 +46,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.callSuper('initialize', options);
 
     this.attributes.wounds = this.attributes.wounds || 0;
+    this.set('defaultFill', this.teamFills[this.team]);
+    this.set('fill', this.defaultFill);
     this._allowRotationOnly();
     this.set('allowedLeft', this.left);
     this.set('allowedTop', this.top);
@@ -145,6 +150,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   isValidTarget(target) {
     return target.targetable
            && target !== this
+           && target.team !== this.team
            && this.isWithinVisionRange(target);
   },
   
@@ -234,7 +240,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     props = props.concat([
       'attributes',
       'showRangeOnSelected',
-      'radius'
+      'radius',
+      'team'
     ]);
     
     return this.callSuper('toObject', props);
