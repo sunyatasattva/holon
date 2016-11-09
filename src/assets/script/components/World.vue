@@ -31,6 +31,24 @@ const component = {
       }
     });
     
+    world.wrapperEl.addEventListener('keydown', (e) => {
+      let selectedObject;
+      
+      if(e.key === 'Alt') {
+        world.getObjects('walker')
+          .forEach( (o) => o.displayNameLabel() );
+      }
+    });
+    
+    world.wrapperEl.addEventListener('keyup', (e) => {
+      let selectedObject;
+
+      if(e.key === 'Alt') {
+        world.getObjects('walker')
+          .forEach( (o) => o.removeCurrentLabel() );
+      }
+    });
+    
     world.on('object:addedAsActive', (opts) => {
       this.$emit('add', opts.objects, opts.save);
     });
