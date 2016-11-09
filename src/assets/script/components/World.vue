@@ -124,12 +124,8 @@ const component = {
       
       if(selectedObject
          && selectedObject.calculateChanceToHit
-         && target.targetable 
-         && selectedObject !== target){
-        target.displayLabel(
-          `${selectedObject.calculateChanceToHit(e.target)}%`,
-          { icon: 'gps_fixed' }
-        );
+         && selectedObject.isValidTarget(target)) {
+          target._highlightChanceToBeHitBy(selectedObject);
       }
       else if(target.displayNameLabel)
         target.displayNameLabel();
@@ -137,7 +133,7 @@ const component = {
     
     world.on('mouse:out', (e) => {
       if(e.target && e.target.currentLabel)
-        e.target.removeCurrentLabel();
+        e.target.resetVisualStatus();
     });
     
     world.on('mouse:wheel', (opts) => {

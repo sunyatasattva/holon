@@ -127,11 +127,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   
   getValidTargets() {
     return this.canvas.getActiveObjects('walker')
-      .filter((target) => {
-        return target.targetable
-               && target !== this
-               && this.isWithinVisionRange(target)
-      });
+      .filter(this.isValidTarget.bind(this));
   },
   
   highlightAllHitChances() {
@@ -142,6 +138,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     possibleTargets.forEach((target) => {
       target._highlightChanceToBeHitBy(this);
     });
+  },
+  
+  isValidTarget(target) {
+    return target.targetable
+           && target !== this
+           && this.isWithinVisionRange(target);
   },
   
   isWithinMovementRange(targetTile) {
@@ -169,6 +171,16 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.canvas
         .calculateOctileDistance(thisCenter, targetCenter) 
         <= this.attributes.vision;
+  },
+  
+  resetVisualStatus() {
+    this
+      .removeCurrentLabel()
+      ._resetDefaultColor();
+    
+    this.canvas.renderAll();
+    
+    return this;
   },
   
   setAttribute(attr, val) {
@@ -199,16 +211,6 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.highlightedTiles = [movementTiles, dashingTiles];
     
     return this.highlightedTiles;
-  },
-  
-  resetVisualStatus() {
-    this
-      .removeCurrentLabel()
-      ._resetDefaultColor();
-    
-    this.canvas.renderAll();
-    
-    return this;
   },
   
   showVisionRange() {
