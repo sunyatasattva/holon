@@ -1,10 +1,13 @@
 export default {
   calculateChanceToHit(source, target) {
-    let mod = 0,
-        targetCover = this.isTargetInCoverRelativeToSource(
-          source, target);
+    let mod;
     
-    mod += !targetCover ? 0 : targetCover === 1 ? -20 : -40;
+    mod = [
+      this._hitModCover,
+      this._hitModWounds
+    ].reduce((sum, modifier) => {
+      return sum + modifier.call(this, source, target);
+    }, 0);
     
     return source.attributes.aim - target.attributes.reflexes + mod;
   },
@@ -24,5 +27,17 @@ export default {
   
   _adjustRelativeDirectionBySideStepping(source, target, direction) {
     // @todo --> if includes "N" see if |y| is within one tile etc.
+  },
+  
+  _hitModCover(source, target) {
+    let targetCover = this.isTargetInCoverRelativeToSource(
+          source, target);
+    
+    return !targetCover ? 0 : targetCover === 1 ? -20 : -40;
+  },
+  _hitModWounds(source) {
+    let wounds = source.attributes.wounds;
+    
+    return wounds ? wounds * -5 : 0;
   }
 }
