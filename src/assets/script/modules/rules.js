@@ -17,7 +17,11 @@ export default {
     if(!target.coveredSides)
       return false;
     else {
-      sourceDirection = target.calculateRelativeDirectionTo(source);
+      sourceDirection = this._adjustRelativeDirectionBySideStepping(
+        source,
+        target,
+        target.calculateRelativeDirectionTo(source)
+      )
       
       return sourceDirection.split('')
         .map( (direction) => target.coveredSides[direction] )
@@ -26,7 +30,19 @@ export default {
   },
   
   _adjustRelativeDirectionBySideStepping(source, target, direction) {
-    // @todo --> if includes "N" see if |y| is within one tile etc.
+    let dirs = direction.split(''),
+        northOrSouth = dirs.includes('N') || dirs.includes('S'),
+        eastOrWest = dirs.includes('E') || dirs.includes('W'),
+        sourcePos = source.gridPosition[0],
+        targetPos = target.gridPosition[0];
+        
+    if(northOrSouth && Math.abs(sourcePos.y - targetPos.y) === 1)
+      dirs.splice(0,1);
+    if(eastOrWest && Math.abs(sourcePos.x - targetPos.x) === 1) {
+      dirs.splice(1,1);
+    }
+      
+    return dirs.join('');
   },
   
   _hitModCover(source, target) {
