@@ -32,8 +32,6 @@ const component = {
     });
     
     world.wrapperEl.addEventListener('keydown', (e) => {
-      let selectedObject;
-      
       if(e.key === 'Alt') {
         world.getObjects('walker')
           .forEach( (o) => o.displayNameLabel() );
@@ -41,11 +39,34 @@ const component = {
     });
     
     world.wrapperEl.addEventListener('keyup', (e) => {
-      let selectedObject;
-
       if(e.key === 'Alt') {
         world.getObjects('walker')
           .forEach( (o) => o.removeCurrentLabel() );
+      }
+    });
+    
+    world.wrapperEl.addEventListener('keydown', (e) => {
+      let selectedObject;
+
+      if(e.key === 'Shift') {
+        selectedObject = world.getActiveObject();
+        if(selectedObject && selectedObject.showVisionRange) {
+          selectedObject.highlightAllHitChances();
+        }
+      }
+    });
+    
+    world.wrapperEl.addEventListener('keyup', (e) => {
+      let selectedObject;
+      
+      if(e.key === 'Shift') {
+        selectedObject = world.getActiveObject();
+        if(selectedObject && selectedObject.highlightedTiles.length) {
+          selectedObject.showMovementRange();
+          
+          world.getActiveObjects('walker')
+            .forEach( (o) => o.resetVisualStatus() );
+        }
       }
     });
     

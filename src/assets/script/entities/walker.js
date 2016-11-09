@@ -15,9 +15,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     movement: 1
   },
   
-  coveredColor: '#43de5d',
   coveredSides: {},
+  defaultFill: '#f1cc16',
   exposedColor: '#f1cc16',
+  fullyCoveredColor: '#43de5d',
+  partiallyCoveredColor: '#43a2de',
   includeDefaultValues: false,
   originX: 'center',
   originY: 'center',
@@ -96,16 +98,26 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     };
   },
   
+  calculateVisionRange() {
+    return this.canvas.calculateRange(
+      this.gridPosition[0],
+      this.attributes.vision,
+      1
+    );
+  },
+  
   destroyTilesHighlightedByThis() {
     let highlightedTiles = this.highlightedTiles;
-
-    if(highlightedTiles.length) {
+    
+    if(highlightedTiles && highlightedTiles.length) {
       highlightedTiles.forEach((o) => {
         this.canvas.remove(o);
       });
 
       this.canvas.renderAll();
     }
+    
+    return this;
   },
   
   displayNameLabel() {
@@ -114,10 +126,50 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     });
   },
   
+  getValidTargets() {
+    return this.canvas.getActiveObjects('walker')
+      .filter((target) => {
+        return target.targetable
+               && target !== this
+               && this.isWithinVisionRange(target)
+      });
+  },
+  
+  highlightAllHitChances() {
+    let possibleTargets = this.getValidTargets();
+    
+    this.showVisionRange();
+
+    possibleTargets.forEach((target) => {
+      target._highlightChanceToBeHitBy(this);
+    });
+  },
+  
   isWithinMovementRange(targetTile) {
     return this.maxMovementRange.totalRange.some((tile) => {
       return tile.x === targetTile.x && tile.y === targetTile.y;
     });
+  },
+  
+  isWithinVisionRange(target) {
+    let thisCenter = this._calculateCenterCoordinates(),
+        targetCenter;
+    
+    if(target.gridPosition) {
+      targetCenter = target._calculateCenterCoordinates();
+    }
+    else if(target.x && target.y) {
+      targetCenter = target;
+    }
+    else {
+      console.error("Invalid target:", target);
+      
+      return false;
+    }
+    
+    return this.canvas
+        .calculateOctileDistance(thisCenter, targetCenter) 
+        <= this.attributes.vision;
   },
   
   showMovementRange(showDashing = true) {
@@ -137,7 +189,35 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       });
     };
     
-    return this.highlightedTiles = [movementTiles, dashingTiles];
+    this.destroyTilesHighlightedByThis();
+    this.highlightedTiles = [movementTiles, dashingTiles];
+    
+    return this.highlightedTiles;
+  },
+  
+  resetVisualStatus() {
+    this
+      .removeCurrentLabel()
+      ._resetDefaultColor();
+    
+    this.canvas.renderAll();
+    
+    return this;
+  },
+  
+  showVisionRange() {
+    let range = this.calculateVisionRange(),
+        visionTiles;
+    
+    visionTiles = this.canvas.highlightTiles(range, {
+      color: '#000',
+      opacity: 0.1
+    });
+    
+    this.destroyTilesHighlightedByThis();
+    this.highlightedTiles = [visionTiles];
+    
+    return this.highlightedTiles;
   },
   
   toObject: function(props = []) {
@@ -150,6 +230,24 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.callSuper('toObject', props);
   },
   
+  _highlightChanceToBeHitBy(source) {
+    let chanceToHit = source.calculateChanceToHit(this),
+        cover = Rules.isTargetInCoverRelativeToSource(source, this);
+    
+    this.displayLabel(`${chanceToHit}%`, { icon: 'gps_fixed' });
+    
+    if(cover > 0) {
+      this.set(
+        'fill',
+        cover === 1 ?
+          this.partiallyCoveredColor :
+          this.fullyCoveredColor
+      );
+      
+      this.canvas.renderAll();
+    }
+  },
+  
   _onObjectAdded() {
     this.callSuper('_onObjectAdded');
     this._updateCoverStatus();
@@ -159,6 +257,10 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.on('deselected', () => {
       this.maxMovementRange = this.calculateMovementRange();
     });
+  },
+  
+  _resetDefaultColor() {
+    return this.set('fill', this.defaultFill);
   },
   
   // @todo this method is copied to Entity as well, refactor
@@ -216,11 +318,6 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         });
     
     this.set('coveredSides', { N: 0, E: 0, S: 0, W: 0 });
-    
-    if (covering.length)
-      this.set('fill', this.coveredColor);
-    else
-      this.set('fill', this.exposedColor);
     
     covering.forEach((cover) => {
       this.coveredSides[cover.side] = 

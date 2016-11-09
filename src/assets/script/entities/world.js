@@ -108,13 +108,11 @@ const World = fabric.util.createClass(fabric.Canvas, {
     
     for (let row = 0; row < this.size.y; row++) {
       for (let col = 0; col < this.size.x; col++) {
-        let diff = Math.abs(row - from.y) + Math.abs(col - from.x);
+        let to = { x: col, y: row },
+            distance = this.calculateOctileDistance(from, to, 'ceil');
         
-        if (diff <= range && diff >= min)
-          tiles.push({
-            x: col,
-            y: row
-          });
+        if (distance <= range && distance >= min)
+          tiles.push(to);
       }
     }
     
@@ -137,6 +135,12 @@ const World = fabric.util.createClass(fabric.Canvas, {
                     tileA.x > tileB.x ? 'W' : 'E';
     
     return direction;
+  },
+  
+  getActiveObjects(type) {
+    return type ? 
+      this.activeObjects.filter((o) => o.type === type) :
+      this.activeObjects;
   },
   
   getCoordinatesOfTile(tile) {
