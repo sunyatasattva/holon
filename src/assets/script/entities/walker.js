@@ -3,6 +3,7 @@ const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 
 import Rules from '../modules/rules';
+import { prototype as Cover } from './cover'; 
 
 /**
  * Walker class
@@ -14,10 +15,10 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {},
   
   coveredSides: {},
-  defaultFill: '#f1cc16',
-  exposedColor: '#f1cc16',
-  fullyCoveredColor: '#43de5d',
-  partiallyCoveredColor: '#43a2de',
+  defaultFill: '#43de5d',
+  exposedColor: '#43a2de',
+  fullyCoveredColor: Cover._coverOpts.fullFill,
+  partiallyCoveredColor: Cover._coverOpts.partialFill,
   includeDefaultValues: false,
   originX: 'center',
   originY: 'center',
@@ -62,6 +63,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     });
     
     this.on('modified', () => {
+      // @todo implement "moved" event
       this._updateCoverStatus();
     });
   },

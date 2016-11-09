@@ -81,8 +81,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
   },
   
   _coverOpts: {
-    partialFill: '#fea',
-    fullFill: '#faa'
+    partialFill: '#f1cc16',
+    fullFill: '#ff6868'
   },
   
   
