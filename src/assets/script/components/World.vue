@@ -70,6 +70,45 @@ const component = {
       }
     });
     
+    // @todo Really ugly touch support implementation
+    let touchStart;
+    
+    world.wrapperEl.addEventListener('touchstart', (e) => {
+      touchStart = {
+        x: e.pageX,
+        y: e.pageY
+      }
+      
+      if(e.touches.length === 3)
+        this.canvas.zoomToPoint(touchStart, 1);
+    });
+    
+    world.wrapperEl.addEventListener('touchmove', (e) => {
+      let newZoom = this.canvas.getZoom() * e.scale,
+          delta = {
+            x: (e.pageX - touchStart.x), 
+            y: (e.pageY - touchStart.y)
+          };
+
+      if(e.touches.length === 2) {
+        if(newZoom > 2 || newZoom < 0.5)
+          return;
+
+        this.canvas.zoomToPoint(
+          { x: e.pageX, y: e.pageY }, 
+          newZoom
+        );
+      }
+      else if( !this.canvas.getActiveObject() ) {
+        this.canvas.relativePan(delta);
+        
+        touchStart = {
+          x: e.pageX,
+          y: e.pageY
+        };
+      }
+    });
+    
     world.on('object:addedAsActive', (opts) => {
       this.$emit('add', opts.objects, opts.save);
     });
