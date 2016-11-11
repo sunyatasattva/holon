@@ -337,7 +337,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.set('coveredSides', { N: 0, E: 0, S: 0, W: 0 });
     
     covering.forEach((cover) => {
-      this.coveredSides[cover.side] = 
+      // @todo this is a bit of a hack that is going to work
+      // only as long as walkers are not bigger than one
+      // tile: it makes sure that two partial covers stacked
+      // on top of one another will give full cover
+      this.coveredSides[cover.side] += 
         cover.cover.coverType === 'partial' ? 1 : 2;
     });
     

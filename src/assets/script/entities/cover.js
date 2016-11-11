@@ -64,6 +64,8 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
              this._coverOpts.fullFill :
              this._coverOpts.partialFill
             );
+    
+    this.set('opacity', this.pathable ? 0.5 : 1);
     this.on('added', () => {
       // @todo removing this for now, as it probably does not
       // serve any real purpose... too bad a lot of work wasted.

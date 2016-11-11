@@ -65,16 +65,30 @@ const Entity = fabric.util.createClass(fabric.Object, {
         return this.canvas.calculateOctileDistance(
           tileA, tileB) === 1;
       });
-    }); 
+    });
   },
   
   isAdjacentToObject(obj) {
+    return !this.isOverlappingWithObject(obj) 
+      && this.gridPosition.some((tileA) => {
+        return obj.gridPosition.some((tileB) => {
+          return this.canvas.calculateOctileDistance(
+            tileA, tileB) === 1;
+        });
+      });
+    
+    // @todo Think how to make this prettier
+    // it iterates twice. Maybe could do a normal `for`
+    // loop with an external variable or could build
+    // my own Array method for pretty functional programming
+  },
+  
+  isOverlappingWithObject(obj) {
     return this.gridPosition.some((tileA) => {
       return obj.gridPosition.some((tileB) => {
-        return this.canvas.calculateOctileDistance(
-          tileA, tileB) === 1;
+        return tileA.x === tileB.x && tileA.y === tileB.y;
       });
-    }); 
+    });
   },
   
   removeCurrentLabel() {
