@@ -64,6 +64,33 @@ const Ruler = fabric.util.createClass(Line, {
     );
   },
   
+  // @todo This is a bit of a hack to simulate height with ruler
+  // currently doesn't find right height for stacked objects because
+  // isOccupied is only returning one object, could change that
+  // to filter or add a parameter
+  calculateOctileLengthWithHeight() {
+    let length = this.calculateOctileLength(),
+        canvas = this.canvas,
+        occupiedStart = canvas.isOccupied(this.gridPosition.start),
+        occupiedEnd = canvas.isOccupied(this.gridPosition.end),
+        heightStart = 0,
+        heightEnd = 0,
+        hDiff;
+    
+    if(occupiedStart && occupiedStart.coverType) {
+      heightStart = occupiedStart.coverType === 'partial' ? 1 : 2;
+    }
+    if(occupiedEnd && occupiedEnd.coverType) {
+      heightEnd = occupiedEnd.coverType === 'partial' ? 1 : 2;
+    }
+    
+    hDiff = Math.abs(heightStart - heightEnd);
+    
+    return Math.ceil(
+      Math.sqrt( Math.pow(length, 2) + Math.pow(hDiff, 2) )
+    );
+  },
+  
   highlightCovers() {
     let covers = this.canvas.getObjects('cover');
     
@@ -164,7 +191,7 @@ const Ruler = fabric.util.createClass(Line, {
   },
   
   _updateLabel() {
-    let length = this.calculateOctileLength();
+    let length = this.calculateOctileLengthWithHeight();
     
     if(this.label){
       if(+this.label.text === length){
