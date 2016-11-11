@@ -27,6 +27,11 @@
         md-value="partial">
         Partial
       </md-radio>
+      <md-switch 
+        v-model="newCoverPathable"
+        class="md-primary">
+        Pathable
+      </md-switch>
     </div>
     <div class="addCharacter">
       <md-button
@@ -104,6 +109,7 @@ export default {
   data() {
     return {
       newCoverType: 'full',
+      newCoverPathable: false,
       newCharacterName: '',
       newCharacterResistance: 3,
       newCharacterWill: 20,
@@ -126,6 +132,7 @@ export default {
           width: world.tileSize,
           height: world.tileSize,
           coverType: this.newCoverType,
+          pathable: this.newCoverPathable,
           selectable: true
         });
       }
