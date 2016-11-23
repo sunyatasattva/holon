@@ -10,6 +10,7 @@ const Ruler  = require('./ruler');
 const World = fabric.util.createClass(fabric.Canvas, {
 
   activeObjects: [],
+  customHighlights: [],
   
   size: {
     x: 50,

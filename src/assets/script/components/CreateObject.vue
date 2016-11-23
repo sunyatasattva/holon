@@ -70,7 +70,7 @@
         <md-input-container>
           <label>Reflexes</label>
           <md-input type="number"
-            v-model='newCharacterResistance'></md-input>
+            v-model='newCharacterReflexes'></md-input>
         </md-input-container>
       </section>
       <section class="attributes character-creation">

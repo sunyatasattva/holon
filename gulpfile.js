@@ -8,6 +8,7 @@ const buffer = require('vinyl-buffer');
 const gutil = require('gulp-util');
 const sourcemaps = require('gulp-sourcemaps');
 const assign = require('lodash.assign');
+const uglify = require('gulp-uglify');
 
 // Custom Browserify options
 let customOpts = {
@@ -30,6 +31,7 @@ function bundle() {
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source('bundle.js'))
     .pipe(buffer())
+    .pipe(uglify())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./dist'));

@@ -137,14 +137,42 @@ const component = {
       let addingObject = this.options.isAddingObject,
           e = opts.e,
           p = this.canvas.getPointer(e),
+          tile = this.canvas.getTileFromCoordinates(p.x, p.y),
+          highlight,
+          idx,
           coords;
 
-      if(!addingObject)
-        return;
+      if(!addingObject) {
+        if(e.ctrlKey) {
+          coords = this.canvas.getCoordinatesOfTile(tile);
+          highlight = this.canvas.customHighlights.find((o) => {
+            return o.left === coords.topLeft[0] 
+              && o.top === coords.topLeft[1];
+          });
+          
+          if(highlight) {
+            idx = this.canvas.customHighlights.indexOf(highlight);
+            tile = this.canvas.customHighlights
+              .splice(idx, 1)[0]
+              .remove();
+            
+            this.canvas.remove(tile);
+            this.canvas.renderAll();
+          }
+          else {
+            this.canvas.customHighlights.push(
+              this.canvas.highlightTiles(
+                [tile],
+                { color: '#000' }
+              )
+            );
+          }
+        }
+        else
+          return;
+      }
       else {
-        coords = this.canvas.getCoordinatesOfTile(
-          this.canvas.getTileFromCoordinates(p.x, p.y)
-        );
+        coords = this.canvas.getCoordinatesOfTile(tile);
         
         addingObject.set({
           left: coords.topLeft[0],

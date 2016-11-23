@@ -46,6 +46,7 @@
     "envify": "^3.4.1",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "http-server": "^0.9.0",
     "lodash.assign": "^4.2.0",
