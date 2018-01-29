@@ -46,93 +46,42 @@
         @click='cancel'>
         Cancel
       </md-button>
-      <md-input-container>
-        <label>Name</label>
-        <md-input v-model='newCharacterName'></md-input>
-      </md-input-container>
-      <section class="characteristics character-creation">
-        <h3>Characteristics</h3>
-        <md-input-container>
-          <label>Resistance</label>
-          <md-input type="number"
-            v-model='newCharacterResistance'></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Will</label>
-          <md-input type="number"
-            v-model='newCharacterWill'></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Aim</label>
-          <md-input type="number"
-            v-model='newCharacterAim'></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Reflexes</label>
-          <md-input type="number"
-            v-model='newCharacterReflexes'></md-input>
-        </md-input-container>
-      </section>
-      <section class="attributes character-creation">
-        <h3>Attributes</h3>
-        <md-input-container>
-          <label>Movement</label>
-          <md-input type="number"
-            v-model='newCharacterMovement'></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Action</label>
-          <md-input type="number"
-            v-model='newCharacterAction'></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Vision</label>
-          <md-input type="number"
-            v-model='newCharacterVision'></md-input>
-        </md-input-container>
-        <md-input-container>
-          <label>Toughness</label>
-          <md-input type="number"
-            v-model='newCharacterToughness'></md-input>
-        </md-input-container>
+        </div>
+      </md-list-item>
+      <md-list-item md-expand>
+        <md-icon>person</md-icon>
+        <span class="md-list-item-text">Add character</span>
         
-        <md-input-container>
-          <label for="team">Team</label>
-          <md-select name="team" id="team" v-model="newCharacterTeam">
-            <md-option value="0">Allies</md-option>
-            <md-option value="1">Enemies</md-option>
-          </md-select>
-        </md-input-container>
-      </section>
+        <div class="add-character" slot="md-expand">
+          <character-creation
+            :isAddingObject="isAddingObject"
+            @add="addObject('character', ...arguments)"
+            @cancel="cancel" />
     </div>
+      </md-list-item>
+    </md-list>
   </div>
 </template>
 
 <script>
+import CharacterCreation from './CharacterCreation.vue';
 import Cover from '../entities/cover';
 import Walker from '../entities/walker';
   
 export default {
   name: 'create-object',
+  components: {
+    CharacterCreation
+  },
   data() {
     return {
       newCoverType: 'full',
-      newCoverPathable: false,
-      newCharacterName: '',
-      newCharacterResistance: 3,
-      newCharacterWill: 20,
-      newCharacterAim: 10,
-      newCharacterReflexes: 0,
-      newCharacterMovement: 6,
-      newCharacterAction: 2,
-      newCharacterVision: 12,
-      newCharacterToughness: 0,
-      newCharacterTeam: 0
+      newCoverPathable: false
     }
   },
   props: ['isAddingObject'],
   methods: {
-    addObject(type) {
+    addObject(type, data) {
       let world = this.$root.$children[0].$refs.World.canvas,
           obj;
       
@@ -148,20 +97,20 @@ export default {
       else if(type === 'character'){
         obj = new Walker({
           attributes: {
-            name: this.newCharacterName,
-            resistance: this.newCharacterResistance,
-            will: this.newCharacterWill,
-            aim: this.newCharacterAim,
-            reflexes: this.newCharacterReflexes,
-            movement: this.newCharacterMovement,
-            action: this.newCharacterAction,
-            vision: this.newCharacterVision,
-            toughness: this.newCharacterToughness,
+            name: data.name,
+            resistance: data.attributes.resistance.value,
+            will: data.attributes.will.value,
+            aim: data.attributes.aim.value,
+            reflexes: data.attributes.reflexes.value,
+            movement: data.attributes.movement.value,
+            action: data.attributes.action.value,
+            vision: data.attributes.vision.value,
+            toughness: data.attributes.toughness.value,
           },
           width: world.tileSize,
           height: world.tileSize,
           radius: world.tileSize / 2,
-          team: this.newCharacterTeam
+          team: data.team
         });
       }
       
