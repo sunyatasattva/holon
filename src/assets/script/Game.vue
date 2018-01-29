@@ -30,7 +30,13 @@
         </md-tab>
         
         <md-tab md-label="Options" md-icon="settings">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas amet cum vitae, omnis! Illum quas voluptatem, expedita iste, dicta ipsum ea veniam dolore in, quod saepe reiciendis nihil.</p>
+          <md-button
+           class="md-primary md-raised"
+           @click="exportCurrentState"
+           >
+            <md-icon>file_download</md-icon>
+            Export current state
+          </md-button>
         </md-tab>
       </md-tabs>
     </md-drawer>
@@ -89,6 +95,16 @@ export default {
     addWound(target) {
       target.setAttribute('wounds', target.attributes.wounds + 1);
     },
+    exportCurrentState() {
+      let currentState = this.activeObjects
+        .map( (o) => o.toObject() ),
+          data = `data:application/json;charset=utf-8,${encodeURIComponent( JSON.stringify(currentState) )}`,
+          linkElement = document.createElement('a');
+      
+      linkElement.setAttribute('href', data);
+      linkElement.setAttribute('download', `holon-${this.$data._clientID}`);
+      linkElement.click();
+    },
     loadGame(state) {
       const world = this.$refs.World.canvas;
       this.removeAllActiveObjects();
@@ -105,8 +121,11 @@ export default {
         );
       }
       catch(e) {
-        console.error("There was an error loading the game", 
-                      e, state);
+        console.error(
+          "There was an error loading the game", 
+          e, 
+          state
+        );
       }
       
       console.log("Saved state loaded:", state);
