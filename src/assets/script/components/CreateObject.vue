@@ -1,51 +1,43 @@
 <template>
   <div class='create-object-form'>
-    <div class="addCover">
-      <md-button
-        v-if='!isAddingObject'
-        class='md-raised md-primary'
-        @click='addObject("cover")'>
-        Add cover
-      </md-button>
-      <md-button
-        v-else
-        class='md-raised md-warn'
-        @click='cancel'>
-        Cancel
-      </md-button>
-      <md-radio
-        v-model="newCoverType"
-        id="new-cover-full"
-        name="new-cover-type"
-        md-value="full">
-        Full
-      </md-radio>
-      <md-radio
-        v-model="newCoverType"
-        id="new-cover-partial"
-        name="new-cover-type"
-        md-value="partial">
-        Partial
-      </md-radio>
-      <md-switch 
-        v-model="newCoverPathable"
-        class="md-primary">
-        Pathable
-      </md-switch>
-    </div>
-    <div class="addCharacter">
-      <md-button
-        v-if='!isAddingObject'
-        class='md-raised md-primary'
-        @click='addObject("character")'>
-        Add character
-      </md-button>
-      <md-button
-        v-else
-        class='md-raised md-warn'
-        @click='cancel'>
-        Cancel
-      </md-button>
+    <md-list>
+      <md-list-item md-expand>
+        <md-icon>security</md-icon>
+        <span class="md-list-item-text">Add cover</span>
+        
+        <div class="add-cover" slot="md-expand">
+          <div class="cover-options">
+            <md-radio
+              v-model="newCoverType"
+              id="new-cover-full"
+              value="full">
+              Full
+            </md-radio>
+            <md-radio
+              v-model="newCoverType"
+              id="new-cover-partial"
+              value="partial">
+              Partial
+            </md-radio>
+            <md-switch 
+              v-model="newCoverPathable"
+              class="md-primary">
+              Pathable
+            </md-switch>
+          </div>
+          <md-button
+            v-if='!isAddingObject'
+            class='md-raised md-primary'
+            @click='addObject("cover")'>
+            <md-icon>add_circle_outline</md-icon>
+            Add cover
+          </md-button>
+          <md-button
+            v-else
+            class='md-raised md-warn'
+            @click='cancel'>
+            Cancel
+          </md-button>
         </div>
       </md-list-item>
       <md-list-item md-expand>
@@ -57,7 +49,7 @@
             :isAddingObject="isAddingObject"
             @add="addObject('character', ...arguments)"
             @cancel="cancel" />
-    </div>
+        </div>
       </md-list-item>
     </md-list>
   </div>
@@ -123,5 +115,33 @@ export default {
 }
 </script>
 
+<style>
+  .md-button {
+    margin-left:  0;
+    margin-right: 20px;
+  }
+  
+  .md-button.md-raised .md-icon {
+    margin-right: 5px;
+  }
+  
+  .md-list-item-expand .md-ripple {
+    cursor: pointer;
+  }
+</style>
+
 <style scoped>
+  .add-character,
+  .add-cover {
+    padding: 16px;
+  }
+  
+  .md-tab {
+    padding: 0;
+  }
+  
+  .md-list.md-theme-default .md-list-item-container:not(.md-list-item-default):not([disabled]):hover {
+    background-color: transparent;
+    cursor: auto;
+  }
 </style>
