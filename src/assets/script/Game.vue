@@ -1,5 +1,5 @@
 <template>
-  <div id='Game' ref='main' v-md-theme="'default'">
+  <div id='Game' ref='main'>
     <keep-alive>
       <game-world
         ref='World'
@@ -11,8 +11,8 @@
         v-on:toggle='toggleOption'>
       </game-world>
     </keep-alive>
-    <md-sidenav class="md-right" ref="sidebar">
-      <md-tabs md-fixed>
+    <md-drawer class="md-right" ref="sidebar" :md-active.sync="editMode">
+      <md-tabs md-alignment="fixed">
         <md-tab md-label="Create" md-icon="add_box">
           <create-object 
             :isAddingObject='options.isAddingObject'
@@ -33,7 +33,7 @@
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas amet cum vitae, omnis! Illum quas voluptatem, expedita iste, dicta ipsum ea veniam dolore in, quod saepe reiciendis nihil.</p>
         </md-tab>
       </md-tabs>
-    </md-sidenav>
+    </md-drawer>
     
     <md-button 
        @click="toggleEditMode"
@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       activeObjects: [],
+      editMode: false,
       selectedObject: false,
       options: {
         isAddingObject: false
@@ -155,7 +156,7 @@ export default {
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();
-      this.$refs.sidebar.toggle();
+      this.editMode = !this.editMode;
     },
     toggleOption(option, val) {
       if(val)
@@ -183,8 +184,16 @@ export default {
     position: relative;
   }
   
-  .md-sidenav.md-active .md-backdrop {
+  .md-overlay {
     opacity: 0;
     pointer-events: none;
+  }
+  
+  .md-tabs-content {
+    overflow: visible;
+  }
+  
+  .md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
+    min-width: auto;
   }
 </style>
