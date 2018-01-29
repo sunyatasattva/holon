@@ -223,7 +223,7 @@ const component = {
     world.on('mouse:move', (opts) => {
       let e = opts.e;
       
-      if(e.button === 2) {
+      if(e.button === 2 || e.which === 3) {
         this.canvas.relativePan(
           { x: e.movementX, y: e.movementY }
         );
