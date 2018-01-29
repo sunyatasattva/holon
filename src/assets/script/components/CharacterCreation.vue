@@ -1,16 +1,29 @@
 <template>
  <section class="character-creation">
     <md-field>
-      <label>Name</label>
-      <md-input v-model='name'></md-input>
-      <md-chip>{{ characterPoints }}</md-chip>
-    </md-field>
-    <md-field>
       <label for="team">Team</label>
       <md-select name="team" id="team" v-model="team">
         <md-option value="0">Allies</md-option>
         <md-option value="1">Enemies</md-option>
       </md-select>
+    </md-field>
+    <md-field>
+      <label for="character-load">Load character</label>
+      <md-select
+        id="character-load"
+        v-model="loadedCharacterId"
+        @md-selected="loadCharacter">
+        <md-option 
+          v-for="character of characters"
+          :value="character['.key']">
+          {{ character.name }}
+        </md-option>
+      </md-select>
+    </md-field>
+    <md-field>
+      <label>Name</label>
+      <md-input v-model='name'></md-input>
+      <md-chip>{{ characterPoints }}</md-chip>
     </md-field>
     <section class="stats">
       <section class="characteristics">
@@ -105,6 +118,9 @@
 
 <script>
 import AttributeInput from './AttributeInput.vue';
+import Network from '../modules/networking';
+  
+const db = Network.database();
 
 export default {
   name: 'character-creation',
@@ -157,9 +173,13 @@ export default {
         }
       },
       
+      loadedCharacterId: null,
       name: '',
       team: 0
     }
+  },
+  firebase: {
+    characters: db.ref('characters')
   },
   methods: {
     add() {
@@ -167,6 +187,24 @@ export default {
     },
     cancel() {
       this.$emit('cancel');
+    },
+    loadCharacter(id) {
+      let character = this.characters.find(
+        (char) => char['.key'] === id
+      );
+      
+      console.log('Loaded character: ', character);
+      
+      // @fixme !! Bleagh!
+      this.attributes.action.value = character.action;
+      this.attributes.aim.value = character.aim;
+      this.attributes.movement.value = character.movement;
+      this.attributes.reflexes.value = character.reflexes;
+      this.attributes.resistance.value = character.resistance;
+      this.attributes.toughness.value = character.toughness;
+      this.attributes.vision.value = character.vision;
+      this.attributes.will.value = character.will;
+      this.name = character.name;
     }
   },
   props: ['isAddingObject']

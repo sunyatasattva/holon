@@ -17,17 +17,15 @@
 export default {
   name: 'attribute-input',
   computed: {
+    rank() {
+      return this.model.value;
+    },
     totalCost() {
       return [...Array(this.model.value)]
         .reduce(
           (sum, v, i) => sum + this.calculateCurrentPointCost(i + 1),
           0
         );
-    }
-  },
-  data() {
-    return {
-      rank: this.model.value
     }
   },
   props: {
