@@ -30,6 +30,15 @@
         </md-tab>
         
         <md-tab md-label="Options" md-icon="settings">
+          <section class="turn-options">
+            <h2>Turn control options</h2>
+            <md-switch
+               class="md-primary"
+               v-model="options.autoPan"
+             >
+              Automatically center current character
+            </md-switch>
+          </section>
           <md-button
            class="md-primary md-raised"
            @click="exportCurrentState"
@@ -47,14 +56,22 @@
       <md-icon>edit</md-icon>
       <md-tooltip md-direction="top">Toggle edit mode</md-tooltip>
     </md-button>
+    
+    <turn-controls
+      :autoPan="options.autoPan"
+      :characters="activeObjects.filter(x => x.attributes)"
+      @play="toggleActedState"
+      @select="panToObject" />
   </div>
 </template>
 
 <script>
 import { fabric } from 'fabric';
+import Vue from 'vue';
 import World from './components/World.vue';
 import ObjectDetails from './components/ObjectDetails.vue';
 import CreateObject from './components/CreateObject.vue';
+import TurnControls from './components/TurnControls.vue';
 import Network from './modules/networking';
   
 const db = Network.database();
@@ -64,7 +81,8 @@ export default {
   components: {
     'game-world': World,
     ObjectDetails,
-    CreateObject
+    CreateObject,
+    TurnControls
   },
   data() {
     return {
@@ -72,6 +90,7 @@ export default {
       editMode: false,
       selectedObject: false,
       options: {
+        autoPan: false,
         isAddingObject: false
       },
       // @todo maybe generate a better unique ID, 
@@ -132,6 +151,17 @@ export default {
       
       return this;
     },
+    panToObject(object) {
+      let canvas = this.$refs.World.canvas,
+          zoom = canvas.getZoom(),
+          canvasHeight = canvas.height / zoom,
+          canvasWidth = canvas.width / zoom;
+      
+      canvas.absolutePan({
+        x: object.left * zoom - canvasWidth / 2,
+        y: object.top * zoom - canvasHeight / 2
+      });
+    },
     removeAllActiveObjects() {
       if(this.activeObjects.length) {
         this.activeObjects.forEach((o) => {
@@ -172,6 +202,9 @@ export default {
     },
     select(object) {
       this.selectedObject = object;
+    },
+    toggleActedState(character) {
+      Vue.set(character, 'hasActed', !character.hasActed);
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();
@@ -214,5 +247,11 @@ export default {
   
   .md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
     min-width: auto;
+  }
+  
+  .turn-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
   }
 </style>
