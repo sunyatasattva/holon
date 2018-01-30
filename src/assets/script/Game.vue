@@ -1,5 +1,5 @@
 <template>
-  <div id='Game' ref='main' v-md-theme="'default'">
+  <div id='Game' ref='main'>
     <keep-alive>
       <game-world
         ref='World'
@@ -11,8 +11,8 @@
         v-on:toggle='toggleOption'>
       </game-world>
     </keep-alive>
-    <md-sidenav class="md-right" ref="sidebar">
-      <md-tabs md-fixed>
+    <md-drawer class="md-right" ref="sidebar" :md-active.sync="editMode">
+      <md-tabs md-alignment="fixed">
         <md-tab md-label="Create" md-icon="add_box">
           <create-object 
             :isAddingObject='options.isAddingObject'
@@ -30,10 +30,16 @@
         </md-tab>
         
         <md-tab md-label="Options" md-icon="settings">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas amet cum vitae, omnis! Illum quas voluptatem, expedita iste, dicta ipsum ea veniam dolore in, quod saepe reiciendis nihil.</p>
+          <md-button
+           class="md-primary md-raised"
+           @click="exportCurrentState"
+           >
+            <md-icon>file_download</md-icon>
+            Export current state
+          </md-button>
         </md-tab>
       </md-tabs>
-    </md-sidenav>
+    </md-drawer>
     
     <md-button 
        @click="toggleEditMode"
@@ -63,6 +69,7 @@ export default {
   data() {
     return {
       activeObjects: [],
+      editMode: false,
       selectedObject: false,
       options: {
         isAddingObject: false
@@ -88,6 +95,16 @@ export default {
     addWound(target) {
       target.setAttribute('wounds', target.attributes.wounds + 1);
     },
+    exportCurrentState() {
+      let currentState = this.activeObjects
+        .map( (o) => o.toObject() ),
+          data = `data:application/json;charset=utf-8,${encodeURIComponent( JSON.stringify(currentState) )}`,
+          linkElement = document.createElement('a');
+      
+      linkElement.setAttribute('href', data);
+      linkElement.setAttribute('download', `holon-${this.$data._clientID}`);
+      linkElement.click();
+    },
     loadGame(state) {
       const world = this.$refs.World.canvas;
       this.removeAllActiveObjects();
@@ -104,8 +121,11 @@ export default {
         );
       }
       catch(e) {
-        console.error("There was an error loading the game", 
-                      e, state);
+        console.error(
+          "There was an error loading the game", 
+          e, 
+          state
+        );
       }
       
       console.log("Saved state loaded:", state);
@@ -155,7 +175,7 @@ export default {
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();
-      this.$refs.sidebar.toggle();
+      this.editMode = !this.editMode;
     },
     toggleOption(option, val) {
       if(val)
@@ -183,8 +203,16 @@ export default {
     position: relative;
   }
   
-  .md-sidenav.md-active .md-backdrop {
+  .md-overlay {
     opacity: 0;
     pointer-events: none;
+  }
+  
+  .md-tabs-content {
+    overflow: visible;
+  }
+  
+  .md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
+    min-width: auto;
   }
 </style>
