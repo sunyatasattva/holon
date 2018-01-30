@@ -16,7 +16,11 @@ import { prototype as Cover } from './cover';
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {},
-  equipment: {},
+  equipment: {
+    armor: null,
+    items: [],
+    weapons: []
+  },
   
   coveredSides: {},
   fullyCoveredColor: Cover._coverOpts.fullFill,

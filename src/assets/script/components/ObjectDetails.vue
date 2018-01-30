@@ -49,6 +49,23 @@
         </dt>
         <dd>{{object.attributes.resistance}}</dd>
       </dl>
+      
+      <section class="equipment">
+        <section class="weapons">
+          <ul>
+            <li
+              v-for="weapon in object.equipment.weapons"
+              :class="{ 'is-selected': object.equipment.activeWeapon.type === weapon.type }"
+              @click="selectWeapon(weapon)"
+             >
+              <h4 class="weapon-type">{{ weapon.type }}</h4>
+              <div class="weapon-details">
+                <span class="weapon-damage">{{ weapon.damage }}</span>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </section>
       <md-button
        class="md-primary md-raised"
        @click="saveObject">
@@ -76,6 +93,8 @@
 </template>
 
 <script>
+import get from 'lodash.get';
+
 import HealthBar from './HealthBar.vue';
 import Network from '../modules/networking';
   
@@ -146,6 +165,10 @@ export default {
             }
           }
         );
+    },
+    selectWeapon(weapon) {
+      console.log('Selecting weapon: ', weapon);
+      this.object.equipment.activeWeapon = weapon;
     }
   }
 }
@@ -173,4 +196,32 @@ export default {
   }
   
   i { margin-right: 10px; }
+  
+  .weapon-type {
+    margin-top: 0;
+  }
+  
+  .weapons {
+    ul {
+      list-style-type: none;
+      margin:          0;
+      padding:         0;
+    }
+    
+    li {
+      cursor: pointer;
+      opacity: 0.5;
+      padding: 10px;
+      
+      &:hover {
+        opacity: 0.75;
+      }
+      
+      &.is-selected {
+        background-color: rgba(md-get-palette-color(blue, A200), 0.1);
+        opacity: 1;
+      }
+    }
+  }
+  
 </style>

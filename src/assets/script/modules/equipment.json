@@ -1,0 +1,68 @@
+{
+  "armors": [],
+  "items": [],
+  "weapons": [
+    {
+      "ammo": 4,
+      "cost": 4,
+      "criticalHitChance": 1,
+      "damage": "1d4+2",
+      "modifiers": {
+        
+      },
+      "range": "medium",
+      "type": "Assault rifle"
+    },
+    {
+      "ammo": 4,
+      "cost": 6,
+      "criticalHitChance": 2,
+      "damage": "2d4",
+      "modifiers": {
+        "movement": -2  
+      },
+      "range": "medium",
+      "type": "Heavy assault rifle"
+    },
+    {
+      "ammo": 4,
+      "cost": 2,
+      "criticalHitChance": 0,
+      "damage": "1d4",
+      "falloffPoint": 10,
+      "range": "short",
+      "type": "Revolver"
+    },
+    {
+      "ammo": 4,
+      "cost": 6,
+      "criticalHitChance": 2,
+      "damage": "1d6+2",
+      "hitChanceModifier": 50,
+      "range": "short",
+      "type": "Shotgun"
+    },
+    {
+      "ammo": 3,
+      "cost": 8,
+      "criticalHitChance": 3,
+      "damage": "1d6+2",
+      "falloffPoint": 5,
+      "hitChanceModifier": -50,
+      "modifiers": {
+        "vision": 10
+      },
+      "range": "long",
+      "type": "Sniper rifle"
+    },
+    {
+      "ammo": 3,
+      "cost": 2,
+      "criticalHitChance": 0,
+      "damage": "1d4+1",
+      "hitChanceModifier": 10,
+      "range": "medium",
+      "type": "SMG"
+    }
+  ]
+}

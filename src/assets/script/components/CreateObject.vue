@@ -99,6 +99,7 @@ export default {
             vision: data.attributes.vision.value,
             toughness: data.attributes.toughness.value,
           },
+          equipment: data.equipment,
           width: world.tileSize,
           height: world.tileSize,
           radius: world.tileSize / 2,

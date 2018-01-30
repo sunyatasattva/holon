@@ -99,6 +99,23 @@
           :model.sync='attributes.toughness' />
       </section>
     </section>
+    <section class="equipment">
+      <section class="weapons">
+        <md-field>
+          <label for="weapons">Weapons</label>
+          <md-select
+           id="weapons"
+           multiple
+           v-model="equipment.weapons">
+            <md-option 
+              v-for="weapon in Equipment.weapons"
+              :value="weapon">
+              {{ weapon.type }}
+            </md-option>
+          </md-select>
+        </md-field>
+      </section>
+    </section>
     <md-button
       v-if='!isAddingObject'
       class='md-raised md-primary'
@@ -120,6 +137,8 @@
 import AttributeInput from './AttributeInput.vue';
 import Network from '../modules/networking';
   
+import Equipment from '../modules/equipment.json';
+  
 const db = Network.database();
 
 export default {
@@ -138,6 +157,8 @@ export default {
   },
   data() {
     return {
+      Equipment: Equipment,
+      
       attributes: {
         action: {
           cost: 0,
@@ -171,6 +192,11 @@ export default {
           cost: 0,
           value: 20
         }
+      },
+      equipment: {
+        armor: null,
+        items: [],
+        weapons: []
       },
       
       loadedCharacterId: null,

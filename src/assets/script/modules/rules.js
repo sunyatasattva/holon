@@ -55,8 +55,8 @@ export default {
     return !targetCover ? 0 : targetCover === 1 ? -20 : -40;
   },
   _hitModWeapons(source, target) {
-    let weapons = get(source, 'equipment.weapons', []),
-        activeWeapon = weapons.find(weapon => weapon.isSelected),
+    let activeWeapon = get(source, 'equipment.activeWeapon'),
+        // @todo integrate this with standard modifiers i.e. aim mod
         baseHitChanceModifier = get(activeWeapon, 'hitChanceModifier', 0),
         distance = source.getDistanceFrom(target),
         falloffPoint = get(activeWeapon, 'falloffPoint', 0);
