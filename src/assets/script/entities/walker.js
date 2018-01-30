@@ -16,6 +16,7 @@ import { prototype as Cover } from './cover';
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {},
+  equipment: {},
   
   coveredSides: {},
   fullyCoveredColor: Cover._coverOpts.fullFill,
@@ -137,6 +138,26 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     });
   },
   
+  getDistanceFrom(target) {
+    let thisCenter = this._calculateCenterCoordinates(),
+        targetCenter;
+    
+    if(target.gridPosition) {
+      targetCenter = target._calculateCenterCoordinates();
+    }
+    else if(target.x && target.y) {
+      targetCenter = target;
+    }
+    else {
+      console.error("Invalid target:", target);
+      
+      return false;
+    }
+    
+    return this.canvas
+        .calculateOctileDistance(thisCenter, targetCenter);
+  },
+  
   getValidTargets() {
     return this.canvas.getActiveObjects('walker')
       .filter(this.isValidTarget.bind(this));
@@ -166,24 +187,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   isWithinVisionRange(target) {
-    let thisCenter = this._calculateCenterCoordinates(),
-        targetCenter;
-    
-    if(target.gridPosition) {
-      targetCenter = target._calculateCenterCoordinates();
-    }
-    else if(target.x && target.y) {
-      targetCenter = target;
-    }
-    else {
-      console.error("Invalid target:", target);
-      
-      return false;
-    }
-    
-    return this.canvas
-        .calculateOctileDistance(thisCenter, targetCenter) 
-        <= this.attributes.vision;
+    return this.getDistanceFrom(target) <= this.attributes.vision;
   },
   
   resetVisualStatus() {
@@ -251,6 +255,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   toObject: function(props = []) {
     props = props.concat([
       'attributes',
+      'equipment',
       'hasActed',
       'isDelaying',
       'showRangeOnSelected',
