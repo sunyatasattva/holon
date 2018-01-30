@@ -2,6 +2,9 @@ const fabric = require('fabric').fabric;
 const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 
+// I think I will regret this
+import Vue from 'vue';
+
 import Rules from '../modules/rules';
 import { prototype as Cover } from './cover'; 
 
@@ -25,6 +28,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     '#43a2de'
   ],
   
+  hasActed: false,
+  isDelaying: false,
   // @todo this entity is technically pathable (i.e. other objects)
   // can take a path through it), but currently pathing is not really
   // implemented and this object should block stopping movement on
@@ -198,6 +203,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.canvas.fire('object:modified');
   },
   
+  setProp(prop, val) {
+    this[prop] = val;
+    
+    this.fire('modified');
+    this.canvas.fire('object:modified');
+  },
+  
   showMovementRange(showDashing = true) {
     let range = this.calculateMovementRange(),
         movementTiles,
@@ -239,6 +251,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   toObject: function(props = []) {
     props = props.concat([
       'attributes',
+      'hasActed',
+      'isDelaying',
       'showRangeOnSelected',
       'radius',
       'team'

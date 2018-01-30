@@ -59,12 +59,7 @@ export default {
   methods: {
     playTurn() {
       if(this.activeCharacters.length > 1) {
-        if(this.autoPan)
-          this.selectCharacter(this.activeCharacters[1]);
-        
         this.$emit('play', this.activeCharacters[0]);
-        
-        //console.log(this.activeCharacters[0].attributes.name, this.activeCharacters[0].hasActed);
       }
       else {
         this.sortedCharacters
@@ -73,13 +68,20 @@ export default {
             character.isDelaying = false;
           });
         
-        if(this.autoPan)
-          this.selectCharacter(this.activeCharacters[0]);
+        // @fixme ? maybe? Should this be here or in Game.vue. Maybe this should emit a simple update event.
+        this.sortedCharacters[0].canvas
+          .fire('object:modified');
       }
     },
     selectCharacter(character) {
       this.$emit('select', character);
     }
+  },
+  watch: {
+    activeCharacters(curr, last) {
+      if(this.autoPan)
+        this.selectCharacter(curr[0]);
+    } 
   }
 }
 </script>

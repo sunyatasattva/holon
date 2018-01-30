@@ -58,6 +58,7 @@
     </md-button>
     
     <turn-controls
+      ref="turnControls"
       :autoPan="options.autoPan"
       :characters="activeObjects.filter(x => x.attributes)"
       @play="toggleActedState"
@@ -204,7 +205,7 @@ export default {
       this.selectedObject = object;
     },
     toggleActedState(character) {
-      Vue.set(character, 'hasActed', !character.hasActed);
+      character.setProp('hasActed', !character.hasActed);
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();

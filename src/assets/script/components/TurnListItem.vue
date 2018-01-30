@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     delayAction() {
-      Vue.set(this.character, 'isDelaying', true);
+      this.character.setProp('isDelaying', true);
     }
   }
 }
