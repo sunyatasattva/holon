@@ -50,8 +50,8 @@
         <dd>{{object.attributes.resistance}}</dd>
       </dl>
       
-      <section class="equipment">
-        <section class="weapons">
+      <section class="equipment" v-if="object.equipment">
+        <section class="weapons" v-if="object.weapons">
           <ul>
             <li
               v-for="weapon in object.equipment.weapons"
@@ -119,6 +119,24 @@ export default {
     }
   },
   methods: {
+    calculateModifiedAttributes() {
+      let character = this.object,
+          equipment = [
+            get(character, 'equipment.activeArmor'),
+            get(character, 'equipment.activeWeapon')
+          ];
+      
+      equipment.forEach((item) => {
+        if( get(item, 'modifiers') ) {
+          for(
+            let [attr, mod] of 
+            Object.entries(item.modifiers)
+          ) {
+            character.attributes[attr] =  character.baseAttributes[attr] + mod;
+          }
+        }
+      });
+    },
     removeObjectFromDatabase() {
       let characterId = this.object.attributes.name.toLowerCase();
       
@@ -141,6 +159,16 @@ export default {
             }
           }
         );
+    },
+    resetBaseAttributes() {
+      let character = this.object;
+      
+      if(character.attributes) {
+        character.attributes = { 
+          ...character.attributes,
+          ...character.baseAttributes
+        };
+      }
     },
     saveObject() {
       let characterId = this.object.attributes.name.toLowerCase();
@@ -170,6 +198,16 @@ export default {
       console.log('Selecting weapon: ', weapon);
       this.object.equipment.activeWeapon = weapon;
     }
+  },
+  watch: {
+    'object.equipment.activeArmor': [
+      'resetBaseAttributes',
+      'calculateModifiedAttributes'
+    ],
+    'object.equipment.activeWeapon': [
+      'resetBaseAttributes',
+      'calculateModifiedAttributes'
+    ]
   }
 }
 </script>

@@ -2,9 +2,6 @@ const fabric = require('fabric').fabric;
 const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 
-// I think I will regret this
-import Vue from 'vue';
-
 import Rules from '../modules/rules';
 import { prototype as Cover } from './cover'; 
 
@@ -259,6 +256,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   toObject: function(props = []) {
     props = props.concat([
       'attributes',
+      'baseAttributes',
       'equipment',
       'hasActed',
       'isDelaying',
