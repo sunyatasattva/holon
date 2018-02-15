@@ -1,0 +1,327 @@
+{
+  "skills": [
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un bonus di 1 punto alla probabilità di <em>successo critico</em> per ogni nemico entro la propria <em>Visione</em> (Max. 4).",
+      "icon": "ico-aggression.jpg",
+      "modifiers": {
+        "criticalHitChance": {
+          "bonus": 1,
+          "conditions": [
+            "forEachEnemyWithinVision"
+          ],
+          "max": 4
+        }
+      },
+      "id": "aggression",
+      "name": "Aggressione",
+      "requirements": []
+    },
+    {
+      "action": 0,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "Dopo aver attivato l'abilità, il personaggio può spendere tutti i suoi <em>Punti Azione</em> in movimento e può ancora effettuare un <em>Attacco</em> o <em>Sorvegliare</em>.",
+      "icon": "ico-runandgun.jpg",
+      "modifiers": {},
+      "id": "run-and-gun",
+      "name": "Attacco in corsa",
+      "requirements": []
+    },
+    {
+      "action": 2,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "Un <em>Attacco</em> con un bonus di 3 punti alla probabilità di <em>successo critico</em> e che infligge il doppio dei danni in caso di <em>successo critico</em>.",
+      "icon": "ico-headshot.jpg",
+      "id": "headshot",
+      "name": "Colpo preciso",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un bonus di 5 punti al <em>Movimento</em>.",
+      "icon": "ico-sprinter.jpg",
+      "modifiers": {
+        "movement": 5
+      },
+      "id": "sprinter",
+      "name": "Corridore",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Quando si effettua un <em>Attacco</em> contro un bersaglio, si conferisce un bonus di 10 punti (non cumulativi) alla <em>Mira</em> degli alleati contro quel bersaglio fino al proprio prossimo punto azione.",
+      "icon": "ico-holotargeting.jpg",
+      "modifiers": {},
+      "id": "holo-targeting",
+      "name": "Holo-targeting",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Attacchi eseguiti come prima azione del turno hanno un bonus di 10 punti alla <em>Mira</em> e 1 punto al <em>successo critico</em>.",
+      "icon": "ico-aimstability.jpg",
+      "modifiers": {},
+      "id": "aim-stability",
+      "name": "Mira salda",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio utilizza automaticamente l'azione <em>Sorvegliare</em> se ha speso il suo primo punto azine per <em>Attaccare</em>.",
+      "icon": "ico-advancedfirecontrol.jpg",
+      "modifiers": {},
+      "id": "advanced-fire-control",
+      "name": "Pronto a tutto",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio attacca i primi 3 bersagli possibili quando usa l'azione <em>Sorvegliare</em>",
+      "icon": "ico-quickreaction.jpg",
+      "modifiers": {},
+      "id": "quick-reaction",
+      "name": "Reazione rapida",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un bonus di 80 punti alla <em>Difesa</em> contro il primo attacco di reazione del turno. Il bonus ricevuto diminuisce di 10 punti per ogni attacco successivo.",
+      "icon": "ico-lightningreflexes.jpg",
+      "modifiers": {},
+      "id": "lightning-reflexes",
+      "name": "Riflessi fulminei",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un bonus di 5 punti alla <em>Difesa</em> per ogni nemico entro la propria <em>Visione</em> (Max. 30).",
+      "icon": "ico-tacticalsense.jpg",
+      "modifiers": {
+        "defense": {
+          "bonus": 5,
+          "conditions": [
+            "forEachEnemyWithinVision"
+          ],
+          "max": 30
+        }
+      },
+      "id": "tactical-sense",
+      "name": "Senso tattico",
+      "requirements": []
+    },
+    
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio aumenta del 150% (arrotondato per eccesso) il bonus alla <em>Resistenza</em> ottenuto tramite le armature ed ottiene un bonus di +10 alla <em>Difesa</em> fintanto che <em>Sorveglia</em>.",
+      "icon": "ico-heavyconditioning.jpg",
+      "modifiers": {
+        "equipment": {
+          "armor": {
+            "modifiers": {
+              "toughness": {
+                "bonus": "x1.5"
+              }
+            }
+          }
+        },
+        "defense": {
+          "bonus": 10,
+          "conditions": [
+            "isStatus"
+          ],
+          "conditionsArguments": [
+            ["overwatch"]
+          ]
+        }
+      },
+      "id": "heavy-conditioning",
+      "name": "Addestramento pesante",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio ottiene un bonus di +10 alla <em>Mira</em> e +1 al <em>successo critico</em> contro avversari che hanno più ferite di metà della propria <em>Resistenza</em>. Uccidere un avversario in questo modo non costa un'azione.",
+      "icon": "ico-executioner.jpg",
+      "modifiers": {
+        "aim": {
+          "bonus": 10,
+          "conditions": [
+            "targetWoundRatio"
+          ],
+          "conditionsArguments": [
+            ["<=", 0.5]
+          ]
+        },
+        "criticalHitChance": {
+          "bonus": 1,
+          "conditions": [
+            "targetWoundRatio"
+          ],
+          "conditionsArguments": [
+            ["<=", 0.5]
+          ]
+        }
+      },
+      "id": "executioner",
+      "name": "Boia",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "La reazione di <em>Sorvegliare</em> si attiva contro qualsiasi azione offensiva nemica entro il raggio, non soltanto contro il movimento.",
+      "icon": "ico-coveringfire.jpg",
+      "modifiers": {},
+      "id": "covering-fire",
+      "name": "Fuoco di copertura",
+      "requirements": ["*0"]
+    },
+    {
+      "action": 1,
+      "ammo": 2,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Effettua un attacco con un bonus di +20 alla <em>Mira</em> che infligge la metà dei danni (minimo 1). Il bersaglio deve effettuare una prova di <em>Volontà</em> od essere costretto a muoversi. Il bersaglio deve muoversi di metà del suo <em>Movimento</em>.",
+      "endsTurn": true,
+      "icon": "ico-flush.jpg",
+      "modifiers": {},
+      "id": "flush",
+      "name": "Fuoco di pressione",
+      "requirements": ["*0"]
+    },
+    {
+      "action": 1,
+      "ammo": 2,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Concentra il fuoco contro un bersaglio entro il 150% della propria <em>Visione</em>. Il personaggio ottiene un attacco di reazione se il bersaglio si muove, ed il bersaglio subisce una penalità di 30 punti alla <em>Mira</em>. Inoltre, annulla <em>Fuoco di saturazione</em> o <em>Sorvegliare</em> del bersaglio.",
+      "endsTurn": true,
+      "icon": "ico-suppression.jpg",
+      "modifiers": {},
+      "id": "suppression",
+      "name": "Fuoco di saturazione",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio può lanciare tutte le <em>Granate</em> ad una distanza di 15 mt. I <em>Fumogeni</em> danno un bonus di +40 alla <em>Difesa</em> e aumenta il danno alle coperture delle <em>Granate</em>.",
+      "icon": "ico-granadier.jpg",
+      "modifiers": {},
+      "id": "granadier",
+      "name": "Granatiere",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il primo attacco di un turno eseguito contro un bersaglio entro 5 mt non costa un'azione. Non vale se usato dopo aver attivato <em>Attacco in corsa</em>.",
+      "icon": "ico-closeencounters.jpg",
+      "modifiers": {},
+      "id": "close-encounters",
+      "name": "Incontri ravvicinati",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "In mano al personaggio, i <em>Medikit</em> curano 8 ferite e possono essere usati come primo punto azione senza spenderlo. Inoltre, invece di stabilizzare semplicemente il bersaglio, lo rianimano curando 4 ferite. Il personaggio rianimato in questo modo ha un solo punto azione ed una penalità di 30 punti a tutte le prove per il turno successivo.",
+      "icon": "ico-fieldmedicine.jpg",
+      "modifiers": {},
+      "id": "field-medicine",
+      "name": "Medicina da campo",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "<em>Attaccare</em> non termina il turno.",
+      "icon": "ico-bulletswarm.jpg",
+      "modifiers": {},
+      "id": "bullet-swarm",
+      "name": "Pioggia di proiettili",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Le armi infliggono +1 danno addizionale, +10 alla <em>Mira</em>, +1 alla <em>Visione</em>.",
+      "icon": "ico-ranger.jpg",
+      "modifiers": {
+        "aim": 10,
+        "equipment": {
+          "weapon": {
+            "modifiers": {
+              "damage": 1
+            }
+          }
+        },
+        "vision": 1
+      },
+      "id": "ranger",
+      "name": "Ranger",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio può ricaricare la propria arma come azione gratuita.",
+      "icon": "ico-quickreload.jpg",
+      "modifiers": {},
+      "id": "quick-reload",
+      "name": "Ricarica rapida",
+      "requirements": ["*0"]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio ottiene un bonus di +1 alla <em>Robustezza</em> in copertura parziale, +2 in copertura totale ed ottiene un bonus di +10 alla <em>Difesa</em> fintanto che <em>Sorveglia</em>.",
+      "icon": "ico-willtosurvive.jpg",
+      "modifiers": {
+        "defense": {
+          "bonus": 10,
+          "conditions": [
+            "isStatus"
+          ],
+          "conditionsArguments": [
+            ["overwatch"]
+          ]
+        }
+      },
+      "id": "will-to-survive",
+      "name": "Senso di sopravvivenza",
+      "requirements": ["*0"]
+    },
+  ],
+  "talents": []
+}
