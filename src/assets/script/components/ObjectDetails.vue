@@ -8,51 +8,67 @@
         :wounds='object.attributes.wounds' />
       
       <dl class="attributes">
-        <dt>
+        <dt :class="{ 'is-modified': object.attributes.resistance !== object.baseAttributes.resistance }">
           <md-icon class="md-primary">favorite</md-icon>
           <span>Resistance</span>
         </dt>
-        <dd>{{object.attributes.resistance}}</dd>
-        <dt>
-          <md-icon class="md-primary">brightness_7</md-icon>
-          <span>Will</span>
-        </dt>
-        <dd>{{object.attributes.will}}</dd>
-        <dt>
-          <md-icon class="md-primary">gps_fixed</md-icon>
-          <span>Aim</span>
-        </dt>
-        <dd>{{object.attributes.aim}}</dd>
-        <dt>
-          <md-icon class="md-primary">flash_on</md-icon>
-          <span>Reflexes</span>
-        </dt>
-        <dd>{{object.attributes.reflexes}}</dd>
-        <dt>
+        <dd>
+          {{object.attributes.resistance}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.movement !== object.baseAttributes.movement }">
           <md-icon class="md-primary">directions_run</md-icon>
           <span>Movement</span>
         </dt>
-        <dd>{{object.attributes.movement}}</dd>
-        <dt>
+        <dd>
+          {{object.attributes.movement}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.will !== object.baseAttributes.will }">
+          <md-icon class="md-primary">brightness_7</md-icon>
+          <span>Will</span>
+        </dt>
+        <dd>
+          {{object.attributes.will}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.action !== object.baseAttributes.action }">
           <md-icon class="md-primary">reply_all</md-icon>
           <span>Action</span>
         </dt>
-        <dd>{{object.attributes.action}}</dd>
-        <dt>
+        <dd>
+          {{object.attributes.action}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.aim !== object.baseAttributes.aim }">
+          <md-icon class="md-primary">gps_fixed</md-icon>
+          <span>Aim</span>
+        </dt>
+        <dd>
+          {{object.attributes.aim}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.vision !== object.baseAttributes.vision }">
           <md-icon class="md-primary">visibility</md-icon>
           <span>Vision</span>
         </dt>
-        <dd>{{object.attributes.vision}}</dd>
-        <dt>
+        <dd>
+          {{object.attributes.vision}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.reflexes !== object.baseAttributes.reflexes }">
+          <md-icon class="md-primary">flash_on</md-icon>
+          <span>Reflexes</span>
+        </dt>
+        <dd>
+          {{object.attributes.reflexes}}
+        </dd>
+        <dt :class="{ 'is-modified': object.attributes.toughness !== object.baseAttributes.toughness }">
           <md-icon class="md-primary">security</md-icon>
           <span>Toughness</span>
         </dt>
-        <dd>{{object.attributes.resistance}}</dd>
+        <dd>
+          {{object.attributes.toughness}}
+        </dd>
       </dl>
       
       <section class="equipment" v-if="object.equipment">
-        <section class="weapons" v-if="object.weapons">
-          <ul>
+        <section class="weapons">
+          <ul v-if="object.equipment.weapons">
             <li
               v-for="weapon in object.equipment.weapons"
               :class="{ 'is-selected': object.equipment.activeWeapon.type === weapon.type }"
@@ -64,6 +80,12 @@
               </div>
             </li>
           </ul>
+        </section>
+        <section class="armor">
+          <div v-if="object.equipment.armor">
+            <h4 class="armor-type">{{ object.equipment.armor.type }}</h4>
+            <div class="armor-details"></div>
+          </div>
         </section>
       </section>
       <md-button
@@ -94,6 +116,7 @@
 
 <script>
 import get from 'lodash.get';
+import Vue from 'vue';
 
 import HealthBar from './HealthBar.vue';
 import Network from '../modules/networking';
@@ -120,22 +143,8 @@ export default {
   },
   methods: {
     calculateModifiedAttributes() {
-      let character = this.object,
-          equipment = [
-            get(character, 'equipment.activeArmor'),
-            get(character, 'equipment.activeWeapon')
-          ];
-      
-      equipment.forEach((item) => {
-        if( get(item, 'modifiers') ) {
-          for(
-            let [attr, mod] of 
-            Object.entries(item.modifiers)
-          ) {
-            character.attributes[attr] =  character.baseAttributes[attr] + mod;
-          }
-        }
-      });
+      if(this.object.calculateModifiedAttributes)
+        this.object.calculateModifiedAttributes();
     },
     removeObjectFromDatabase() {
       let characterId = this.object.attributes.name.toLowerCase();
@@ -159,16 +168,6 @@ export default {
             }
           }
         );
-    },
-    resetBaseAttributes() {
-      let character = this.object;
-      
-      if(character.attributes) {
-        character.attributes = { 
-          ...character.attributes,
-          ...character.baseAttributes
-        };
-      }
     },
     saveObject() {
       let characterId = this.object.attributes.name.toLowerCase();
@@ -196,18 +195,12 @@ export default {
     },
     selectWeapon(weapon) {
       console.log('Selecting weapon: ', weapon);
-      this.object.equipment.activeWeapon = weapon;
+      Vue.set(this.object.equipment, 'activeWeapon', weapon);
     }
   },
   watch: {
-    'object.equipment.activeArmor': [
-      'resetBaseAttributes',
-      'calculateModifiedAttributes'
-    ],
-    'object.equipment.activeWeapon': [
-      'resetBaseAttributes',
-      'calculateModifiedAttributes'
-    ]
+    'object.equipment.armor': 'calculateModifiedAttributes',
+    'object.equipment.activeWeapon': 'calculateModifiedAttributes'
   }
 }
 </script>
@@ -227,7 +220,15 @@ export default {
     margin:      5px 0;
   }
   
-  dt { width: 145px; }
+  dt { 
+    width: 145px;
+  
+    &.is-modified {
+      + dd {
+        color: md-get-palette-color(blue, A200);
+      } 
+    }
+  }
   
   dd {
     width: 30px;

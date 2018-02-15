@@ -14,7 +14,8 @@ import { prototype as Cover } from './cover';
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {},
   equipment: {
-    armor: null,
+    activeWeapon: {},
+    armor: {},
     items: [],
     weapons: []
   },
@@ -53,6 +54,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.callSuper('initialize', options);
 
     this.attributes.wounds = this.attributes.wounds || 0;
+    this.calculateModifiedAttributes();
     this.set('defaultFill', this.teamFills[this.team]);
     this.set('fill', this.defaultFill);
     this._allowRotationOnly();
@@ -83,6 +85,28 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   // @todo refactor this in a mixin
   calculateChanceToHit(target) {
     return Rules.calculateChanceToHit(this, target);
+  },
+  
+  calculateModifiedAttributes() {
+    let equipment = [
+      this.equipment.armor,
+      this.equipment.activeWeapon
+    ];
+    
+    this.resetBaseAttributes();
+
+    equipment.forEach((item) => {
+      let modifiers = item.modifiers;
+
+      if(modifiers) {
+        for(
+          let [attr, mod] of 
+          Object.entries(modifiers)
+        ) {
+          this.attributes[attr] =  this.baseAttributes[attr] + mod;
+        }
+      }
+    });
   },
   
   calculateMovementRange() {
@@ -189,6 +213,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   
   isWithinVisionRange(target) {
     return this.getDistanceFrom(target) <= this.attributes.vision;
+  },
+  
+  resetBaseAttributes() {
+    this.attributes = {
+      ...this.attributes,
+      ...this.baseAttributes
+    };
   },
   
   resetVisualStatus() {

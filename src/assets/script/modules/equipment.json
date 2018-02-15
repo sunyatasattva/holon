@@ -1,5 +1,47 @@
 {
-  "armors": [],
+  "armors": [
+    {
+      "cost": 12,
+      "modifiers": {
+        "movement": -3,
+        "resistance": 2,
+        "toughness": 1
+      },
+      "type": "Carapace",
+    },
+    {
+      "cost": 4,
+      "modifiers": {
+        "resistance": 1
+      },
+      "type": "Leather jacket"
+    },
+    {
+      "cost": 10,
+      "modifiers": {
+        "movement": -2,
+        "resistance": 1,
+        "toughness": 1
+      },
+      "type": "Phalanx",
+    },
+    {
+      "cost": 8,
+      "modifiers": {
+        "movement": -3,
+        "resistance": 3
+      },
+      "type": "Tactical armor",
+    },
+    {
+      "cost": 6,
+      "modifiers": {
+        "movement": -1,
+        "resistance": 2
+      },
+      "type": "Tactical vest"
+    }
+  ],
   "items": [],
   "weapons": [
     {
@@ -7,9 +49,6 @@
       "cost": 4,
       "criticalHitChance": 1,
       "damage": "1d4+2",
-      "modifiers": {
-        
-      },
       "range": "medium",
       "type": "Assault rifle"
     },

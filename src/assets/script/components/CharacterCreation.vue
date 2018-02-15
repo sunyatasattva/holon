@@ -106,13 +106,35 @@
           <md-select
            id="weapons"
            multiple
-           v-model="equipment.weapons">
+           v-model="selectedWeaponsTypes">
             <md-option 
               v-for="weapon in Equipment.weapons"
-              :value="weapon">
+              :value="weapon.type">
               {{ weapon.type }}
             </md-option>
           </md-select>
+          <md-chip v-if="selectedWeapons.length">
+            {{ selectedWeapons.reduce((sum, i) => sum + i.cost, 0) }}
+          </md-chip>
+        </md-field>
+      </section>
+      <section class="armors">
+        <md-field>
+          <label for="armors">Armor</label>
+          <md-select
+           id="armors"
+           v-model="selectedArmorType"
+           >
+            <md-option
+             v-for="armor in Equipment.armors"
+             :value="armor.type"
+             >
+              {{ armor.type }}
+            </md-option>
+          </md-select>
+          <md-chip v-if="selectedArmor">
+            {{ selectedArmor.cost }}
+          </md-chip>
         </md-field>
       </section>
     </section>
@@ -153,6 +175,27 @@ export default {
           (sum, curr) => sum + curr.cost,
           0
         );
+    },
+    // @fixme this is due to a bug in vue-material
+    // can't assign objects to select value
+    selectedArmor() {
+      let armor = Equipment.armors.find(
+        (item) => item.type === this.selectedArmorType
+      );
+      
+      this.equipment.armor = armor;
+      
+      return armor; 
+    },
+    selectedWeapons() {
+      let weapons = Equipment.weapons.filter(
+        (item) => this.selectedWeaponsTypes.includes(item.type)
+      );
+      
+      this.equipment.weapons = weapons;
+      this.equipment.activeWeapon = weapons[0];
+      
+      return weapons;
     }
   },
   data() {
@@ -201,7 +244,10 @@ export default {
       
       loadedCharacterId: null,
       name: '',
-      team: 0
+      team: 0,
+      
+      selectedArmorType: '',
+      selectedWeaponsTypes: []
     }
   },
   firebase: {
