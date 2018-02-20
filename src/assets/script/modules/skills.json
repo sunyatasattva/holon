@@ -5,7 +5,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Conferisce un bonus di 1 punto alla probabilità di <em>successo critico</em> per ogni nemico entro la propria <em>Visione</em> (Max. 4).",
-      "icon": "ico-aggression.jpg",
+      "icon": "ico-aggression",
       "modifiers": {
         "criticalHitChance": {
           "bonus": 1,
@@ -24,7 +24,7 @@
       "cooldown": 3,
       "cost": 10,
       "description": "Dopo aver attivato l'abilità, il personaggio può spendere tutti i suoi <em>Punti Azione</em> in movimento e può ancora effettuare un <em>Attacco</em> o <em>Sorvegliare</em>.",
-      "icon": "ico-runandgun.jpg",
+      "icon": "ico-runandgun",
       "modifiers": {},
       "id": "run-and-gun",
       "name": "Attacco in corsa",
@@ -35,7 +35,7 @@
       "cooldown": 3,
       "cost": 10,
       "description": "Un <em>Attacco</em> con un bonus di 3 punti alla probabilità di <em>successo critico</em> e che infligge il doppio dei danni in caso di <em>successo critico</em>.",
-      "icon": "ico-headshot.jpg",
+      "icon": "ico-headshot",
       "id": "headshot",
       "name": "Colpo preciso",
       "requirements": []
@@ -45,7 +45,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Conferisce un bonus di 5 punti al <em>Movimento</em>.",
-      "icon": "ico-sprinter.jpg",
+      "icon": "ico-sprinter",
       "modifiers": {
         "movement": 5
       },
@@ -58,7 +58,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Quando si effettua un <em>Attacco</em> contro un bersaglio, si conferisce un bonus di 10 punti (non cumulativi) alla <em>Mira</em> degli alleati contro quel bersaglio fino al proprio prossimo punto azione.",
-      "icon": "ico-holotargeting.jpg",
+      "icon": "ico-holotargeting",
       "modifiers": {},
       "id": "holo-targeting",
       "name": "Holo-targeting",
@@ -69,7 +69,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Attacchi eseguiti come prima azione del turno hanno un bonus di 10 punti alla <em>Mira</em> e 1 punto al <em>successo critico</em>.",
-      "icon": "ico-aimstability.jpg",
+      "icon": "ico-aimstability",
       "modifiers": {},
       "id": "aim-stability",
       "name": "Mira salda",
@@ -79,8 +79,8 @@
       "action": -1,
       "cooldown": false,
       "cost": 10,
-      "description": "Il personaggio utilizza automaticamente l'azione <em>Sorvegliare</em> se ha speso il suo primo punto azine per <em>Attaccare</em>.",
-      "icon": "ico-advancedfirecontrol.jpg",
+      "description": "Il personaggio utilizza automaticamente l'azione <em>Sorvegliare</em> se ha speso il suo primo punto azione per <em>Attaccare</em>.",
+      "icon": "ico-advancedfirecontrol",
       "modifiers": {},
       "id": "advanced-fire-control",
       "name": "Pronto a tutto",
@@ -91,7 +91,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Il personaggio attacca i primi 3 bersagli possibili quando usa l'azione <em>Sorvegliare</em>",
-      "icon": "ico-quickreaction.jpg",
+      "icon": "ico-quickreaction",
       "modifiers": {},
       "id": "quick-reaction",
       "name": "Reazione rapida",
@@ -102,7 +102,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Conferisce un bonus di 80 punti alla <em>Difesa</em> contro il primo attacco di reazione del turno. Il bonus ricevuto diminuisce di 10 punti per ogni attacco successivo.",
-      "icon": "ico-lightningreflexes.jpg",
+      "icon": "ico-lightningreflexes",
       "modifiers": {},
       "id": "lightning-reflexes",
       "name": "Riflessi fulminei",
@@ -113,7 +113,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Conferisce un bonus di 5 punti alla <em>Difesa</em> per ogni nemico entro la propria <em>Visione</em> (Max. 30).",
-      "icon": "ico-tacticalsense.jpg",
+      "icon": "ico-tacticalsense",
       "modifiers": {
         "defense": {
           "bonus": 5,
@@ -133,7 +133,7 @@
       "cooldown": false,
       "cost": 10,
       "description": "Il personaggio aumenta del 150% (arrotondato per eccesso) il bonus alla <em>Resistenza</em> ottenuto tramite le armature ed ottiene un bonus di +10 alla <em>Difesa</em> fintanto che <em>Sorveglia</em>.",
-      "icon": "ico-heavyconditioning.jpg",
+      "icon": "ico-heavyconditioning",
       "modifiers": {
         "equipment": {
           "armor": {
@@ -156,14 +156,14 @@
       },
       "id": "heavy-conditioning",
       "name": "Addestramento pesante",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "Il personaggio ottiene un bonus di +10 alla <em>Mira</em> e +1 al <em>successo critico</em> contro avversari che hanno più ferite di metà della propria <em>Resistenza</em>. Uccidere un avversario in questo modo non costa un'azione.",
-      "icon": "ico-executioner.jpg",
+      "icon": "ico-executioner",
       "modifiers": {
         "aim": {
           "bonus": 10,
@@ -186,18 +186,18 @@
       },
       "id": "executioner",
       "name": "Boia",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "La reazione di <em>Sorvegliare</em> si attiva contro qualsiasi azione offensiva nemica entro il raggio, non soltanto contro il movimento.",
-      "icon": "ico-coveringfire.jpg",
+      "icon": "ico-coveringfire",
       "modifiers": {},
       "id": "covering-fire",
       "name": "Fuoco di copertura",
-      "requirements": ["*0"]
+      "requirements": ["quick-reaction"]
     },
     {
       "action": 1,
@@ -206,11 +206,13 @@
       "cost": 10,
       "description": "Effettua un attacco con un bonus di +20 alla <em>Mira</em> che infligge la metà dei danni (minimo 1). Il bersaglio deve effettuare una prova di <em>Volontà</em> od essere costretto a muoversi. Il bersaglio deve muoversi di metà del suo <em>Movimento</em>.",
       "endsTurn": true,
-      "icon": "ico-flush.jpg",
+      "icon": "ico-flush",
       "modifiers": {},
       "id": "flush",
       "name": "Fuoco di pressione",
-      "requirements": ["*0"]
+      "requirements": [
+        ["aggression", "run-and-gun"]
+      ]
     },
     {
       "action": 1,
@@ -219,62 +221,62 @@
       "cost": 10,
       "description": "Concentra il fuoco contro un bersaglio entro il 150% della propria <em>Visione</em>. Il personaggio ottiene un attacco di reazione se il bersaglio si muove, ed il bersaglio subisce una penalità di 30 punti alla <em>Mira</em>. Inoltre, annulla <em>Fuoco di saturazione</em> o <em>Sorvegliare</em> del bersaglio.",
       "endsTurn": true,
-      "icon": "ico-suppression.jpg",
+      "icon": "ico-suppression",
       "modifiers": {},
       "id": "suppression",
       "name": "Fuoco di saturazione",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "Il personaggio può lanciare tutte le <em>Granate</em> ad una distanza di 15 mt. I <em>Fumogeni</em> danno un bonus di +40 alla <em>Difesa</em> e aumenta il danno alle coperture delle <em>Granate</em>.",
-      "icon": "ico-granadier.jpg",
+      "icon": "ico-grenadier",
       "modifiers": {},
-      "id": "granadier",
+      "id": "grenadier",
       "name": "Granatiere",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "Il primo attacco di un turno eseguito contro un bersaglio entro 5 mt non costa un'azione. Non vale se usato dopo aver attivato <em>Attacco in corsa</em>.",
-      "icon": "ico-closeencounters.jpg",
+      "icon": "ico-closeencounters",
       "modifiers": {},
       "id": "close-encounters",
       "name": "Incontri ravvicinati",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "In mano al personaggio, i <em>Medikit</em> curano 8 ferite e possono essere usati come primo punto azione senza spenderlo. Inoltre, invece di stabilizzare semplicemente il bersaglio, lo rianimano curando 4 ferite. Il personaggio rianimato in questo modo ha un solo punto azione ed una penalità di 30 punti a tutte le prove per il turno successivo.",
-      "icon": "ico-fieldmedicine.jpg",
+      "icon": "ico-fieldmedicine",
       "modifiers": {},
       "id": "field-medicine",
       "name": "Medicina da campo",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "<em>Attaccare</em> non termina il turno.",
-      "icon": "ico-bulletswarm.jpg",
+      "icon": "ico-bulletswarm",
       "modifiers": {},
       "id": "bullet-swarm",
       "name": "Pioggia di proiettili",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "Le armi infliggono +1 danno addizionale, +10 alla <em>Mira</em>, +1 alla <em>Visione</em>.",
-      "icon": "ico-ranger.jpg",
+      "icon": "ico-ranger",
       "modifiers": {
         "aim": 10,
         "equipment": {
@@ -288,25 +290,25 @@
       },
       "id": "ranger",
       "name": "Ranger",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "Il personaggio può ricaricare la propria arma come azione gratuita.",
-      "icon": "ico-quickreload.jpg",
+      "icon": "ico-quickreload",
       "modifiers": {},
       "id": "quick-reload",
       "name": "Ricarica rapida",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
     },
     {
       "action": -1,
       "cooldown": false,
       "cost": 10,
       "description": "Il personaggio ottiene un bonus di +1 alla <em>Robustezza</em> in copertura parziale, +2 in copertura totale ed ottiene un bonus di +10 alla <em>Difesa</em> fintanto che <em>Sorveglia</em>.",
-      "icon": "ico-willtosurvive.jpg",
+      "icon": "ico-willtosurvive",
       "modifiers": {
         "defense": {
           "bonus": 10,
@@ -320,8 +322,101 @@
       },
       "id": "will-to-survive",
       "name": "Senso di sopravvivenza",
-      "requirements": ["*0"]
+      "requirements": ["*1"]
+    },
+    
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Test level 3 ability",
+      "icon": "ico-willtosurvive",
+      "modifiers": {
+        "defense": {
+          "bonus": 10,
+          "conditions": [
+            "isStatus"
+          ],
+          "conditionsArguments": [
+            ["overwatch"]
+          ]
+        }
+      },
+      "id": "level-3",
+      "name": "Test Level 3",
+      "requirements": [["covering-fire", "flush"], "*2", "*2"]
     },
   ],
-  "talents": []
+  "talents": [
+    {
+      "description": "",
+      "icon": "ico-talent-athletics",
+      "id": "athletics",
+      "name": "Atletica",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-demolition",
+      "id": "demolition",
+      "name": "Demolizione",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-infiltration",
+      "id": "inflitration",
+      "name": "Inflitrazione",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-engineering",
+      "id": "engineering",
+      "name": "Ingegneria",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-interfacing",
+      "id": "interfacing",
+      "name": "Interfazione",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-knowledge",
+      "id": "knowledge",
+      "name": "Istruzione",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-medicine",
+      "id": "medicine",
+      "name": "Medicina",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-networking",
+      "id": "networking",
+      "name": "Networking",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-pilot",
+      "id": "pilot",
+      "name": "Pilotaggio",
+      "skills": []
+    },
+    {
+      "description": "",
+      "icon": "ico-talent-survival",
+      "id": "survival",
+      "name": "Sopravvivenza",
+      "skills": []
+    },
+  ]
 }
