@@ -1,14 +1,43 @@
 <template>
   <div ref="main" class="off-canvas off-canvas-sidebar-show">
-    <nav class="off-canvas-sidebar table-of-contents">
-      <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
-    </nav>
+    <div class="off-canvas-sidebar">
+      <nav class="table-of-contents">
+        <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
+
+        <ul>
+          <li>
+            <a href="#skill-list">Abilità</a>
+          </li>
+          <li>
+            <a href="#talent-list">Talenti</a>
+          </li>
+          <li>
+            <a href="#equipment">Equipaggiamento</a>
+
+            <ul>
+              <li>
+                <a href="#weapon-list">Armi</a>
+              </li>
+              <li>
+                <a href="#armor-list">Armature</a>
+              </li>
+              <li>
+                <a href="#item-list">Oggetti</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
     <div class="off-canvas-content book-content">
       <section class="skill-list" id="skill-list">
-        <h1>Abilità</h1>
+        <h1>
+          Abilità
+        </h1>
         <div 
           v-for="(group, i) in $options.skills"
-          class="skill-group-compact">
+          class="skill-group-compact"
+          :id="`skills-level-${i + 1}`">
           <h2>Livello {{ i + 1 }}</h2>
           <skill 
             v-for="skill in group"
@@ -17,13 +46,6 @@
             :compact="true" 
             @click="selectSkill"
           />
-        </div>
-        <div 
-          v-for="(group, i) in $options.skills"
-          class="skill-group-compact"
-          :id="`skills-level-${i + 1}`">
-          <h2>Livello {{ i + 1 }}</h2>
-          <skill v-for="skill in group" :skill="skill" />
         </div>
       </section>
       <section class="talent-list" id="talent-list">
@@ -221,6 +243,17 @@ export default {
 <style lang="scss">
   @import "../style/core";
   
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $blue-color;
+    font-weight: 300;
+    margin: $line-height 0;
+  }
+  
   a {
     color: $blue-color;
     opacity: 0.9;
@@ -264,6 +297,10 @@ export default {
     }
   }
   
+  h1 {
+    margin: $line-height * 2 0;
+  }
+  
   ul {
     padding: 0;
     margin: $line-height 0;
@@ -275,16 +312,6 @@ export default {
     }
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: $blue-color;
-    font-weight: 300;
-  }
-  
   .armor-list,
   .item-list {
     .card-header-main .attribute-modifiers {
@@ -314,21 +341,60 @@ export default {
   }
   
   .logo {
-    width: 150px;
+    margin-bottom: $line-height;
+    width:         150px;
   }
   
   .off-canvas {
     .book-content {
       padding-right: 4rem;
     }
-    .table-of-contents {
+    .off-canvas-sidebar {
       background-color: $dark-color-darker;
-      padding: $padding;
+      padding:          $padding;
     }
   }
   
   .skill-group {
     margin: $line-height 0;
+  }
+  
+  .table-of-contents {
+    font-weight:    bold;
+    text-transform: uppercase;
+    position:       fixed;
+    top:            $line-height;
+    
+    > ul {
+      > li {
+        margin-bottom: $line-height;
+        
+        > ul {
+          font-weight:    normal;
+          padding-left:   $padding;
+          text-transform: none;
+          
+          > li {
+            
+          }
+        }
+      }
+    }
+    
+    a {
+      color: $gray-color-light;
+      
+      &:hover {
+        color: $blue-color;
+        border: 0;
+      }
+    }
+    
+    ul {
+      font-size: $unit-3;
+      list-style-type: none;
+      margin-top:      $line-height;
+    }
   }
   
   .tooltip {
