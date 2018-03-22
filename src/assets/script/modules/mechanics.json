@@ -1,0 +1,85 @@
+{
+  "attributes": [
+    {
+      "cap": 6,
+      "cost": 20,
+      "description": "<em>Resistenza</em> rappresenta la capacità di subire ferite fisiche.",
+      "icon": "favorite",
+      "initial": 3,
+      "name": "Resistenza",
+      "step": 5
+    },
+    {
+      "cap": 50,
+      "cost": 1,
+      "description": "<em>Focus</em> rappresenta la capacità di concentrazione, nonché di mantenere il sangue freddo nelle situazioni più pericolose.",
+      "icon": "brightness_7",
+      "initial": 20,
+      "name": "Focus",
+      "step": 10
+    },
+    {
+      "cap": 40,
+      "cost": 1,
+      "description": "<em>Mira</em> rappresenta la capacità di colpire un bersaglio.",
+      "icon": "gps_fixed",
+      "initial": 10,
+      "name": "Mira",
+      "step": 10
+    },
+    {
+      "cap": 10,
+      "cost": 4,
+      "description": "<em>Riflessi</em> rappresenta la capacità di reagire agli attacchi diretti contro la propria persona, nonché la velocità di reazione in circostanze di tensione.",
+      "icon": "flash_on",
+      "initial": 0,
+      "name": "Riflessi",
+      "step": 10
+    },
+    {
+      "cap": 10,
+      "cost": 10,
+      "description": "<em>Mobilità</em> rappresenta la capacità di muoversi agilmente all'interno del campo di battaglia.",
+      "icon": "directions_run",
+      "initial": 6,
+      "name": "Mobilità",
+      "step": 5
+    },
+    {
+      "cap": 4,
+      "cost": 60,
+      "description": "<em>Azione</em> rappresenta la acpacità di effettuare azioni significative all'interno di un breve arco di tempo.",
+      "icon": "reply_all",
+      "initial": 2,
+      "name": "Azione",
+      "step": 1
+    },
+    {
+      "cap": 20,
+      "cost": 10,
+      "description": "<em>Visione</em> rappresenta la chiarezza visiva a lunghe distanze.",
+      "icon": "visibility",
+      "initial": 12,
+      "name": "Visione",
+      "step": 5
+    },
+    {
+      "cap": 3,
+      "cost": 30,
+      "description": "<em>Robustezza</em> rappresenta la capacità assorbire ferite fisiche.",
+      "icon": "security",
+      "initial": 0,
+      "name": "Robustezza",
+      "step": 2
+    },
+    {
+      "cap": 10,
+      "cost": 5,
+      "description": "<em>Risorse</em> rappresenta il capitale economico e materiale, nonché la capacità di procurarsi ciò che si desira con altri mezzi non convenzionali.",
+      "icon": "monetization_on",
+      "initial": 5,
+      "name": "Risorse",
+      "step": 10
+    }
+  ]
+}

@@ -18,6 +18,12 @@
             <a href="#section-combat-mechanics">Combattimento</a>
           </li>
           <li>
+            <a href="#section-status-conditions">Condizioni alterate</a>
+          </li>
+          <li>
+            <a href="#section-base-actions">Azioni base</a>
+          </li>
+          <li>
             <a href="#skill-list">Abilità</a>
           </li>
           <li>
@@ -44,33 +50,82 @@
     <div class="off-canvas-content book-content">
       <section id="section-attributes">
         <h1>Attributi</h1>
-        <p>Ogni personaggio possiede 8 <em>Attributi</em>:</p>
+        <p>Ogni personaggio possiede {{ $options.mechanics.attributes.length }} <em>Attributi</em>:</p>
         <ul class="attribute-list">
-          <li>
-            <p><i class="material-icons">favorite</i> <em>Resistenza</em> rappresenta la capacità di subire ferite fisiche.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">brightness_7</i> <em>Focus</em> rappresenta la capacità di concentrazione, nonché di mantenere il sangue freddo nelle situazioni più pericolose.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">gps_fixed</i> <em>Mira</em> rappresenta la capacità di colpire un bersaglio.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">flash_on</i> <em>Riflessi</em> rappresenta la capacità di reagire agli attacchi diretti contro la propria persona, nonché la velocità di reazione in circostanze di tensione.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">directions_run</i> <em>Mobilità</em> rappresenta la capacità di muoversi agilmente all'interno del campo di battaglia.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">reply_all</i> <em>Azione</em> rappresenta la acpacità di effettuare azioni significative all'interno di un breve arco di tempo.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">visibility</i> <em>Visibilità</em> rappresenta la chiarezza visiva a lunghe distanze.</p>
-          </li>
-          <li>
-            <p><i class="material-icons">security</i> <em>Robustezza</em> rappresenta la capacità assorbire ferite fisiche.</p>
+          <li v-for="attribute in $options.mechanics.attributes">
+            <p>
+              <i class="material-icons">{{ attribute.icon }}</i>
+              <span v-html="attribute.description"></span>
+            </p>
           </li>
         </ul>
+      </section>
+      <section id="section-character-creation">
+        <h1>Creazione del personaggio</h1>
+        <p>Alla creazione, un personaggio ottiene <em class="stat">150 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">20</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#equipment">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
+        <p>Ogni <em>Attributo</em> ha un valore iniziale di base che può essere aumentato ad un costo per punto che aumenta proporzionalmente al punteggio. Il costo effettivo di ogni punto viene calcolato in questo modo:</p>
+        <ol>
+          <li>Se il punto da acquisire è minore del valore di <em>cap</em> dell'<em>Attributo</em>, allora il costo è semplicemente quello indicato.</li>
+          <li>Altrimenti, il costo aumenta aritmeticamente per ogni incremento di <em>step</em>.</li>
+        </ol>
+        <p>
+          <md-button
+            class="md-raised md-primary"
+            @click="showCharacterCreator = true"
+          >
+            <i class="material-icons">share</i>
+            <span>Assegna Punti Esperienza iniziali</span>
+          </md-button>
+        </p>
+        <div class="modal" :class="{ 'active': showCharacterCreator }">
+          <div 
+            class="modal-overlay"
+            @click="showCharacterCreator = false"></div>
+          <div class="modal-container">
+           <div class="modal-header">
+             <a 
+               class="btn btn-clear float-right" 
+               aria-label="Chiudi"
+               @click="showCharacterCreator = false"
+             ></a>
+             <h2 class="modal-title">Assegnazione punti esperienza</h2>
+           </div>
+           <div class="modal-body">
+             <div class="content">
+               <table class="table attributes-costs">
+                <tr>
+                  <th>
+                    <md-chip>{{ availableCharacterPoints }}</md-chip>
+                  </th>
+                  <th>Iniziale</th>
+                  <th>Costo</th>
+                  <th>Cap</th>
+                  <th>Step</th>
+                </tr>
+                <tr v-for="(attribute, i) in $options.mechanics.attributes">
+                  <td>
+                    <attribute-input
+                      :max="availableCharacterPoints <= 0 ? attributes[i].value : 255"
+                      :icon="attribute.icon"
+                      :label="attribute.name"
+                      :min="attribute.initial"
+                      :cap="attribute.cap"
+                      :cost="attribute.cost"
+                      :initial="attribute.initial"
+                      :step="attribute.step"
+                      :model.sync="attributes[i]"
+                    />
+                  </td>
+                  <td>{{ attribute.initial }}</td>
+                  <td>{{ attribute.cost }}</td>
+                  <td>{{ attribute.cap }}</td>
+                  <td>{{ attribute.step }}</td>
+                </tr>
+              </table>
+             </div>
+           </div>
+          </div>
+        </div>
       </section>
       <section id="section-base-mechanics">
         <h1>Meccaniche di base</h1>
@@ -98,6 +153,12 @@
         <p>Per colpire un bersaglio, l'<em>attaccante</em> effettua una <em>prova</em> la cui <em>possibilità di successo</em> è calcolata sottraendo alla <em>Mira</em> dell'<em>attaccante</em> la <em>Difesa</em> del <em>difensore</em>, la quale è calcolata aggiungendo ai <em>Riflessi</em> altri modificatori contestuali come, per esempio, <em>condizioni negative</em> e <em>coperture</em>.</p>
         <p>Un bersaglio colpito riceve un numero di <em>ferite</em> come indicato dall'arma dell'<em>attaccante</em>, modificato dal proprio valore di <em>Robustezza</em> (<em class="stat">minimo 1</em>).</p>
         
+        <h2>Schivata</h2>
+        <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
+        <p>Questi punti si sottraggono alla probabilità di <em>successo critico</em> di un avversario che ha come bersaglio il personaggio.</p>
+        <p>Se il punteggio di <em>Schivata</em> del bersaglio è maggiore della probabilità di <em>successo critico</em> dell'attaccante, la differenza rappresenta la <em>probabilità di schivare</em>; la meccanica è identica a quella dei <em>risultati critici</em>: se l'unità della prova è minore o uguale alla <em>probabilità di schivare</em>, l'attacco si considera <em>schivato</em>.</p>
+        <p>Un attacco <em>schivato</em> <em class="plus">riduce di 1 livello</em> il successo della prova: sarebbe a dire, un successo normale diviene un <em>successo marginale</em>, ed un <em>successo marginale</em> diviene un fallimento.</p>
+        
         <h2>Coperture</h2>
         <p>Esistono due tipi di <em>coperture</em>: <em>copertura parziale</em> e <em>copertura totale</em>. La prima conferisce un <em class="plus">bonus di +20</em> alla <em>Difesa</em>, la seconda un <em class="plus">bonus di +40</em>.</p>
         <p>Un <em>difensore</em> si trova <em class="stat">in copertura</em> rispetto ad un determinato <em>attaccante</em>, se, al momento dell'<em>Attacco</em>, questi si trova subito dietro una <em>copertura</em> ed un piano proiettato da questa interseca la <em>linea visiva</em> dell'<em>Attaccante</em>.</p>
@@ -112,7 +173,7 @@
         <p>Ogni personaggio ha un numero finito di <em>punti azione</em> pari al proprio punteggio di <em>Azione</em>; ogni azione usa un numero di predefinito di questi punti. Una volta esauriti questi punti, il <em>turno del personaggio</em> finisce ed egli non può agire più fino al <em>turno successivo</em>.</p>
         
         <h2>Azioni</h2>
-        <p>Ogni azione costa un determinato numero di <em>punti azione</em>, certe <em>azioni</em> terminano il turno indipendentemente dal numero di punti azione rimanenti (queste azioni sono indicate con una <em class="stat">“T”</em> tra parentesi nel loro costo).</p>
+        <p>Ogni azione costa un determinato numero di <em>punti azione</em>, certe <em>azioni</em> terminano il turno indipendentemente dal numero di punti azione rimanenti (queste azioni sono indicate in <span class="ends-turn">arancione</span> nel loro costo in punti azione).</p>
 
         <p>Vi sono due tipi di azione: <em>Azioni Base</em> ed <em>Abilità</em>. Le <em>azioni base</em> sono in genere disponibili ad ogni personaggio e possono essere usate a piacere. Le abilità sono specifiche per alcuni personaggi e possono avere dei tempi di <em>cooldown</em>.</p>
         
@@ -121,6 +182,164 @@
         
         <h2>Turno</h2>
         <p>Un <em>turno</em> si conclude quando tutti i partecipanti alla scena hanno esaurito i propri <em>punti azione</em>. Tutti gli effetti collaterali si risolvono alla fine del turno.</p>
+      </section>
+      <section id="section-base-actions">
+        <h1>Azioni base</h1>
+        <ul class="ability-list">
+          <li>
+            <card>
+              <span slot="header-main">
+                Muoversi
+
+                <ul class="attribute-modifiers">
+                  <li
+                    class="modifier tooltip"
+                    data-tooltip="Punti azione">
+                    <i class="material-icons">reply_all</i>
+                    1    
+                  </li>
+                </ul>
+              </span>
+              
+              <p>
+                Un personaggio può <em>muoversi</em> per un numero di metri pari al suo <em>Movimento</em>. Un personaggio che spende almeno <em class="stat">2 PA</em> in un <em>turno</em> in questa azione, ottiene <em class="plus">un bonus di 20 punti</em> alla <em>Difesa</em> contro <em>Sorvegliare</em>.
+              </p>
+            </card>
+          </li>
+          <li>
+            <card>
+              <span slot="header-main">
+                Attaccare
+
+                <ul class="attribute-modifiers">
+                  <li
+                    class="modifier tooltip ends-turn"
+                    data-tooltip="Punti azione">
+                    <i class="material-icons">reply_all</i>
+                    1    
+                  </li>
+                </ul>
+              </span>
+              
+              <p>
+                Un personaggio può utilizzare la proprio arma per eseguire un <em>attacco</em>. Per usare un’arma a distanza deve avere sufficienti munizioni ed il bersaglio deve trovarsi ad almeno <em class="stat">2 metri di distanza</em>. Armi in mischia possono attaccare entro <em class="stat">1 metro di distanza</em> (anche in diagonale).
+              </p>
+              <p>
+                Le armi a distanza possono colpire fino ad un raggio massimo pari al punteggio di <em>Visione</em>, tranne dove diversamente specificato.
+              </p>
+              
+              <div slot="footer">
+                <span 
+                   class="side-effect tooltip tooltip-left"
+                   data-tooltip="Fallimento critico">
+                  <i class="material-icons minus">new_releases</i>
+                  <span>L'arma si inceppa e richiede un'azione di <em>Utilizzare Oggetti (Ricaricare)</em> per essere utilizzata nuovamente.</span>
+                </span>
+                <span 
+                   class="side-effect tooltip tooltip-left"
+                   data-tooltip="Successo critico">
+                  <i class="material-icons plus">new_releases</i>
+                  <span>L'attacco infligge <em class="plus">1.5&times;</em> danni.</span>
+                </span>
+                <span 
+                   class="side-effect tooltip tooltip-left"
+                   data-tooltip="Fallimento/Successo marginale">
+                  <i class="material-icons">error_outline</i>
+                  <span>L'attacco infligge <em class="minus">la metà</em> dei danni.</span>
+                </span>
+              </div>
+            </card>
+          </li>
+          <li>
+            <card>
+              <span slot="header-main">
+                Sorvegliare
+
+                <ul class="attribute-modifiers">
+                  <li
+                    class="modifier tooltip"
+                    data-tooltip="Punti azione">
+                    <i class="material-icons">reply_all</i>
+                    1    
+                  </li>
+                </ul>
+              </span>
+              
+              <p>
+                Un personaggio può coprire un’area semicircolare pari al suo punteggio di <em>Visione</em> o pari alla gittata della sua arma, quale che sia maggiore. Il personaggio eseguirà un’azione di <em>Reazione</em> con <em class="minus">una penalità di -20</em> verso il primo bersaglio ostile che si muove entro questo raggio e non usufruisce di <em>Copertura totale</em>. Questi attacchi non possono effettuare <em>successi critici</em>.
+              </p>
+              <p>
+                Tranne quando diversamente specificato, una <em>Reazione</em> consiste in un <em>Attacco</em>.
+              </p>
+              <p>
+                <em>Sorvegliare</em> dura fino al prossimo <em>punto azione</em> speso dal personaggio.
+              </p>
+            </card>
+          </li>
+          <li>
+            <card>
+              <span slot="header-main">
+                Accovacciarsi
+
+                <ul class="attribute-modifiers">
+                  <li
+                    class="modifier tooltip ends-turn"
+                    data-tooltip="Punti azione">
+                    <i class="material-icons">reply_all</i>
+                    1    
+                  </li>
+                </ul>
+              </span>
+              
+              <p>
+                Un personaggio che esegue questa azione <em class="minus">dimezza il suo punteggio</em> di <em>Visibilità</em> e <em>Movimento</em>, subisce <em class="minus">una penalità di -20</em> alla <em>Mira</em>, ma <em class="plus">raddoppia il suo bonus</em> di <em>Copertura</em>. Dura fino all’inizio del prossimo <em>turno</em> del personaggio.
+              </p>
+            </card>
+          </li>
+          <li>
+            <card>
+              <span slot="header-main">
+                Stabilizzare l'arma
+
+                <ul class="attribute-modifiers">
+                  <li
+                    class="modifier tooltip ends-turn"
+                    data-tooltip="Punti azione">
+                    <i class="material-icons">reply_all</i>
+                    1    
+                  </li>
+                </ul>
+              </span>
+              
+              <p>
+                <em>Stabilizzare l’arma</em> conferisce <em class="plus">un bonus di +20</em> alla <em>Mira</em> del personaggio per il <em>punto azione</em> successivo.
+              </p>
+            </card>
+          </li>
+          <li>
+            <card>
+              <span slot="header-main">
+                Utilizzare oggetti
+
+                <ul class="attribute-modifiers">
+                  <li
+                    class="modifier tooltip ends-turn"
+                    data-tooltip="Punti azione">
+                    <i class="material-icons">reply_all</i>
+                    1    
+                  </li>
+                </ul>
+              </span>
+              
+              <p>
+                Il personaggio può utilizzare un oggetto dal suo inventario, o affidare un oggetto ad un bersaglio alleato entro <em>Visione</em>.
+              </p>
+              <p>
+                Un personaggio può usare questa azione per <em>Estrarre</em> o <em>Ricaricare</em> la propria arma. In tal caso, l'azione non termina il turno.
+              </p>
+            </card>
+          </li>
+        </ul>
       </section>
       <section class="skill-list" id="skill-list">
         <h1>
@@ -139,9 +358,26 @@
             @click="selectSkill"
           />
         </div>
+        
+        <div 
+          class="skill-group-compact">
+          <h2>Talent skills</h2>
+          <skill 
+            v-for="skill in $options.talentSkills"
+            :skill="skill"
+            :selectedSkill="selectedSkill"
+            :compact="true"
+            @click="selectSkill"
+          />
+        </div>
       </section>
       <section class="talent-list" id="talent-list">
         <h1>Talenti</h1>
+        <p>I <em>Talenti</em> rappresentano i dominî di competenza nei quali un personaggio possiede maestria ottenuta attraverso formazione e pratica.</p>
+        <p>Queste competenze determinano in che modo il personaggio può agire efficacemente nel mondo: se un personaggio non possiede alcuna competenza in un determinato campo, non può in genere tentare di interagire con quel campo (un personaggio che non possiede competenze di <em>Atletica</em> non può tentare di scalare una parete rocciosa).</p>
+        <p>In caso contrario, il personaggio può effettuare una <em>Prova di Focus</em> per ottenere il risultato che desidera, con dei modificatori appropriati per la situazione (es. il personaggio non ha tempo per concentrarsi, è il suo primo tentativo in qualcosa di completamente nuovo, non ha attrezzi adatti etc.).</p>
+        <p>Ogni <em>Talento</em> ha tre livelli di competenza: al <em class="stat">primo</em>, il personaggio è un professionista del settore; al <em class="stat">secondo</em>, il personaggio è un'autorità del settore (ed ottiene <em class="plus">un bonus di +15</em> alle <em>prove</em>); al <em class="stat">terzo</em>, è maestro assoluto in quel campo (ed ottiene <em class="plus">un bonus di +30</em> alle <em>prove</em>).</p>
+        <p>Personaggi con competenze nel medesimo settore, possono collaborare e conferirsi vicendevolmente dei <em class="plus">bonus</em> alla <em>prova</em>.</p>
         <ul>
           <li v-for="talent in $options.talents">
             <card>
@@ -156,7 +392,7 @@
                 <span>{{ talent.name }}</span>
               </span>
               
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt vero ad eius, sed temporibus porro. Sapiente dolore, sequi ad, nam expedita ea ullam labore vitae molestias iure delectus laborum aliquid.</p>
+              <div v-html="talent.description"></div>
             </card>
             
           </li>
@@ -242,11 +478,14 @@ import Card from "./components/Card.vue";
 import Skill from "./components/Skill.vue";
 import WeaponCard from "./components/WeaponCard.vue";
 
+import AttributeInput from "../../../../src/assets/script/components/AttributeInput.vue";
+  
 import equipment from "../../../../src/assets/script/modules/equipment.json";
+import mechanics from "../../../../src/assets/script/modules/mechanics.json";
 import skills from "../../../../src/assets/script/modules/skills.json";
 
 function parseRequirements(requirements, curr) {
-  let nestedRequirements,
+  let nestedRequirements = [],
       requirementLevel,
       skill;
 
@@ -265,8 +504,13 @@ function parseRequirements(requirements, curr) {
   else if(typeof curr === "string") {
     skill = skills.skills.find(skill => skill.id === curr);
     
-    nestedRequirements = skill.requirements
-      .reduce(parseRequirements, []);
+    try {
+      nestedRequirements = skill.requirements
+        .reduce(parseRequirements, []);
+    }
+    catch(e) {
+      console.warn(`No skill with id ${curr} has been found.`);
+    }
     
     requirements = requirements.concat(nestedRequirements);
   }
@@ -279,8 +523,6 @@ function parseRequirements(requirements, curr) {
 
       curr = curr.concat(nestedRequirements);
     });
-    
-    requirements.push(curr);
   }
   
   return requirements;
@@ -288,7 +530,14 @@ function parseRequirements(requirements, curr) {
 
 const groupedSkills = skills.skills
   .reduce((arr, skill) => {
-    let requirementsLevel = skill.requirements.length,
+    if( !skill.requirements.some( _ => _.includes("talent-") ) )
+      arr.push(skill);
+    
+    return arr;
+  }, [])
+  .reduce((arr, skill) => {
+    let requirementsLevel = skill.requirements
+      .reduce(parseRequirements, []).length,
         group = arr[requirementsLevel] || [];
     
     group.push(skill);
@@ -302,14 +551,30 @@ const groupedSkills = skills.skills
 export default {
   name: "book",
   components: {
+    AttributeInput,
     AttributeModifiers,
     Card,
     Skill,
     WeaponCard
   },
+  computed: {
+    availableCharacterPoints() {
+      return 150 - this.characterPoints;
+    },
+    characterPoints() {
+      return this.attributes
+        .reduce(
+          (sum, curr) => sum + curr.cost,
+          0
+        );
+    }
+  },
   data() {
     return {
-      selectedSkill: {}
+      attributes: mechanics.attributes
+        .map( attr => ({ cost: 0, value: attr.initial }) ),
+      selectedSkill: {},
+      showCharacterCreator: false
     }
   },
   
@@ -327,8 +592,17 @@ export default {
     items: groupBy(equipment.items, "category"),
     weapons: equipment.weapons
   },
+  mechanics: mechanics,
   skills: groupedSkills,
-  talents: skills.talents
+  talents: skills.talents,
+  
+  talentSkills: skills.skills
+    .reduce((arr, skill) => {
+      if( skill.requirements.some( _ => _.includes("talent-") ) )
+        arr.push(skill);
+    
+      return arr;
+    }, [])
 }
 </script>
 
@@ -375,18 +649,6 @@ export default {
     &.stat {
       font-style: normal;
     }
-    
-    &.minus {
-      color: $red-color;
-    }
-    
-    &.plus {
-      color: $green-color;
-    }
-    
-    &.stat {
-      color: $aqua-color;
-    }
   }
   
   h1 {
@@ -404,10 +666,55 @@ export default {
     }
   }
 
+  .ability-list,
   .armor-list,
   .item-list {
     .card-header-main .attribute-modifiers {
       right: $padding;
+    }
+  }
+  
+  .attributes-costs {
+    td,
+    th {
+      text-align: center;
+    }
+    
+    tr:nth-child(2n+1) {
+      background-color: $dark-color;
+      
+      .md-field > .md-icon {
+        &::after {
+          background-color: $dark-color;
+        }
+      }
+    }
+    
+    td {
+      border:     0;
+      
+      &:first-child {
+        width: 50%;
+      }
+    }
+    
+    
+    .md-field {
+      margin: 0;
+      
+      &::after {
+        height: 0px;
+      }
+      
+      .md-chip {
+        margin-left: $padding / 2;
+        position: relative;
+        bottom: 4px;
+      }
+      
+      .md-icon {
+        bottom: 10px;
+      }
     }
   }
   
@@ -420,7 +727,6 @@ export default {
     .material-icons {
       color: $yellow-color;
       margin-right: $padding;
-      vertical-align: middle;
     }
   }
   
@@ -445,11 +751,54 @@ export default {
     }
   }
   
+  .ends-turn {
+    color: $orange-color;
+  }
+  
   .logo {
     margin-bottom: $line-height;
     width:         150px;
   }
   
+  .material-icons {
+    vertical-align: middle;
+  }
+  
+  .md-field.md-theme-default > .md-icon::after {
+    background-color: $dark-color-darker;
+  }
+  
+  .md-primary {
+    margin: $line-height 0;
+    height: 48px;
+    
+    .md-button-content {
+      padding: 10px;
+    }
+  }
+  
+  .minus {
+    color: $red-color;
+  }
+  
+  .modal {
+    &:target,
+    &.active {
+      .modal-overlay {
+        background-color: rgba($dark-color-darker, 0.8);
+      }
+    }
+    
+    .modal-body {
+      max-height: 85vh;
+    }
+    
+    .modal-container {
+      background-color: $dark-color-darker;
+      box-shadow: 0 0.2rem 0.5rem rgba(#000, 0.6);
+    }
+  }
+    
   .off-canvas {
     .book-content {
       padding-right: 4rem;
@@ -460,6 +809,19 @@ export default {
       min-width:        12rem;
       padding:          $padding;
     }
+  }
+  
+  .plus {
+    color: $green-color;
+  }
+  
+  .side-effect {
+    display: block;
+    margin: 10px 0;
+  }
+    
+  .stat {
+    color: $aqua-color;
   }
   
   .skill-group {
