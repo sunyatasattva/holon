@@ -71,6 +71,7 @@ export default {
       .icon-container-inner {
         display:      inline-block;
         margin-right: $padding;
+        text-align:   center;
       }
     }
     

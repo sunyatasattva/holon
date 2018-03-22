@@ -4,7 +4,7 @@
       <li 
         v-for="(mod, attr) in modifiers"
         class="modifier"
-        :class="{ 'is-negative': mod < 0, 'is-positive': mod > 0 }">
+        :class="{ 'is-negative': mod < 0 || mod[0] === '-', 'is-positive': mod > 0 || mod[0] === 'x' }">
         <i class="material-icons">{{ $options.icons[attr] }}</i>
         <span class="modifier-value">{{ mod }}</span>
       </li>
@@ -35,7 +35,7 @@ export default {
   .attribute-modifiers {
     .modifier {
       display: inline-block;
-      margin: 0 5px 0 0;
+      margin: 0 $padding 0 0;
       
       &:last-child {
         margin-right: 0;

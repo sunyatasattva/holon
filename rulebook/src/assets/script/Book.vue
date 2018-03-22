@@ -183,6 +183,32 @@
         <h2>Turno</h2>
         <p>Un <em>turno</em> si conclude quando tutti i partecipanti alla scena hanno esaurito i propri <em>punti azione</em>. Tutti gli effetti collaterali si risolvono alla fine del turno.</p>
       </section>
+      <section id="section-status-conditions">
+        <h1>Condizioni alterate</h1>
+        <p>Un personaggio può subire degli effetti, dall'ambiente, da oggetti o da altre cause, che ne alterano la condizione. Generalmente questi effetti hanno una <em>durata</em> in termini di <em>turni</em> che è specificata nella fonte dell'effetto in questione. Alcuni oggetti o azioni possono ridurre o rimuovere questa alterazione.</p>
+        <ul>
+          <li v-for="status in $options.mechanics.statii">
+            <card>
+              <div slot="header-main">
+                <div class="icon-container-inner">
+                  <i class="material-icons status-icon">
+                    {{ status.icon }}
+                  </i>
+                </div>
+                {{ status.name }}
+              </div>
+              
+              <div v-html="status.description"></div>
+              
+              <attribute-modifiers 
+                slot="footer"
+                v-if="status.modifiers"
+                :modifiers="status.modifiers"
+              />
+            </card>
+          </li>
+        </ul>
+      </section>
       <section id="section-base-actions">
         <h1>Azioni base</h1>
         <ul class="ability-list">
@@ -381,7 +407,7 @@
         <ul>
           <li v-for="talent in $options.talents">
             <card>
-              <span slot="header-main" :id="`talent-${talent.id}`">
+              <div slot="header-main" :id="`talent-${talent.id}`">
                 <div class="icon-container-inner">
                   <img
                     class="skill-icon"
@@ -390,7 +416,7 @@
                 </div>
                 
                 <span>{{ talent.name }}</span>
-              </span>
+              </div>
               
               <div v-html="talent.description"></div>
             </card>
@@ -753,6 +779,14 @@ export default {
   
   .ends-turn {
     color: $orange-color;
+  }
+  
+  .h-card {
+    .material-icons.status-icon {
+      display:        inline-block;
+      font-size:      24px;
+      vertical-align: baseline;
+    }
   }
   
   .logo {
