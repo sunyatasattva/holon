@@ -4,7 +4,9 @@
     <md-icon>{{ icon }}</md-icon>
     <label>{{ label }}</label>
     <md-input
-      :type="type"
+      :max="max"
+      :min="min"
+      type="number"
       v-model.sync="rank"
       @input="update">
     </md-input>
@@ -49,6 +51,14 @@ export default {
       required: true,
       type: String
     },
+    max: {
+      default: 255,
+      type: Number
+    },
+    min: {
+      default: 0,
+      type: Number
+    },
     model: {
       required: true,
       type: Object
@@ -56,10 +66,6 @@ export default {
     step: {
       default: 10,
       type: Number
-    },
-    type: {
-      default: 'text',
-      type: String
     }
   },
   methods: {
@@ -80,6 +86,7 @@ export default {
     },
     update(e) {
       this.$emit('update:model', {
+        // @todo change `cost` to `totalCost`
         cost: this.totalCost,
         value: +e
       });
