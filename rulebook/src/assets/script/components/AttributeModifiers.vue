@@ -33,6 +33,8 @@ export default {
   @import "../../style/_variables";
   
   .attribute-modifiers {
+    margin: 0;
+    
     .modifier {
       display: inline-block;
       margin: 0 $padding 0 0;

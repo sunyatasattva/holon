@@ -641,7 +641,7 @@
     {
       "action": 1,
       "ammo": "targets",
-      "cooldown": true,
+      "cooldown": 3,
       "cost": 10,
       "description": "Effettua un <em>Attacco</em> contro tutti i bersagli in un semicerchio entro la propria <em>Visione</em>. Questi attacchi infliggono <em class='minus'>la metà dei danni</em>.",
       "endsTurn": true,

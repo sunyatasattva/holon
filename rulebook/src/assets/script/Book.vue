@@ -370,33 +370,19 @@
           </li>
         </ul>
       </section>
-      <section class="skill-list" id="skill-list">
+      <section class="skill-list" id="section-skills">
         <h1>Abilità</h1>
         <p>Un personaggio può utilizzare <em>punti esperienza</em> per acquistare permanentemente <em>abilità</em>. Il costo di ognuna di queste dipende dal <em class="stat">livello</em>, e questo dipende dai <em class="stat">requisiti</em> che devono essere soddisfatti per acquisirla.</p>
         <p>Per ogni <em>abilità</em> dello stesso <em class="stat">livello</em>, il costo aumenta in maniera aritmetica.</p>
         <div 
-          v-for="(group, i) in $options.skills"
+          v-for="(group, i) in $options.groupedSkills"
           class="skill-group-compact"
           :id="`skills-level-${i + 1}`">
           <h2>Livello {{ i + 1 }}</h2>
-          <skill 
+          <skill-card
             v-for="skill in group"
-            :selectedSkill="selectedSkill"
             :skill="skill"
             :compact="true"
-            @click="selectSkill"
-          />
-        </div>
-        
-        <div 
-          class="skill-group-compact">
-          <h2>Talent skills</h2>
-          <skill 
-            v-for="skill in $options.talentSkills"
-            :skill="skill"
-            :selectedSkill="selectedSkill"
-            :compact="true"
-            @click="selectSkill"
           />
         </div>
       </section>
@@ -422,6 +408,15 @@
               </div>
               
               <div v-html="talent.description"></div>
+              
+              <div slot="footer">
+                <skill-card 
+                  v-for="skill in 
+                    $options.skills.filter( skill => skill.requirements.some( requirement => requirement === `talent-${talent.id}` ) )"
+                  :skill="skill"
+                  :compact="true"
+                />
+              </div>
             </card>
             
           </li>
@@ -564,6 +559,7 @@ import groupBy from "lodash.groupby";
 import AttributeModifiers from "./components/AttributeModifiers.vue";
 import Card from "./components/Card.vue";
 import Skill from "./components/Skill.vue";
+import SkillCard from "./components/SkillCard.vue";
 import WeaponCard from "./components/WeaponCard.vue";
 
 import AttributeInput from "../../../../src/assets/script/components/AttributeInput.vue";
@@ -643,6 +639,7 @@ export default {
     AttributeModifiers,
     Card,
     Skill,
+    SkillCard,
     WeaponCard
   },
   computed: {
@@ -681,16 +678,9 @@ export default {
     weapons: equipment.weapons
   },
   mechanics: mechanics,
-  skills: groupedSkills,
-  talents: skills.talents,
-  
-  talentSkills: skills.skills
-    .reduce((arr, skill) => {
-      if( skill.requirements.some( _ => _.includes("talent-") ) )
-        arr.push(skill);
-    
-      return arr;
-    }, [])
+  groupedSkills: groupedSkills,
+  skills: skills.skills,
+  talents: skills.talents
 }
 </script>
 
@@ -715,7 +705,7 @@ export default {
     &:hover {
       color: $blue-color;
       border-bottom: 1px solid $blue-color;
-      text-decoration: none;
+      text-decoration: none !important;
       opacity: 1;
     }
   }
@@ -757,7 +747,9 @@ export default {
   .ability-list,
   .armor-list,
   .immortality-services,
-  .item-list {
+  .item-list,
+  .skill-list,
+  .talent-list {
     .card-header-main .attribute-modifiers {
       right: $padding;
     }

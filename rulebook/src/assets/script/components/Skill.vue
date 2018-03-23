@@ -16,40 +16,7 @@
     <div class="skill-description-container" :class="{ 'col-11': !compact }">
       <h3 class="skill-name">{{ skill.name }}</h3>
       <div class="skill-data">
-        <dl>
-          <dt v-if="requirements.length">Requisiti:</dt>
-          <dd>
-            <ul class="requirements-list">
-              <li v-for="(requirement, idx) in requirements">
-                <a 
-                  v-if="typeof requirement === 'string' && requirement.includes('talent')">
-                    {{ requirement }}
-                </a>
-                <a 
-                  v-else-if="typeof requirement === 'string'"
-                  :href="`#skills-level-${requirement[1]}`">
-                    Qualsiasi abilità di Livello {{ requirement[1] }}
-                </a>
-                <a 
-                  v-else-if="requirement.id"
-                  :href="`#skill-${requirement.id}`">
-                    {{ requirement.name }}
-                </a>
-                <span v-else-if="requirement.length">
-                  Una qualsiasi tra
-                  <ul class="optional-requirements requirements-list">
-                    <li v-for="optionalRequirement in requirement">
-                      <a 
-                        :href="`#skill-${optionalRequirement.id}`">
-                        {{ optionalRequirement.name }}
-                      </a>
-                    </li>
-                  </ul>
-                </span>
-              </li>
-            </ul>
-          </dd>
-        </dl>
+        
       </div>
       <div class="skill-description">
         <p v-html="skill.description"></p>
