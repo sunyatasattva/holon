@@ -70,6 +70,7 @@ export default {
       
       .icon-container-inner {
         display:      inline-block;
+        line-height:  28px;
         margin-right: $padding;
         text-align:   center;
       }

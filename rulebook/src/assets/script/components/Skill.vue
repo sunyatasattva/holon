@@ -22,7 +22,11 @@
             <ul class="requirements-list">
               <li v-for="(requirement, idx) in requirements">
                 <a 
-                  v-if="typeof requirement === 'string'"
+                  v-if="typeof requirement === 'string' && requirement.includes('talent')">
+                    {{ requirement }}
+                </a>
+                <a 
+                  v-else-if="typeof requirement === 'string'"
                   :href="`#skills-level-${requirement[1]}`">
                     Qualsiasi abilità di Livello {{ requirement[1] }}
                 </a>
@@ -59,7 +63,20 @@ import { skills } from "../../../../../src/assets/script/modules/skills.json";
 
 export default {
   name: "skill",
-  props: ["compact", "selectedSkill", "skill"],
+  props: {
+    "compact": {
+      type: Boolean,
+      required: true
+    },
+    "selectedSkill": {
+      type: Object,
+      required: true
+    },
+    "skill": {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     classObject() {
       let classes = {
@@ -102,6 +119,7 @@ export default {
           if(
             typeof requirement === "string" 
             && !requirement.includes("*")
+            && !requirement.includes("talent")
           )
             return skills.find( skill => skill.id === requirement );
           else if( Array.isArray(requirement) )

@@ -30,7 +30,7 @@
             <a href="#talent-list">Talenti</a>
           </li>
           <li>
-            <a href="#equipment">Equipaggiamento</a>
+            <a href="#section-resources">Risorse</a>
 
             <ul>
               <li>
@@ -41,6 +41,9 @@
               </li>
               <li>
                 <a href="#item-list">Oggetti</a>
+              </li>
+              <li>
+                <a href="#section-immortality-protocol">Protocollo dell'Immortalità</a>
               </li>
             </ul>
           </li>
@@ -62,7 +65,7 @@
       </section>
       <section id="section-character-creation">
         <h1>Creazione del personaggio</h1>
-        <p>Alla creazione, un personaggio ottiene <em class="stat">150 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">20</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#equipment">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
+        <p>Alla creazione, un personaggio ottiene <em class="stat">150 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">20</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#section-resources">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
         <p>Ogni <em>Attributo</em> ha un valore iniziale di base che può essere aumentato ad un costo per punto che aumenta proporzionalmente al punteggio. Il costo effettivo di ogni punto viene calcolato in questo modo:</p>
         <ol>
           <li>Se il punto da acquisire è minore del valore di <em>cap</em> dell'<em>Attributo</em>, allora il costo è semplicemente quello indicato.</li>
@@ -187,7 +190,7 @@
         <h1>Condizioni alterate</h1>
         <p>Un personaggio può subire degli effetti, dall'ambiente, da oggetti o da altre cause, che ne alterano la condizione. Generalmente questi effetti hanno una <em>durata</em> in termini di <em>turni</em> che è specificata nella fonte dell'effetto in questione. Alcuni oggetti o azioni possono ridurre o rimuovere questa alterazione.</p>
         <ul>
-          <li v-for="status in $options.mechanics.statii">
+          <li class="status-condition" v-for="status in $options.mechanics.statii">
             <card>
               <div slot="header-main">
                 <div class="icon-container-inner">
@@ -368,9 +371,9 @@
         </ul>
       </section>
       <section class="skill-list" id="skill-list">
-        <h1>
-          Abilità
-        </h1>
+        <h1>Abilità</h1>
+        <p>Un personaggio può utilizzare <em>punti esperienza</em> per acquistare permanentemente <em>abilità</em>. Il costo di ognuna di queste dipende dal <em class="stat">livello</em>, e questo dipende dai <em class="stat">requisiti</em> che devono essere soddisfatti per acquisirla.</p>
+        <p>Per ogni <em>abilità</em> dello stesso <em class="stat">livello</em>, il costo aumenta in maniera aritmetica.</p>
         <div 
           v-for="(group, i) in $options.skills"
           class="skill-group-compact"
@@ -380,7 +383,7 @@
             v-for="skill in group"
             :selectedSkill="selectedSkill"
             :skill="skill"
-            :compact="true" 
+            :compact="true"
             @click="selectSkill"
           />
         </div>
@@ -424,8 +427,16 @@
           </li>
         </ul>
       </section>
-      <section class="equipment" id="equipment">
-        <h1>Equipaggiamento ed Oggetti</h1>
+      <section class="equipment" id="section-resources">
+        <h1>Risorse</h1>
+        <p>Ogni personaggio ha un punteggio di <em>Risorse</em> che rappresenta il suo capitale economico e materiale, nonché la capacità di procurarsi ciò che si desira con altri mezzi non convenzionali.</p>
+        <p>In determinate <em>situazioni di ristoro</em> decise dal <em>GM</em>, un personaggio può procurarsi equipaggiamento, oggetti ed altre risorse materiali in misura uguale all'interezza del suo punteggio di <em>Risorse</em>.</p>
+        <p>Un personaggio può decidere di <em class="minus">spendere permanentemente</em> <em class="stat">3 di questi punti</em> per crearsi una <em>situazione di ristoro</em>. La situazione deve essere comunque vagamente ragionevole, ed il <em>GM</em> può sempre decidere quali beni sono acquistabili ad ogni situazione.</p>
+        <h2>Risorse bloccate</h2>
+        <p>In alcuni casi, come per l'acquisto di servizi su base continua, il <em>GM</em> può decretare che un certo numero di <em>Risorse</em> siano bloccate: in tal caso, il punteggio non cambia, ma queste non possono essere usate fin tanto che rimangono <em>bloccate</em>.</p>
+        <p>Il costo di questi servizi viene indicato in <span class="ongoing-service">arancione</span>.</p>
+        <h2>Debiti</h2>
+        <p>Un personaggio può <em>indebitarsi</em> di un numero di <em>Risorse</em> pari al suo punteggio completo. In tal caso, il personaggio <em class="minus">perde permanentemente</em> <em class="stat">1 di questi punti</em> e le sue risorse rimangono <em>bloccate</em> per le prossime due <em>situazioni di ristoro</em>.</p>
         <section class="weapons" id="weapon-list">
           <h2>Armi</h2>
           <ul class="weapon-list">
@@ -488,6 +499,57 @@
                   v-if="item.modifiers"
                   :modifiers="item.modifiers"
                 />
+              </card>
+            </li>
+          </ul>
+        </section>
+        <section id="section-immortality-protocol">
+          <h2>Protocollo dell'Immortalità</h2>
+          <p>Un personaggio che <em>muore</em> può essere <em>resuscitato</em> attraverso il <em class="stat">Protocollo dell'Immortalità</em>, ma la resurrezione non arriva senza effetti collaterali:</p>
+          <ol>
+            <li>
+              Se il corpo del personaggio ed il <em class="stat">Protocollo dell'Immortalità</em> sono recuperabili, il personaggio può essere <em>resuscitato</em> in una <em class="stat">Clinica di Resurrezione</em>, ma le sue <em>Risorse</em> saranno <em>bloccate</em> per una <em>situazione di ristoro</em>.
+            </li>
+            <li>
+              Se il <em class="stat">Protocollo dell'Immortalità</em> è recuperabile, ma il corpo è in condizioni irrimediabili, si applicano le conseguenze del punto 1, ed in più il personaggio <em class="minus">perde permanentemente</em> <em class="stat">5 punti</em> <em>Risorse</em>.
+            </li>
+            <li>
+              Se il <em class="stat">Protocollo dell'Immortalità</em> non è recuperabile, il personaggio può essere <em>resuscitato</em> da un <em>backup</em>, ammesso che lo abbia. In quel caso si applicano tutte le conseguenze del punto 2, ed in più il personaggio <em class="minus">perde qualsiasi punto esperienza</em> acquisito dall'ultimo <em>backup</em>.
+            </li>
+          </ol>
+          <ul class="immortality-services">
+            <li>
+              <card>
+                <span slot="header-main">
+                  Assicurazione Immortalità
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                     class="modifier tooltip ongoing-service" 
+                     data-tooltip="Costo">
+                      <i class="material-icons">monetization_on</i>
+                      <span class="modifier-value">4</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p>Un personaggio assicurato non ha alcun effetto negativo sulle <em>Risorse</em> a seguito di una <em>resurrezione</em>.</p>
+              </card>
+              <card>
+                <span slot="header-main">
+                  Backup
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                     class="modifier tooltip ongoing-service" 
+                     data-tooltip="Costo">
+                      <i class="material-icons">monetization_on</i>
+                      <span class="modifier-value">2</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p>Un personaggio effettua un <em>backup</em> della propria coscienza ad ogni <em>situazione di ristoro</em>.</p>
               </card>
             </li>
           </ul>
@@ -683,7 +745,7 @@ export default {
   
   ul {
     padding: 0;
-    margin: $line-height 0;
+    margin: $line-height * 2 0;
     list-style-type: none;
     
     ul {
@@ -694,6 +756,7 @@ export default {
 
   .ability-list,
   .armor-list,
+  .immortality-services,
   .item-list {
     .card-header-main .attribute-modifiers {
       right: $padding;
@@ -777,7 +840,8 @@ export default {
     }
   }
   
-  .ends-turn {
+  .ends-turn,
+  .ongoing-service {
     color: $orange-color;
   }
   
@@ -809,6 +873,10 @@ export default {
     .md-button-content {
       padding: 10px;
     }
+  }
+  
+  .md-theme-default :not(input):not(textarea)::selection {
+    background-color: $purple-color;
   }
   
   .minus {
@@ -858,6 +926,12 @@ export default {
     color: $aqua-color;
   }
   
+  .status-condition {
+    .h-card .icon-container-inner {
+      line-height: 2rem;
+    }
+  }
+  
   .skill-group {
     margin: $line-height 0;
   }
@@ -870,6 +944,7 @@ export default {
     top:            $line-height;
     
     > ul {
+      margin:     0;
       text-align: left;
       
       > li {
@@ -877,6 +952,7 @@ export default {
         
         > ul {
           font-weight:    normal;
+          margin:         0;
           padding-left:   $padding;
           text-transform: none;
           
