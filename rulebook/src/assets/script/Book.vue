@@ -4,6 +4,8 @@
       <nav class="table-of-contents">
         <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
 
+        <span class="version-number">2.0.0-beta.1</span>
+        
         <ul>
           <li>
             <a href="#section-attributes">Attributi</a>
@@ -1049,6 +1051,14 @@ export default {
   
   .tooltip {
     cursor: help;
+  }
+  
+  .version-number {
+    display:        block;
+    font-size:      0.5rem;
+    font-weight:    normal;
+    opacity:        0.7;
+    text-transform: none;
   }
   
   .view-options {
