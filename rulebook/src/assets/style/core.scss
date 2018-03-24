@@ -1,0 +1,17 @@
+@import "../../../../node_modules/spectre.css/src/spectre";
+@import "../../../../node_modules/spectre.css/src/spectre-exp";
+
+@import "../style/_variables";
+
+@import "../../../../node_modules/vue-material/dist/theme/engine";
+
+@include md-register-theme("default", (
+  primary: $blue-color,
+  theme: dark
+));
+
+@import "../../../../node_modules/vue-material/dist/theme/all";
+
+img {
+  max-width: 100%;
+}
