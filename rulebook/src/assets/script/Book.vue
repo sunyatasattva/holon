@@ -24,7 +24,7 @@
             <a href="#section-base-actions">Azioni base</a>
           </li>
           <li>
-            <a href="#skill-list">Abilità</a>
+            <a href="#section-skills">Abilità</a>
           </li>
           <li>
             <a href="#talent-list">Talenti</a>
@@ -156,6 +156,12 @@
         <p>Per colpire un bersaglio, l'<em>attaccante</em> effettua una <em>prova</em> la cui <em>possibilità di successo</em> è calcolata sottraendo alla <em>Mira</em> dell'<em>attaccante</em> la <em>Difesa</em> del <em>difensore</em>, la quale è calcolata aggiungendo ai <em>Riflessi</em> altri modificatori contestuali come, per esempio, <em>condizioni negative</em> e <em>coperture</em>.</p>
         <p>Un bersaglio colpito riceve un numero di <em>ferite</em> come indicato dall'arma dell'<em>attaccante</em>, modificato dal proprio valore di <em>Robustezza</em> (<em class="stat">minimo 1</em>).</p>
         
+        <h2>Tipologie di danni</h2>
+        <h3>Danni perforanti</h3>
+        <p>I <em>danni perforanti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
+        <h3>Danni devastanti</h3>
+        <p>I <em>danni devastanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
+        
         <h2>Schivata</h2>
         <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
         <p>Questi punti si sottraggono alla probabilità di <em>successo critico</em> di un avversario che ha come bersaglio il personaggio.</p>
@@ -218,6 +224,12 @@
           <li>
             <card>
               <span slot="header-main">
+                <div class="icon-container-inner">
+                  <img 
+                    class="skill-icon"
+                    src="src/assets/images/skills-icons/ico-base-move.png" />
+                </div>
+               
                 Muoversi
 
                 <ul class="attribute-modifiers">
@@ -238,6 +250,12 @@
           <li>
             <card>
               <span slot="header-main">
+                <div class="icon-container-inner">
+                  <img 
+                    class="skill-icon"
+                    src="src/assets/images/skills-icons/ico-base-attack.png" />
+                </div>
+               
                 Attaccare
 
                 <ul class="attribute-modifiers">
@@ -282,6 +300,12 @@
           <li>
             <card>
               <span slot="header-main">
+                <div class="icon-container-inner">
+                  <img 
+                    class="skill-icon"
+                    src="src/assets/images/skills-icons/ico-base-overwatch.png" />
+                </div>
+               
                 Sorvegliare
 
                 <ul class="attribute-modifiers">
@@ -308,6 +332,12 @@
           <li>
             <card>
               <span slot="header-main">
+                <div class="icon-container-inner">
+                  <img 
+                    class="skill-icon"
+                    src="src/assets/images/skills-icons/ico-base-hunkerdown.png" />
+                </div>
+                
                 Accovacciarsi
 
                 <ul class="attribute-modifiers">
@@ -328,6 +358,12 @@
           <li>
             <card>
               <span slot="header-main">
+                <div class="icon-container-inner">
+                  <img 
+                    class="skill-icon"
+                    src="src/assets/images/skills-icons/ico-base-stabilize.png" />
+                </div>
+                
                 Stabilizzare l'arma
 
                 <ul class="attribute-modifiers">
@@ -348,6 +384,12 @@
           <li>
             <card>
               <span slot="header-main">
+                <div class="icon-container-inner">
+                  <img 
+                    class="skill-icon"
+                    src="src/assets/images/skills-icons/ico-base-useitem.png" />
+                </div>
+                
                 Utilizzare oggetti
 
                 <ul class="attribute-modifiers">
@@ -371,7 +413,19 @@
         </ul>
       </section>
       <section class="skill-list" id="section-skills">
-        <h1>Abilità</h1>
+        <h1>
+          <span>Abilità</span>
+          <div class="view-options">
+            <input type="radio" id="compactAbilities-compact" name="compactAbilities" :value=true v-model="compactAbilities">
+            <label for="compactAbilities-compact">
+              <i class="material-icons">view_comfy</i>
+            </label>
+            <input type="radio" id="compactAbilities-expanded" name="compactAbilities" :value=false v-model="compactAbilities">
+            <label for="compactAbilities-expanded">
+              <i class="material-icons">view_list</i>
+            </label>
+          </div>
+        </h1>
         <p>Un personaggio può utilizzare <em>punti esperienza</em> per acquistare permanentemente <em>abilità</em>. Il costo di ognuna di queste dipende dal <em class="stat">livello</em>, e questo dipende dai <em class="stat">requisiti</em> che devono essere soddisfatti per acquisirla.</p>
         <p>Per ogni <em>abilità</em> dello stesso <em class="stat">livello</em>, il costo aumenta in maniera aritmetica.</p>
         <div 
@@ -382,7 +436,7 @@
           <skill-card
             v-for="skill in group"
             :skill="skill"
-            :compact="true"
+            :compact="compactAbilities"
           />
         </div>
       </section>
@@ -432,6 +486,9 @@
         <p>Il costo di questi servizi viene indicato in <span class="ongoing-service">arancione</span>.</p>
         <h2>Debiti</h2>
         <p>Un personaggio può <em>indebitarsi</em> di un numero di <em>Risorse</em> pari al suo punteggio completo. In tal caso, il personaggio <em class="minus">perde permanentemente</em> <em class="stat">1 di questi punti</em> e le sue risorse rimangono <em>bloccate</em> per le prossime due <em>situazioni di ristoro</em>.</p>
+        <h1>Equipaggiamento</h1>
+        <p>Armi ed armature possono avere un numero variabile di <em>slot</em> nei quali possono essere installati dei <em>moduli</em> che ne modificano alcune caratteristiche: una volta installati, questi moduli non possono essere disinstallati senza danneggiare l'arma o il modulo, a meno che non si possegga <em class="stat">Ingegneria 2</em>.</p>
+        <p>Solo un <em>modulo</em> per ogni tipo può essere installato in un'arma.</p>
         <section class="weapons" id="weapon-list">
           <h2>Armi</h2>
           <ul class="weapon-list">
@@ -475,6 +532,10 @@
             <li v-for="item in category">
               <card>
                 <span slot="header-main">
+                  <span class="icon-container-inner">
+                    <component 
+                      :is="`icon-${$options.itemIcons[item.category]}`" />
+                  </span>
                   {{ item.type }}
 
                   <ul class="armor-stats attribute-modifiers">
@@ -630,7 +691,14 @@ const groupedSkills = skills.skills
     return arr;
   }, []);
 
-  console.log(groupedSkills)
+  console.log(groupedSkills);
+  
+const ITEM_ICONS = {
+  "Ammo": "ammo",
+  "Drugs": "pill",
+  "Grenades": "ornament",
+  "Weapon Mods": "pistol"
+}
   
 export default {
   name: "book",
@@ -658,6 +726,7 @@ export default {
     return {
       attributes: mechanics.attributes
         .map( attr => ({ cost: 0, value: attr.initial }) ),
+      compactAbilities: true,
       selectedSkill: {},
       showCharacterCreator: false
     }
@@ -677,6 +746,7 @@ export default {
     items: groupBy(equipment.items, "category"),
     weapons: equipment.weapons
   },
+  itemIcons: ITEM_ICONS,
   mechanics: mechanics,
   groupedSkills: groupedSkills,
   skills: skills.skills,
@@ -850,6 +920,12 @@ export default {
     width:         150px;
   }
   
+  .material-design-icon__svg {
+    display:        inline-block;
+    fill:           $blue-color;
+    vertical-align: middle;
+  }
+  
   .material-icons {
     vertical-align: middle;
   }
@@ -973,5 +1049,37 @@ export default {
   
   .tooltip {
     cursor: help;
+  }
+  
+  .view-options {
+    float:     right;
+    font-size: 0;
+    position: relative;
+    top: 5px;
+    
+    input {
+      display: none;
+      
+      &:checked + label {
+        background-color: darken($blue-color, 15);
+        box-shadow:       inset 0 0 5px darken($blue-color, 25);
+      }
+    }
+    
+    label {
+      background-color: $blue-color;
+      color:            $dark-color-darker;
+      cursor:           pointer;
+      display:          inline-block;
+      padding:          5px;
+      
+      &:last-child {
+        border-radius: 0 5px 5px 0;
+      }
+      
+      &:nth-child(2) {
+        border-radius: 5px 0 0 5px;
+      }
+    }
   }
 </style>

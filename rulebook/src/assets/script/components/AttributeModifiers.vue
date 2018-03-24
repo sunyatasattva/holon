@@ -4,7 +4,7 @@
       <li 
         v-for="(mod, attr) in modifiers"
         class="modifier"
-        :class="{ 'is-negative': mod < 0 || mod[0] === '-', 'is-positive': mod > 0 || mod[0] === 'x' }">
+        :class="{ 'is-negative': mod < 0 || mod[0] === '-', 'is-positive': mod > 0 || mod[0] === '×' }">
         <i class="material-icons">{{ $options.icons[attr] }}</i>
         <span class="modifier-value">{{ mod }}</span>
       </li>
@@ -19,6 +19,7 @@ export default {
   icons: {
     "action": "reply_all",
     "aim": "gps_fixed",
+    "criticalHitChance": "new_releases",
     "movement": "directions_run",
     "reflexes": "flash_on",
     "resistance": "favorite",
