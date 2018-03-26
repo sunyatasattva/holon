@@ -195,7 +195,10 @@ export default {
     },
     selectWeapon(weapon) {
       console.log('Selecting weapon: ', weapon);
-      Vue.set(this.object.equipment, 'activeWeapon', weapon);
+      Vue.set(this.object, 'equipment', {
+        ...this.object.equipment,
+        activeWeapon: weapon
+      }); 
     }
   },
   watch: {
