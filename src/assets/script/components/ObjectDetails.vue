@@ -8,65 +8,43 @@
         :wounds='object.attributes.wounds' />
       
       <dl class="attributes">
-        <dt :class="{ 'is-modified': object.attributes.resistance !== object.baseAttributes.resistance }">
-          <md-icon class="md-primary">favorite</md-icon>
-          <span>Resistance</span>
-        </dt>
-        <dd>
-          {{object.attributes.resistance}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.movement !== object.baseAttributes.movement }">
-          <md-icon class="md-primary">directions_run</md-icon>
-          <span>Movement</span>
-        </dt>
-        <dd>
-          {{object.attributes.movement}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.will !== object.baseAttributes.will }">
-          <md-icon class="md-primary">brightness_7</md-icon>
-          <span>Will</span>
-        </dt>
-        <dd>
-          {{object.attributes.will}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.action !== object.baseAttributes.action }">
-          <md-icon class="md-primary">reply_all</md-icon>
-          <span>Action</span>
-        </dt>
-        <dd>
-          {{object.attributes.action}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.aim !== object.baseAttributes.aim }">
-          <md-icon class="md-primary">gps_fixed</md-icon>
-          <span>Aim</span>
-        </dt>
-        <dd>
-          {{object.attributes.aim}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.vision !== object.baseAttributes.vision }">
-          <md-icon class="md-primary">visibility</md-icon>
-          <span>Vision</span>
-        </dt>
-        <dd>
-          {{object.attributes.vision}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.reflexes !== object.baseAttributes.reflexes }">
-          <md-icon class="md-primary">flash_on</md-icon>
-          <span>Reflexes</span>
-        </dt>
-        <dd>
-          {{object.attributes.reflexes}}
-        </dd>
-        <dt :class="{ 'is-modified': object.attributes.toughness !== object.baseAttributes.toughness }">
-          <md-icon class="md-primary">security</md-icon>
-          <span>Toughness</span>
-        </dt>
-        <dd>
-          {{object.attributes.toughness}}
-        </dd>
+        <template
+          v-for='attribute in $options.mechanics.attributes'
+          v-if='attribute.id !== "resources"'>
+          <dt
+           :class="{ 'is-modified': object.attributes[attribute.id] !== object.baseAttributes[attribute.id] }"
+         >
+          <md-icon class="md-primary">{{ attribute.icon }}</md-icon>
+          <span>{{ attribute.name }}</span>
+          </dt>
+
+          <dd>
+            {{ object.attributes[attribute.id] }}
+          </dd>
+        </template>
       </dl>
       
       <section class="equipment" v-if="object.equipment">
+        <section class="armor">
+          <div v-if="object.equipment.armor">
+            <h4 class="armor-type">
+              <md-icon>accessibility</md-icon>
+              {{ object.equipment.armor.type }}
+            </h4>
+            <div class="armor-details">
+              <span
+               v-for="(value, key) in object.equipment.armor.modifiers"
+               >
+                <md-icon>
+                  {{ $options.mechanics.attributes.find( x => x.id === key ).icon }}
+                </md-icon>
+                <span class="modifier-value">
+                  {{ value }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </section>
         <section class="weapons">
           <ul v-if="object.equipment.weapons">
             <li
@@ -75,17 +53,34 @@
               @click="selectWeapon(weapon)"
              >
               <h4 class="weapon-type">{{ weapon.type }}</h4>
+              <div class="weapon-modifiers">
+                <span
+                 v-for="(value, key) in weapon.modifiers"
+                 >
+                  <md-icon>
+                    {{ $options.mechanics.attributes.find( x => x.id === key ).icon }}
+                  </md-icon>
+                  <span class="modifier-value">
+                    {{ value }}
+                  </span>
+                </span>
+              </div>
               <div class="weapon-details">
-                <span class="weapon-damage">{{ weapon.damage }}</span>
+                <span class="weapon-damage">
+                  <md-icon>gps_not_fixed</md-icon>
+                  {{ weapon.damage }}
+                </span>
+                <span class="weapon-critical">
+                  <md-icon>new_releases</md-icon>
+                  {{ weapon.criticalHitChance }}
+                </span>
+                <span class="weapon-critical">
+                  <md-icon>settings_input_component</md-icon>
+                  {{ weapon.ammo }}
+                </span>
               </div>
             </li>
           </ul>
-        </section>
-        <section class="armor">
-          <div v-if="object.equipment.armor">
-            <h4 class="armor-type">{{ object.equipment.armor.type }}</h4>
-            <div class="armor-details"></div>
-          </div>
         </section>
       </section>
       <md-button
@@ -117,6 +112,8 @@
 <script>
 import get from 'lodash.get';
 import Vue from 'vue';
+  
+import Mechanics from '../modules/mechanics.json';
 
 import HealthBar from './HealthBar.vue';
 import Network from '../modules/networking';
@@ -204,7 +201,8 @@ export default {
   watch: {
     'object.equipment.armor': 'calculateModifiedAttributes',
     'object.equipment.activeWeapon': 'calculateModifiedAttributes'
-  }
+  },
+  mechanics: Mechanics
 }
 </script>
 
@@ -238,6 +236,34 @@ export default {
   }
   
   i { margin-right: 10px; }
+  
+  .armor-details,
+  .armor-type,
+  .weapon-modifiers,
+  .weapon-type {
+    display: inline-block;
+  }
+  
+  .armor-details,
+  .armor-type {
+    width: 175px;
+  }
+  
+  .weapon-modifiers,
+  .weapon-type {
+    width: 165px;
+  }
+  
+  .modifier-value {
+    margin-right: 10px;
+  }
+  
+  .weapon-details {
+    span {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
   
   .weapon-type {
     margin-top: 0;
