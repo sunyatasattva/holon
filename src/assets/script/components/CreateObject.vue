@@ -75,6 +75,7 @@ export default {
   methods: {
     addObject(type, data) {
       let world = this.$root.$children[0].$refs.World.canvas,
+          attrs,
           obj;
       
       if(type === 'cover') {
@@ -87,18 +88,26 @@ export default {
         });
       }
       else if(type === 'character'){
+        attrs = {
+          resistance: data.attributes.resistance.value,
+          will: data.attributes.will.value,
+          aim: data.attributes.aim.value,
+          reflexes: data.attributes.reflexes.value,
+          movement: data.attributes.movement.value,
+          action: data.attributes.action.value,
+          vision: data.attributes.vision.value,
+          toughness: data.attributes.toughness.value
+        };
+        
         obj = new Walker({
           attributes: {
+            ...attrs,
             name: data.name,
-            resistance: data.attributes.resistance.value,
-            will: data.attributes.will.value,
-            aim: data.attributes.aim.value,
-            reflexes: data.attributes.reflexes.value,
-            movement: data.attributes.movement.value,
-            action: data.attributes.action.value,
-            vision: data.attributes.vision.value,
-            toughness: data.attributes.toughness.value,
           },
+          // @fixme I wish I could use computed props on this :(
+          // too much tied into FabricJs
+          baseAttributes: attrs,
+          equipment: data.equipment,
           width: world.tileSize,
           height: world.tileSize,
           radius: world.tileSize / 2,

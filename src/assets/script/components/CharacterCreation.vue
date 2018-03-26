@@ -99,6 +99,45 @@
           :model.sync='attributes.toughness' />
       </section>
     </section>
+    <section class="equipment">
+      <section class="weapons">
+        <md-field>
+          <label for="weapons">Weapons</label>
+          <md-select
+           id="weapons"
+           multiple
+           v-model="selectedWeaponsTypes">
+            <md-option 
+              v-for="weapon in Equipment.weapons"
+              :value="weapon.type">
+              {{ weapon.type }}
+            </md-option>
+          </md-select>
+          <md-chip v-if="selectedWeapons.length">
+            {{ selectedWeapons.reduce((sum, i) => sum + i.cost, 0) }}
+          </md-chip>
+        </md-field>
+      </section>
+      <section class="armors">
+        <md-field>
+          <label for="armors">Armor</label>
+          <md-select
+           id="armors"
+           v-model="selectedArmorType"
+           >
+            <md-option
+             v-for="armor in Equipment.armors"
+             :value="armor.type"
+             >
+              {{ armor.type }}
+            </md-option>
+          </md-select>
+          <md-chip v-if="selectedArmor">
+            {{ selectedArmor.cost }}
+          </md-chip>
+        </md-field>
+      </section>
+    </section>
     <md-button
       v-if='!isAddingObject'
       class='md-raised md-primary'
@@ -120,6 +159,8 @@
 import AttributeInput from './AttributeInput.vue';
 import Network from '../modules/networking';
   
+import Equipment from '../modules/equipment.json';
+  
 const db = Network.database();
 
 export default {
@@ -134,10 +175,37 @@ export default {
           (sum, curr) => sum + curr.cost,
           0
         );
+    },
+    // @fixme this is due to a bug in vue-material
+    // can't assign objects to select value
+    selectedArmor() {
+      let armor = Equipment.armors.find(
+        (item) => item.type === this.selectedArmorType
+      );
+      
+      if(armor) {
+        this.equipment.armor = armor;
+      }
+      
+      return armor; 
+    },
+    selectedWeapons() {
+      let weapons = Equipment.weapons.filter(
+        (item) => this.selectedWeaponsTypes.includes(item.type)
+      );
+      
+      if(weapons.length) {
+        this.equipment.weapons = weapons;
+        this.equipment.activeWeapon = weapons[0];
+      }
+      
+      return weapons;
     }
   },
   data() {
     return {
+      Equipment: Equipment,
+      
       attributes: {
         action: {
           cost: 0,
@@ -172,10 +240,18 @@ export default {
           value: 20
         }
       },
+      equipment: {
+        armor: null,
+        items: [],
+        weapons: []
+      },
       
       loadedCharacterId: null,
       name: '',
-      team: 0
+      team: 0,
+      
+      selectedArmorType: '',
+      selectedWeaponsTypes: []
     }
   },
   firebase: {

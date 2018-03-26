@@ -2,9 +2,6 @@ const fabric = require('fabric').fabric;
 const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 
-// I think I will regret this
-import Vue from 'vue';
-
 import Rules from '../modules/rules';
 import { prototype as Cover } from './cover'; 
 
@@ -16,6 +13,12 @@ import { prototype as Cover } from './cover';
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {},
+  equipment: {
+    activeWeapon: {},
+    armor: {},
+    items: [],
+    weapons: []
+  },
   
   coveredSides: {},
   fullyCoveredColor: Cover._coverOpts.fullFill,
@@ -51,6 +54,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.callSuper('initialize', options);
 
     this.attributes.wounds = this.attributes.wounds || 0;
+    this.calculateModifiedAttributes();
     this.set('defaultFill', this.teamFills[this.team]);
     this.set('fill', this.defaultFill);
     this._allowRotationOnly();
@@ -81,6 +85,30 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   // @todo refactor this in a mixin
   calculateChanceToHit(target) {
     return Rules.calculateChanceToHit(this, target);
+  },
+  
+  calculateModifiedAttributes() {
+    let equipment = [
+      this.equipment.armor,
+      this.equipment.activeWeapon
+    ];
+    
+    this.resetBaseAttributes();
+
+    equipment
+      .filter(x => x)
+      .forEach((item) => {
+        let modifiers = item.modifiers;
+
+        if(modifiers) {
+          for(
+            let [attr, mod] of 
+            Object.entries(modifiers)
+          ) {
+            this.attributes[attr] =  this.baseAttributes[attr] + mod;
+          }
+        }
+      });
   },
   
   calculateMovementRange() {
@@ -137,6 +165,26 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     });
   },
   
+  getDistanceFrom(target) {
+    let thisCenter = this._calculateCenterCoordinates(),
+        targetCenter;
+    
+    if(target.gridPosition) {
+      targetCenter = target._calculateCenterCoordinates();
+    }
+    else if(target.x && target.y) {
+      targetCenter = target;
+    }
+    else {
+      console.error("Invalid target:", target);
+      
+      return false;
+    }
+    
+    return this.canvas
+        .calculateOctileDistance(thisCenter, targetCenter);
+  },
+  
   getValidTargets() {
     return this.canvas.getActiveObjects('walker')
       .filter(this.isValidTarget.bind(this));
@@ -166,24 +214,14 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   isWithinVisionRange(target) {
-    let thisCenter = this._calculateCenterCoordinates(),
-        targetCenter;
-    
-    if(target.gridPosition) {
-      targetCenter = target._calculateCenterCoordinates();
-    }
-    else if(target.x && target.y) {
-      targetCenter = target;
-    }
-    else {
-      console.error("Invalid target:", target);
-      
-      return false;
-    }
-    
-    return this.canvas
-        .calculateOctileDistance(thisCenter, targetCenter) 
-        <= this.attributes.vision;
+    return this.getDistanceFrom(target) <= this.attributes.vision;
+  },
+  
+  resetBaseAttributes() {
+    this.attributes = {
+      ...this.attributes,
+      ...this.baseAttributes
+    };
   },
   
   resetVisualStatus() {
@@ -251,6 +289,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   toObject: function(props = []) {
     props = props.concat([
       'attributes',
+      'baseAttributes',
+      'equipment',
       'hasActed',
       'isDelaying',
       'showRangeOnSelected',
