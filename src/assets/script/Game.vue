@@ -30,6 +30,15 @@
         </md-tab>
         
         <md-tab md-label="Options" md-icon="settings">
+          <section class="vision-options">
+            <h2>Vision options</h2>
+            <md-switch
+               class="md-primary"
+               v-model="options.showHitChance"
+             >
+              Show hit chance
+            </md-switch>
+          </section>
           <section class="turn-options">
             <h2>Turn control options</h2>
             <md-switch
@@ -39,13 +48,16 @@
               Automatically center current character
             </md-switch>
           </section>
-          <md-button
-           class="md-primary md-raised"
-           @click="exportCurrentState"
-           >
-            <md-icon>file_download</md-icon>
-            Export current state
-          </md-button>
+          <section class="save-options">
+            <h2>Save options</h2>
+            <md-button
+             class="md-primary md-raised"
+             @click="exportCurrentState"
+             >
+              <md-icon>file_download</md-icon>
+              Export current state
+            </md-button>
+          </section>
         </md-tab>
       </md-tabs>
     </md-drawer>
@@ -92,7 +104,8 @@ export default {
       selectedObject: false,
       options: {
         autoPan: false,
-        isAddingObject: false
+        isAddingObject: false,
+        showHitChance: true
       },
       // @todo maybe generate a better unique ID, 
       // doesn't matter so much

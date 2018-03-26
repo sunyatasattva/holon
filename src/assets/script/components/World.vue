@@ -51,7 +51,10 @@ const component = {
       if(e.key === 'Shift') {
         selectedObject = world.getActiveObject();
         if(selectedObject && selectedObject.showVisionRange) {
-          selectedObject.highlightAllHitChances();
+          if(this.options.showHitChance)
+            selectedObject.highlightAllHitChances();
+          else
+            selectedObject.showVisionRange();
         }
       }
     });
@@ -190,6 +193,7 @@ const component = {
           target = e.target;
       
       if(selectedObject
+         && this.options.showHitChance
          && selectedObject.calculateChanceToHit
          && selectedObject.isValidTarget(target)) {
           target._highlightChanceToBeHitBy(selectedObject);
