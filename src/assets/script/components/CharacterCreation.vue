@@ -183,7 +183,9 @@ export default {
         (item) => item.type === this.selectedArmorType
       );
       
-      this.equipment.armor = armor;
+      if(armor) {
+        this.equipment.armor = armor;
+      }
       
       return armor; 
     },
@@ -192,8 +194,10 @@ export default {
         (item) => this.selectedWeaponsTypes.includes(item.type)
       );
       
-      this.equipment.weapons = weapons;
-      this.equipment.activeWeapon = weapons[0];
+      if(weapons.length) {
+        this.equipment.weapons = weapons;
+        this.equipment.activeWeapon = weapons[0];
+      }
       
       return weapons;
     }

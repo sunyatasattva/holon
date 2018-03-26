@@ -95,18 +95,20 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     
     this.resetBaseAttributes();
 
-    equipment.forEach((item) => {
-      let modifiers = item.modifiers;
+    equipment
+      .filter(x => x)
+      .forEach((item) => {
+        let modifiers = item.modifiers;
 
-      if(modifiers) {
-        for(
-          let [attr, mod] of 
-          Object.entries(modifiers)
-        ) {
-          this.attributes[attr] =  this.baseAttributes[attr] + mod;
+        if(modifiers) {
+          for(
+            let [attr, mod] of 
+            Object.entries(modifiers)
+          ) {
+            this.attributes[attr] =  this.baseAttributes[attr] + mod;
+          }
         }
-      }
-    });
+      });
   },
   
   calculateMovementRange() {

@@ -125,7 +125,7 @@ const db = Network.database();
   
 export default {
   name: 'object-details',
-  props: ['activeObjects', 'object'],
+  props: ['object'],
   components: {
     HealthBar
   },
