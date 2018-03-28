@@ -335,7 +335,7 @@
       "falloffPoint": 5,
       "hitChanceModifier": -50,
       "modifiers": {
-        "vision": 10
+        "vision": 4
       },
       "range": "long",
       "type": "Fucile da cecchino"
