@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { skills } from "../../../../../src/assets/script/modules/skills.json";
+import { skills } from "../../../../rules/skills.json";
   
 import Card from "./Card.vue";
 

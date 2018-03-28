@@ -1,0 +1,131 @@
+{
+  "attributes": [
+    {
+      "cap": 6,
+      "cost": 20,
+      "description": "<em>Resistenza</em> rappresenta la capacità di subire ferite fisiche.",
+      "icon": "favorite",
+      "initial": 3,
+      "name": "Resistenza",
+      "step": 5
+    },
+    {
+      "cap": 50,
+      "cost": 1,
+      "description": "<em>Focus</em> rappresenta la capacità di concentrazione, nonché di mantenere il sangue freddo nelle situazioni più pericolose.",
+      "icon": "brightness_7",
+      "initial": 20,
+      "name": "Focus",
+      "step": 10
+    },
+    {
+      "cap": 40,
+      "cost": 1,
+      "description": "<em>Mira</em> rappresenta la capacità di colpire un bersaglio.",
+      "icon": "gps_fixed",
+      "initial": 10,
+      "name": "Mira",
+      "step": 10
+    },
+    {
+      "cap": 10,
+      "cost": 4,
+      "description": "<em>Riflessi</em> rappresenta la capacità di reagire agli attacchi diretti contro la propria persona, nonché la velocità di reazione in circostanze di tensione.",
+      "icon": "flash_on",
+      "initial": 0,
+      "name": "Riflessi",
+      "step": 10
+    },
+    {
+      "cap": 10,
+      "cost": 10,
+      "description": "<em>Mobilità</em> rappresenta la capacità di muoversi agilmente all'interno del campo di battaglia.",
+      "icon": "directions_run",
+      "initial": 6,
+      "name": "Mobilità",
+      "step": 5
+    },
+    {
+      "cap": 4,
+      "cost": 60,
+      "description": "<em>Azione</em> rappresenta la acpacità di effettuare azioni significative all'interno di un breve arco di tempo.",
+      "icon": "reply_all",
+      "initial": 2,
+      "name": "Azione",
+      "step": 1
+    },
+    {
+      "cap": 20,
+      "cost": 10,
+      "description": "<em>Visione</em> rappresenta la chiarezza visiva a lunghe distanze.",
+      "icon": "visibility",
+      "initial": 12,
+      "name": "Visione",
+      "step": 5
+    },
+    {
+      "cap": 3,
+      "cost": 30,
+      "description": "<em>Robustezza</em> rappresenta la capacità assorbire ferite fisiche.",
+      "icon": "security",
+      "initial": 0,
+      "name": "Robustezza",
+      "step": 2
+    },
+    {
+      "cap": 10,
+      "cost": 5,
+      "description": "<em>Risorse</em> rappresenta il capitale economico e materiale, nonché la capacità di procurarsi ciò che si desira con altri mezzi non convenzionali.",
+      "icon": "monetization_on",
+      "initial": 5,
+      "name": "Risorse",
+      "step": 10
+    }
+  ],
+  "statii": [
+    {
+      "description": "<p>Un personaggio in preda alla <em>Confusione</em> <em class=\"minus\">non può utilizzare alcuna abilità attiva</em>, né azioni di <em>Sorvegliare</em> e <em>Stabilizzare l'arma</em>, e subisce una <em class=\"minus\">penalità di -20</em> al <em>Focus</em>.</p>",
+      "icon": "live_help",
+      "modifiers": {
+        "will": -20,
+      },
+      "name": "Confusione"
+    },
+    {
+      "description": "<p>Un personaggio <em>Disorientato</em> subisce una <em class=\"minus\">penalità di -50</em> alla <em>Mira</em>, <em class=\"minus\">annulla qualsiasi azione in corso</em>, ed i suoi punteggi di <em>Mobilità</em> e <em>Visione</em> vengono <em class=\"minus\">dimezzati</em> per la durata dell'effetto.</p>",
+      "icon": "flare",
+      "modifiers": {
+        "aim": -50,
+        "movement": "-½",
+        "vision": "-½"
+      },
+      "name": "Disorientamento"
+    },
+    {
+      "description": "<p>Un personaggio <em>Intossicato</em> subisce <em class=\"minus\">1 ferita</em> alla fine di ogni <em>turno</em>.</p>",
+      "icon": "bubble_chart",
+      "name": "Intossicazione"
+    },
+    {
+      "description": "<p>Un personaggio in preda al <em>Panico</em> agisce in maniera casuale.</p><p>Alla fine di ogni <em>turno</em> un personaggio può ritentare la <em>prova di Focus</em> con un <em class=\"plus\">bonus di +5</em> per uscire dallo stato di <em>Panico</em>.</p><p>Questa condizione può essere causata da diversi fattori come <em>ferite</em>, morte di un alleato, e così via.</p>",
+      "icon": "warning",
+      "name": "Panico"
+    },
+    {
+      "description": "<p>Il punteggio di <em>Mobilità</em> di un personaggio <em>Stordito</em> viene <em class=\"minus\">dimezzato</em>, ed il personaggio <em class=\"minus\">non può effettuare alcuna azione</em> eccetto <em>Movimento</em>.</p>",
+      "icon": "filter_tilt_shift",
+      "modifiers": {
+        "movement": "-½",
+      },
+      "name": "Stordimento"
+    },
+    {
+      "description": "<p>Un personaggio <em>Ustionato</em> subisce gli effetti combinati di <em>Confusione</em> ed <em>Intossicazione</em>.</p><p>Il personaggio può usare un'azione di <em>Accovacciarsi</em> per rimuovere questo effetto, tranne quando diversamente specificato.</p>",
+      "icon": "whatshot",
+      "modifiers": {
+        "will": -20,
+      },
+      "name": "Ustione"
+    }
+  ]
+}
