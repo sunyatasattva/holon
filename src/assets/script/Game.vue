@@ -57,6 +57,16 @@
               <md-icon>file_download</md-icon>
               Export current state
             </md-button>
+            <md-field class="state-upload">
+              <label>
+                Import state
+              </label>
+              <md-file 
+                v-model="options.uploadedState"
+                accept="application/json"
+                @md-change="importStateFromJSON"
+              />
+            </md-field>
           </section>
         </md-tab>
       </md-tabs>
@@ -105,7 +115,8 @@ export default {
       options: {
         autoPan: false,
         isAddingObject: false,
-        showHitChance: true
+        showHitChance: true,
+        uploadedState: null
       },
       // @todo maybe generate a better unique ID, 
       // doesn't matter so much
@@ -138,11 +149,23 @@ export default {
       linkElement.setAttribute('download', `holon-${this.$data._clientID}`);
       linkElement.click();
     },
+    importStateFromJSON(fileList) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => this.loadGame({
+        gameObjects: JSON.parse(e.target.result)
+      });
+      
+      reader.readAsText( fileList.item(0) );
+    },
     loadGame(state) {
       const world = this.$refs.World.canvas;
       this.removeAllActiveObjects();
       
       try {
+        if(!state.gameObjects || !state.gameObjects.length)
+          throw "Invalid state object or state object empty";
+        
         fabric.util.enlivenObjects(
           state.gameObjects, 
           (objs) => {
@@ -152,16 +175,16 @@ export default {
             );
           }
         );
+        
+        console.log("Saved state loaded:", state);
       }
       catch(e) {
         console.error(
-          "There was an error loading the game", 
+          "There was an error loading the game:", 
           e, 
           state
         );
       }
-      
-      console.log("Saved state loaded:", state);
       
       return this;
     },
