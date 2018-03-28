@@ -1,0 +1,967 @@
+{
+  "skills": [
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio <em class='plus'>aumenta del 150%</em> (arrotondato per eccesso) il bonus alla <em>Resistenza</em> ottenuto tramite le armature ed <em class='plus'>ignora le penalità</em> al <em>Movimento</em>.",
+      "icon": "ico-heavyconditioning",
+      "modifiers": {
+        "equipment": {
+          "armor": {
+            "modifiers": {
+              "toughness": {
+                "bonus": "x1.5"
+              }
+            }
+          }
+        },
+        "defense": {
+          "bonus": 10,
+          "conditions": [
+            "isStatus"
+          ],
+          "conditionsArguments": [
+            [
+              "overwatch"
+            ]
+          ]
+        }
+      },
+      "id": "heavy-conditioning",
+      "name": "Addestramento pesante",
+      "requirements": [
+        "talent-athletics"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Quando il personaggio <em> fallisce un Attacco</em>, ottiene un <em class='plus'>bonus di +20</em> alla <em>Mira</em> al prossimo attacco contro lo stesso bersaglio.",
+      "icon": "ico-lockedon",
+      "modifiers": {},
+      "id": "locked-on",
+      "name": "Agganciare il bersaglio",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce <em class='plus'>bonus di +10</em> alla <em>Mira</em> per ogni <em>Attacco</em> consecutivo contro lo stesso bersaglio. Qualsiasi altra <em>Azione</em> azzera questo bonus.",
+      "icon": "ico-allin",
+      "modifiers": {},
+      "id": "all-in",
+      "name": "All in",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> con una <em class='minus'>penalità di -20</em> alla <em>Mira</em> ed un <em class='plus'>bonus di +2</em> ai <em>danni</em>.",
+      "endsTurn": true,
+      "icon": "ico-brutalattack",
+      "modifiers": {},
+      "id": "brutal-attack",
+      "name": "Attacco brutale",
+      "requirements": [
+      ]
+    },
+    {
+      "action": 2,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> che infligge <em class='minus'>la metà</em> dei <em>danni</em> ma che <em>Disorienta</em> il bersaglio.",
+      "endsTurn": true,
+      "icon": "ico-dazingattack",
+      "modifiers": {},
+      "id": "dazing-attack",
+      "name": "Attacco frastornante",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": 0,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "Dopo aver attivato l'abilità, il personaggio può spendere tutti i suoi <em>Punti Azione</em> in movimento e può ancora effettuare un <em>Attacco</em> o <em>Sorvegliare</em>.",
+      "icon": "ico-runandgun",
+      "modifiers": {},
+      "id": "run-and-gun",
+      "name": "Attacco in corsa",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce <em class='plus'>un bonus di 1 punto</em> alla probabilità di <em>successo critico</em> per ogni nemico entro la propria <em>Visione</em> (Max. 4).",
+      "icon": "ico-aggression",
+      "modifiers": {
+        "criticalHitChance": {
+          "bonus": 1,
+          "conditions": [
+            "forEachEnemyWithinVision"
+          ],
+          "max": 4
+        }
+      },
+      "id": "aggression",
+      "name": "Aggressione",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Se il personaggio non effettua nessuna <em>azione offensiva</em>, si <em>Accovaccia</em> automaticamente alla fine del suo turno.",
+      "icon": "ico-cautiousadvancement",
+      "modifiers": {
+        "criticalHitChance": {
+          "bonus": 1,
+          "conditions": [
+            "forEachEnemyWithinVision"
+          ],
+          "max": 4
+        }
+      },
+      "id": "cautious-advancement",
+      "name": "Avanzamento cauto",
+      "requirements": []
+    },
+    {
+      "action": 1,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> con un'<em>arma da mischia</em> contro un bersaglio entro la propria <em>Mobilità</em> con un <em class='plus'>bonus di +1</em> ai <em>danni</em> per ogni <em class='stat'>2 mt.</em> percorsi in questo modo.",
+      "endsTurn": false,
+      "icon": "ico-charge",
+      "modifiers": {},
+      "id": "charge",
+      "name": "Carica",
+      "requirements": [
+        [
+          "aggression",
+          "run-and-gun"
+        ]
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio ottiene un <em class='plus'>bonus di +10</em> alla <em>Mira</em> e +1 al <em>successo critico</em> contro avversari che hanno più ferite di metà della propria <em>Resistenza</em>.",
+      "icon": "ico-executioner",
+      "modifiers": {
+        "aim": {
+          "bonus": 10,
+          "conditions": [
+            "targetWoundRatio"
+          ],
+          "conditionsArguments": [
+            [
+              "<=",
+              0.5
+            ]
+          ]
+        },
+        "criticalHitChance": {
+          "bonus": 1,
+          "conditions": [
+            "targetWoundRatio"
+          ],
+          "conditionsArguments": [
+            [
+              "<=",
+              0.5
+            ]
+          ]
+        }
+      },
+      "id": "executioner",
+      "name": "Boia",
+      "requirements": [
+        "unfair-combat"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Uccidere un bersaglio con un'arma leggera conferisce un'<em>Azione</em>.",
+      "icon": "ico-coupdegrace",
+      "modifiers": {},
+      "id": "coup-de-grace",
+      "name": "Colpo di grazia",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": 2,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "Un <em>Attacco</em> con un <em class='plus'>bonus di 3 punti</em> alla probabilità di <em>successo critico</em> e che infligge il doppio dei danni in caso di <em>successo critico</em>.",
+      "icon": "ico-headshot",
+      "id": "headshot",
+      "name": "Colpo alla testa",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio ottiene un <em class='plus'>bonus di +2</em> alla  probabilità di <em>successo critico</em> ed un <em class='plus'>bonus di +10</em> alla <em>Mira</em> contro bersagli affetti da <em>condizioni negative</em>.",
+      "icon": "ico-unfaircombat",
+      "modifiers": {},
+      "id": "unfair-combat",
+      "name": "Combattimento sleale",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di +5</em> alla <em>Mobilità</em> a tutti gli alleati entro la propria <em>Visione</em> per 1 turno.",
+      "endsTurn": true,
+      "icon": "ico-coordination",
+      "modifiers": {},
+      "id": "coordination",
+      "name": "Coordinare",
+      "requirements": [
+        "talent-networking"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce <em>copertura parziale</em> fino al prossimo turno.",
+      "endsTurn": true,
+      "icon": "ico-improvisedcover",
+      "modifiers": {},
+      "id": "improvised-cover",
+      "name": "Copertura improvvisata",
+      "requirements": [
+        "talent-survival"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di 5 punti</em> alla <em>Mobilità</em> se spende tutte le sue <em>Azioni</em> in <em>Movimento</em>.",
+      "icon": "ico-sprinter",
+      "modifiers": {
+        "movement": 5
+      },
+      "id": "sprinter",
+      "name": "Corridore",
+      "requirements": []
+    },
+    {
+      "action": 1,
+      "ammo": 2,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> contro una <em>Copertura</em> che la scala di un livello. Può essere effettuato solo con <em>Armi pesanti</em>.",
+      "endsTurn": true,
+      "icon": "ico-collateraldamage",
+      "modifiers": {},
+      "id": "collateral-damage",
+      "name": "Danno collaterale",
+      "requirements": [
+        "talent-demolition"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "<em class='plus'>Conferisce +1</em> <em>Azione</em> ad un bersaglio entro <em>Visione</em>",
+      "endsTurn": true,
+      "icon": "ico-directive",
+      "modifiers": {},
+      "id": "directive",
+      "name": "Dirigere",
+      "requirements": [
+        "talent-networking"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "<em class='plus'>Aumenta di +1 mt</em> il <em class='stat'>raggio di esplosione</em> delle <em>Granate</em>. Inoltre, queste infliggono <em class='plus'>la metà</em> dei <em>danni</em> agli alleati entro il <em class='stat'>raggio di esplosione</em>.",
+      "icon": "ico-controlledexplosion",
+      "modifiers": {
+        "movement": 5
+      },
+      "id": "controlled-explosion",
+      "name": "Esplosioni controllate",
+      "requirements": [
+        "talent-demolition"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Può <em>Estrarre</em> armi senza spendere un'<em>Azione</em>.",
+      "icon": "ico-quickdraw",
+      "modifiers": {
+        "movement": 5
+      },
+      "id": "quick-draw",
+      "name": "Estrazione rapida",
+      "requirements": [
+        "lightning-hands"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "La reazione di <em>Sorvegliare</em> si attiva contro qualsiasi azione offensiva nemica entro il raggio, non soltanto contro il movimento.",
+      "icon": "ico-coveringfire",
+      "modifiers": {},
+      "id": "covering-fire",
+      "name": "Fuoco di copertura",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": 1,
+      "ammo": 2,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Effettua un attacco con un <em class='plus'>bonus di +20</em> alla <em>Mira</em> che infligge la metà dei danni (minimo 1). Il bersaglio deve effettuare una prova di <em>Volontà</em> od essere costretto a muoversi. Il bersaglio deve muoversi di metà del suo <em>Movimento</em>.",
+      "endsTurn": true,
+      "icon": "ico-flush",
+      "modifiers": {},
+      "id": "flush",
+      "name": "Fuoco di pressione",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": 1,
+      "ammo": 2,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Concentra il fuoco contro un bersaglio entro il 150% della propria <em>Visione</em>. Il personaggio ottiene un attacco di reazione se il bersaglio si muove, ed il bersaglio subisce una <em class='minus'>penalità di 30 punti</em> alla <em>Mira</em>. Inoltre, annulla <em>Fuoco di saturazione</em> o <em>Sorvegliare</em> del bersaglio.",
+      "endsTurn": true,
+      "icon": "ico-suppression",
+      "modifiers": {},
+      "id": "suppression",
+      "name": "Fuoco di saturazione",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Quando utilizza <em>Fuoco di saturazione</em> effettua anche un <em>Attacco</em> contro il bersaglio che infligge <em class='minus'>la metà</em> dei <em>danni</em> ",
+      "icon": "ico-improvedsuppression",
+      "modifiers": {},
+      "id": "improved-suppression",
+      "name": "Fuoco di saturazione migliorato",
+      "requirements": [
+        "suppression"
+      ]
+    },
+    {
+      "action": 1,
+      "ammo": 2,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Effettua due <em>Attacchi</em> contro lo stesso bersaglio con una <em class='minus'>penalità di -15</em> alla <em>Mira</em>.",
+      "endsTurn": true,
+      "icon": "ico-rapidfire",
+      "modifiers": {},
+      "id": "rapid-fire",
+      "name": "Fuoco rapido",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Le <em>Granate</em> hanno una possibilità di <em>successo critico</em> di <em class='plus'>2 punti</em> (calcolata con un regolare <em>tiro per colpire</em>). Inoltre, <em class='plus'>raddoppia la possibilità</em> di infliggere danni alle <em>coperture</em>.",
+      "icon": "ico-sapper",
+      "modifiers": {},
+      "id": "sapper",
+      "name": "Geniere",
+      "requirements": [
+        "talent-demolition",
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio può lanciare tutte le <em>Granate</em> ad una distanza di 15 mt. I <em>Fumogeni</em> danno un <em class='plus'>bonus di +40</em> alla <em>Difesa</em>.",
+      "icon": "ico-grenadier",
+      "modifiers": {},
+      "id": "grenadier",
+      "name": "Granatiere",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Uccidere un bersaglio <em class='plus'>conferisce un'Azione</em>.",
+      "icon": "ico-implacable",
+      "modifiers": {},
+      "id": "implacable",
+      "name": "Implacabile",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "<em>Usare oggetti</em> non termina il turno.",
+      "icon": "ico-fieldengineering",
+      "modifiers": {},
+      "id": "field-engineering",
+      "name": "Ingegneria militare",
+      "requirements": [
+        "talent-engineering"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "<em class='plus'>Previene qualsiasi danno</em> dal prossimo <em>Attacco</em>.",
+      "icon": "ico-untouchable",
+      "modifiers": {},
+      "id": "untouchable",
+      "name": "Inviolabile",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di +1</em> alla probabilità di <em>successo critico</em> ed al <em>danno</em>.",
+      "icon": "ico-killerinstinct",
+      "modifiers": {
+        "criticalHitChance": {
+          "bonus": 1
+        },
+        "damage": {
+          "bonus": 1
+        }
+      },
+      "id": "killer-instinct",
+      "name": "Istinto Omicida",
+      "requirements": [
+        "ranger"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Ottiene un <em class='plus'>bonus di +10</em> ai <em>Riflessi</em> ed alla <em>Mira</em>, ed un <em class='plus'>bonus di +1</em> alla probabilità di <em>successo critico</em> fintanto che non ci sono alleati in vita entro la sua <em>Visione</em>.",
+      "icon": "ico-lonewolf",
+      "modifiers": {},
+      "id": "lone-wolf",
+      "name": "Lupo solitario",
+      "requirements": [
+        "talent-survival"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di +2</em> alla probabilità di <em>successo critico</em> ed al <em>danno</em> con <em>armi da mischia</em>.",
+      "icon": "ico-martialmaster",
+      "modifiers": {},
+      "id": "martial-master",
+      "name": "Maestro marziale",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": 3,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> con un'arma leggera senza spendere un'<em>Azione</em> e senza doverla <em>Estrarre</em>.",
+      "endsTurn": false,
+      "icon": "ico-lightninghands",
+      "modifiers": {},
+      "id": "lightning-hands",
+      "name": "Mani fulminee",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Se il personaggio non ha effettuato nessuna azione di <em>Movimento</em>, <em>Stabilizza</em> automaticamente alla fine del suo turno.",
+      "icon": "ico-holdposition",
+      "modifiers": {},
+      "id": "hold-position",
+      "name": "Mantenere la posizione",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "In mano al personaggio, i <em>Medikit</em> curano 8 ferite e possono essere usati come primo punto azione senza spenderlo. Inoltre, invece di stabilizzare semplicemente il bersaglio, lo rianimano curando 4 ferite. Il personaggio rianimato in questo modo ha un solo punto azione ed una penalità di 30 punti a tutte le prove per il turno successivo.",
+      "icon": "ico-fieldmedicine",
+      "modifiers": {},
+      "id": "field-medicine",
+      "name": "Medicina da campo",
+      "requirements": [
+        "talent-medicine"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Attacchi eseguiti come prima azione del turno hanno un <em class='plus'>bonus di 10 punti</em> alla <em>Mira</em> e <em class='plus'>1 punto</em> al <em>successo critico</em>.",
+      "icon": "ico-aimstability",
+      "modifiers": {},
+      "id": "aim-stability",
+      "name": "Mira salda",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Contro il personaggio, le <em>coperture totali</em> contano come <em>coperture parziali</em>.",
+      "icon": "ico-canthide",
+      "modifiers": {},
+      "id": "cant-hide",
+      "name": "Non puoi nasconderti",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "In mano al personaggio, i <em>Medikit</em> <em class='plus'>conferiscono +1</em> <em>Azione</em> al bersaglio per il suo prossimo turno.",
+      "icon": "ico-nootropics",
+      "modifiers": {},
+      "id": "nootropics",
+      "name": "Nootropi",
+      "requirements": [
+        "talent-medicine"
+      ]
+    },
+    {
+      "action": 0,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio <em class='plus'>ignora la penalità</em> alla <em>Mira</em> se <em>Accovacciato</em>",
+      "icon": "ico-opportunist",
+      "modifiers": {},
+      "id": "opportunist",
+      "name": "Opportunista",
+      "requirements": []
+    },
+    {
+      "action": 0,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Per questo turno, il personaggio non scatena <em>Reazioni</em>.",
+      "icon": "ico-shadowstep",
+      "modifiers": {},
+      "id": "shadow-step",
+      "name": "Passo felpato",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "<em>Attaccare</em> non termina il turno.",
+      "icon": "ico-bulletswarm",
+      "modifiers": {},
+      "id": "bullet-swarm",
+      "name": "Pioggia di proiettili",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio utilizza automaticamente l'azione <em>Sorvegliare</em> se ha speso il suo primo punto azione per <em>Attaccare</em>.",
+      "icon": "ico-advancedfirecontrol",
+      "modifiers": {},
+      "id": "advanced-fire-control",
+      "name": "Pronto a tutto",
+      "requirements": [
+        "threat-assessment"
+      ]
+    },
+    {
+      "action": 1,
+      "ammo": "targets",
+      "cooldown": 3,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> contro tutti i bersagli in un semicerchio entro la propria <em>Visione</em>. Questi attacchi infliggono <em class='minus'>la metà dei danni</em>.",
+      "endsTurn": true,
+      "icon": "ico-sprayandpray",
+      "modifiers": {},
+      "id": "spray-and-pray",
+      "name": "Raffica a ventaglio",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di +1</em> <em>danno</em>, e <em class='plus'>+1</em> alla <em>Visione</em>.",
+      "icon": "ico-ranger",
+      "modifiers": {
+        "equipment": {
+          "weapon": {
+            "modifiers": {
+              "damage": 1
+            }
+          }
+        },
+        "vision": 1
+      },
+      "id": "ranger",
+      "name": "Ranger",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio attacca i primi 3 bersagli possibili quando usa l'azione <em>Sorvegliare</em>",
+      "icon": "ico-quickreaction",
+      "modifiers": {},
+      "id": "quick-reaction",
+      "name": "Reazione rapida",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio <em class='plus'>ignora la penalità</em> alla <em>Mira</em> quando <em>Sorveglia</em>.",
+      "icon": "ico-conditionedreflexes",
+      "modifiers": {},
+      "id": "conditioned-reflexes",
+      "name": "Riflessi condizionati",
+      "requirements": [
+        "*2"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio può <em>Ricaricare</em> le <em>Armi leggere</em> come azione gratuita.",
+      "icon": "ico-quickreload",
+      "modifiers": {},
+      "id": "quick-reload",
+      "name": "Ricarica rapida",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di 80 punti</em> alla <em>Difesa</em> contro il primo attacco di reazione del turno. Il bonus ricevuto diminuisce di <em class='minus'>10 punti</em> per ogni attacco successivo.",
+      "icon": "ico-lightningreflexes",
+      "modifiers": {},
+      "id": "lightning-reflexes",
+      "name": "Riflessi fulminei",
+      "requirements": [
+        "shadow-step",
+        "*2"
+      ]
+    },
+    {
+      "action": 1,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Effettua un <em>Attacco</em> con un <em class='plus'>bonus di +20</em> alla <em>Mira</em>: questo attacco non infligge <em>danni</em> ma <em>disabilita</em> l'arma del bersaglio.",
+      "endsTurn": true,
+      "icon": "ico-sabotage",
+      "modifiers": {},
+      "id": "sabotage",
+      "name": "Sabotare",
+      "requirements": [
+        "talent-engineering"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio ottiene un <em class='plus'>bonus di +10</em> alla <em>Mira</em> e +1 al <em>successo critico</em> se il bersaglio è stato ferito entro il suo ultimo turno.",
+      "icon": "ico-sadist",
+      "modifiers": {},
+      "id": "sadist",
+      "name": "Sadista",
+      "requirements": [
+        "*1"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio ottiene un <em class='plus'>bonus di +1</em> alla <em>Robustezza</em> in copertura parziale, <em class='plus'>+2</em> in copertura totale ed ottiene un <em class='plus'>bonus di +10</em> alla <em>Difesa</em> fintanto che <em>Sorveglia</em>.",
+      "icon": "ico-willtosurvive",
+      "modifiers": {
+        "defense": {
+          "bonus": 10,
+          "conditions": [
+            "isStatus"
+          ],
+          "conditionsArguments": [
+            [
+              "overwatch"
+            ]
+          ]
+        }
+      },
+      "id": "will-to-survive",
+      "name": "Senso di sopravvivenza",
+      "requirements": [
+        "talent-survival"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di 5 punti</em> alla <em>Difesa</em> per ogni nemico entro la propria <em>Visione</em> (Max. 30).",
+      "icon": "ico-tacticalsense",
+      "modifiers": {
+        "defense": {
+          "bonus": 5,
+          "conditions": [
+            "forEachEnemyWithinVision"
+          ],
+          "max": 30
+        }
+      },
+      "id": "tactical-sense",
+      "name": "Senso tattico",
+      "requirements": []
+    },
+    {
+      "action": 0,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Il personaggio può conoscere il risultato della <em>prova</em> prima di decidere se effettuare o no l'azione.",
+      "endsTurn": false,
+      "icon": "ico-sixthsense",
+      "modifiers": {},
+      "id": "sixth-sense",
+      "name": "Sesto senso",
+      "requirements": [
+        "talent-knowledge"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "I <em>successi critici</em> con gli <em>Attacchi</em> del personaggio, infliggono il <em class='plus'>doppio</em> dei <em>danni</em>. ",
+      "icon": "ico-merciless",
+      "modifiers": {
+        "defense": {
+          "bonus": 5,
+          "conditions": [
+            "forEachEnemyWithinVision"
+          ],
+          "max": 30
+        }
+      },
+      "id": "merciless",
+      "name": "Spietato",
+      "requirements": [
+        "headshot"
+      ]
+    },
+    {
+      "action": 0,
+      "cooldown": 4,
+      "cost": 10,
+      "description": "Il personaggio <em class='plus'>ottiene +1</em> <em>Azione</em> a fine turno.",
+      "endsTurn": false,
+      "icon": "ico-tactician",
+      "modifiers": {},
+      "id": "tactician",
+      "name": "Stratega",
+      "requirements": [
+        "talent-knowledge"
+      ]
+    },
+    {
+      "action": 2,
+      "cooldown": 5,
+      "cost": 10,
+      "description": "Effettua tanti <em>Attacchi</em> quante sono le <em>munizioni</em> rimanenti contro un singolo bersaglio.",
+      "endsTurn": true,
+      "icon": "ico-continuousshot",
+      "modifiers": {},
+      "id": "continuous-shot",
+      "name": "Tiro continuo",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": 0,
+      "cooldown": 2,
+      "cost": 10,
+      "description": "Il personaggio si <em class='minus'>infligge 2</em> <em>danni</em>, ed <em class='plus'>ottiene un bonus di +1</em> <em>Azione</em> ed <em class='plus'>un bonus di +5</em> alla <em>Mobilità</em>.",
+      "endsTurn": false,
+      "icon": "ico-allornothing",
+      "modifiers": {},
+      "id": "all-or-nothing",
+      "name": "Tutto per tutto",
+      "requirements": [
+        "*3"
+      ]
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio utilizza automaticamente l'azione <em>Sorvegliare</em> se ha speso il suo ultimo punto azione per <em>Muoversi</em>.",
+      "icon": "ico-threatassessment",
+      "modifiers": {},
+      "id": "threat-assessment",
+      "name": "Valutazione del pericolo",
+      "requirements": []
+    },
+    {
+      "action": -1,
+      "cooldown": false,
+      "cost": 10,
+      "description": "Il personaggio può effettuare <em>Attacchi</em> entro la <em>Visione</em> di qualsiasi alleato, fintanto che ci sia linea visiva tra sé ed il bersaglio. Attacchi effettuati in questo modo <em class='minus'>non possono effettuare successi critici</em> ed hanno una <em class='minus'>penalità di -30 alla Mira</em>.",
+      "icon": "ico-squadsight",
+      "modifiers": {},
+      "id": "squadsight",
+      "name": "Visione di squadra",
+      "requirements": [
+        "*3"
+      ]
+    }
+  ],
+  "talents": [
+    {
+      "description": "<p>Il dominio di <em>Atletica</em> è quello di qualsiasi tipo di attività che coinvolge primariamente l'uso competente del corpo: scalare, combattere senz'armi, fare acrobazie o salti straordinari, sollevare enormi pesi e così via.</p>",
+      "icon": "ico-talent-athletics",
+      "id": "athletics",
+      "name": "Atletica",
+      "skills": []
+    },
+    {
+      "description": "<p>Il dominio di <em>Demolizione</em> è quello che compete l'uso calcolato ed efficiente di esplosivi, il riciclaggio di materie prime, l'operare artiglieria pesante e conoscenze tecniche riguardo i punti deboli di una struttura.</p>",
+      "icon": "ico-talent-demolition",
+      "id": "demolition",
+      "name": "Demolizione",
+      "skills": []
+    },
+    {
+      "description": "<p><em>Infiltrazione</em> è l'arte di agire con discrezione in modo da sfuggire l'individuazione: muoversi silenziosamente e nascondersi nelle ombre, dissimulare la propria identità camuffandosi, borseggiare furtivamente, svanire nella folla e così via.</p>",
+      "icon": "ico-talent-infiltration",
+      "id": "inflitration",
+      "name": "Inflitrazione",
+      "skills": []
+    },
+    {
+      "description": "<p><em>Ingegneria</em> include qualsiasi competenza tecnica riguardante le componenti fisiche di apparecchiature elettroniche, meccaniche, magnetiche, hardware e la ferramenta.</p><p>Un personaggio competente in questo campo può occuparsi della progettazione, costruzione, riparazione ed alterazione di vari tipi di sistemi, nonché del pilotaggio di veicoli terrestri, aerei e marini.</p>",
+      "icon": "ico-talent-engineering",
+      "id": "engineering",
+      "name": "Ingegneria",
+      "skills": []
+    },
+    {
+      "description": "<p>La competenza in <em>Interfacing</em> si riferisce alla capacità esperta di sistemi computerizzati (software). Include il campo della sicurezza digitale, tecniche di intrusione e controintrusione (hacking), criptaggio e decodifica di dati digitali, e così via.</p>",
+      "icon": "ico-talent-interfacing",
+      "id": "interfacing",
+      "name": "Interfacing",
+      "skills": []
+    },
+    {
+      "description": "<p><em>Istruzione</em> è un termine onnicomprensivo che include tutte le conoscenze strettamente teoriche: dalla storia, all'astronomia, alle lingue, tattica e strategia militare, geografia e persino aree di competenza incluse negli altri <em>talenti</em>.</p>",
+      "icon": "ico-talent-knowledge",
+      "id": "knowledge",
+      "name": "Istruzione",
+      "skills": []
+    },
+    {
+      "description": "<p>La <em>Medicina</em> include non solo la conoscenza teorica di biologia, anatomia, diagnostica etc., ma soprattutto l'applicazione pratica atta alla cura e mantenimento di entità biologiche: competenze accessorie come la progettazione e l'uso competente di droghe, la chirurgia, l'anestesia e così via, sono incluse in questo ambito di competenza.</p>",
+      "icon": "ico-talent-medicine",
+      "id": "medicine",
+      "name": "Medicina",
+      "skills": []
+    },
+    {
+      "description": "<p>Competenza in <em>Networking</em> non include soltanto la capacità di gestire un gran numero di contatti nei più svariati ambienti, scambiare favori e tenere d'occhio i trendi di varie fazioni e sottogruppi culturali, ma anche più in generale la reputazione, la scaltrezza metropolitana e la disinvoltura urbana.</p>",
+      "icon": "ico-talent-networking",
+      "id": "networking",
+      "name": "Networking",
+      "skills": []
+    },
+    {
+      "description": "<p>Le competenze in <em>Sopravvivenza</em> sono quelle che permettono disinvoltura in ambienti ostili, spesso selvaggi: improvvisare rifugi, procurarsi cibo, saper riconoscere veleni, orientarsi, seguire tracce, creare oggetti di fortuna con risorse inadeguate e così via.</p>",
+      "icon": "ico-talent-survival",
+      "id": "survival",
+      "name": "Sopravvivenza",
+      "skills": []
+    }
+  ]
+}
