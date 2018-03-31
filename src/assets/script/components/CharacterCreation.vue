@@ -16,7 +16,7 @@
         <md-option 
           v-for="character of characters"
           :value="character['.key']">
-          {{ character.name }}
+          {{ character.attributes.name }}
         </md-option>
       </md-select>
     </md-field>
@@ -271,16 +271,15 @@ export default {
       
       console.log('Loaded character: ', character);
       
-      // @fixme !! Bleagh!
-      this.attributes.action.value = character.action;
-      this.attributes.aim.value = character.aim;
-      this.attributes.movement.value = character.movement;
-      this.attributes.reflexes.value = character.reflexes;
-      this.attributes.resistance.value = character.resistance;
-      this.attributes.toughness.value = character.toughness;
-      this.attributes.vision.value = character.vision;
-      this.attributes.will.value = character.will;
-      this.name = character.name;
+      Object.keys(character.baseAttributes)
+        .forEach((attr) => {
+          this.attributes[attr].value = character.baseAttributes[attr];
+        });
+      
+      this.selectedArmorType = character.equipment.armor.type;
+      this.selectedWeaponsTypes = character.equipment.weapons
+        .map(weapon => weapon.type);
+      this.name = character.attributes.name;
     }
   },
   props: ['isAddingObject']

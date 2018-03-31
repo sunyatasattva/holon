@@ -111,6 +111,7 @@
 
 <script>
 import get from 'lodash.get';
+import pick from 'lodash.pick';
 import Vue from 'vue';
   
 import Mechanics from '../modules/mechanics.json';
@@ -155,9 +156,8 @@ export default {
               this.snackbarMessage = 'References to character removed from the database.';
             
               console.log(
-                'Character saved: ',
-                characterId,
-                this.object.attributes
+                'Character removed: ',
+                characterId
               );
             }
             else {
@@ -167,12 +167,20 @@ export default {
         );
     },
     saveObject() {
-      let characterId = this.object.attributes.name.toLowerCase();
+      const characterId = this.object.attributes.name.toLowerCase();
+      const character = pick(
+        this.object,
+        [
+          'attributes',
+          'baseAttributes',
+          'equipment'
+        ]
+      );
       
       this.$firebaseRefs.characters
         .child(characterId)
         .set(
-          this.object.attributes,
+          character,
           (error) => {
             if(!error) {
               this.showSnackbar = true;
@@ -181,11 +189,11 @@ export default {
               console.log(
                 'Character saved: ',
                 characterId,
-                this.object.attributes
+                character
               );
             }
             else {
-              console.error('There was an error removing the character from the database', error);
+              console.error('There was an error saving the character in the database', error);
             }
           }
         );
