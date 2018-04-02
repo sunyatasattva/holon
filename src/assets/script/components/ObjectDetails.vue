@@ -114,7 +114,7 @@ import get from 'lodash.get';
 import pick from 'lodash.pick';
 import Vue from 'vue';
   
-import Mechanics from '../modules/mechanics.json';
+import Mechanics from '_mechanics';
 
 import HealthBar from './HealthBar.vue';
 import Network from '../modules/networking';

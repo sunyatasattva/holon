@@ -159,7 +159,7 @@
 import AttributeInput from './AttributeInput.vue';
 import Network from '../modules/networking';
   
-import Equipment from '../modules/equipment.json';
+import Equipment from '_equipment';
   
 const db = Network.database();
 

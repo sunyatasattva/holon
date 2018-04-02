@@ -627,9 +627,9 @@ import WeaponCard from "./components/WeaponCard.vue";
 
 import AttributeInput from "../../../../src/assets/script/components/AttributeInput.vue";
   
-import equipment from "../../../rules/equipment.json";
-import mechanics from "../../../rules/mechanics.json";
-import skills from "../../../rules/skills.json";
+import equipment from "_equipment";
+import mechanics from "_mechanics";
+import skills from "_skills";
 
 function parseRequirements(requirements, curr) {
   let nestedRequirements = [],
