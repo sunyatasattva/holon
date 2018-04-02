@@ -3,8 +3,8 @@
     <md-field>
       <label for="team">Team</label>
       <md-select name="team" id="team" v-model="team">
-        <md-option value="0">Allies</md-option>
-        <md-option value="1">Enemies</md-option>
+        <md-option :value="0">Allies</md-option>
+        <md-option :value="1">Enemies</md-option>
       </md-select>
     </md-field>
     <md-field>
