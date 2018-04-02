@@ -105,7 +105,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
             let [attr, mod] of 
             Object.entries(modifiers)
           ) {
-            this.attributes[attr] =  this.baseAttributes[attr] + mod;
+            this.attributes[attr] += mod;
           }
         }
       });
