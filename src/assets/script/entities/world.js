@@ -231,6 +231,11 @@ const World = fabric.util.createClass(fabric.Canvas, {
             || objectOccupyingTheTile.pathable) ? true : false;
   },
   
+  remove(object) {
+    object.fire('before:remove');
+    this.callSuper('remove', object);
+  },
+  
   removeFromActiveObjects(object) {
     this.remove(object);
     this.renderAll();

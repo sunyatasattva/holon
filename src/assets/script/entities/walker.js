@@ -225,11 +225,14 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   resetVisualStatus() {
-    this
-      .removeCurrentLabel()
-      ._resetDefaultColor();
-    
-    this.canvas.renderAll();
+    try {
+      this
+        .removeCurrentLabel()
+        ._resetDefaultColor();
+      
+      this.canvas.renderAll();
+    }
+    catch(ok) {}
     
     return this;
   },

@@ -37,6 +37,10 @@ const Entity = fabric.util.createClass(fabric.Object, {
     this.on('modified', () => {
       this.updateGridCoordinates();
     });
+    
+    this.on('before:remove', () => {
+      this.removeCurrentLabel();
+    });
   },
   
   calculateRelativeDirectionTo(to, center = true) {
