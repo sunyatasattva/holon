@@ -191,8 +191,8 @@ export default {
     panToObject(object) {
       let canvas = this.$refs.World.canvas,
           zoom = canvas.getZoom(),
-          canvasHeight = canvas.height / zoom,
-          canvasWidth = canvas.width / zoom;
+          canvasHeight = canvas.height,
+          canvasWidth = canvas.width;
       
       canvas.absolutePan({
         x: object.left * zoom - canvasWidth / 2,
