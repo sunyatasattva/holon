@@ -50,6 +50,12 @@
           </section>
           <section class="save-options">
             <h2>Save options</h2>
+            <md-switch
+               class="md-primary"
+               v-model="options.autoSync"
+             >
+              Automatically syncronize the state
+            </md-switch>
             <md-button
              class="md-primary md-raised"
              @click="exportCurrentState"
@@ -114,6 +120,7 @@ export default {
       selectedObject: false,
       options: {
         autoPan: false,
+        autoSync: true,
         isAddingObject: false,
         showHitChance: true,
         uploadedState: null
@@ -133,7 +140,7 @@ export default {
     addEntities(entities, save = true) {
       this.activeObjects.push.apply(this.activeObjects, entities);
       
-      if(save)
+      if(save && this.options.autoSync)
         this.saveGame();
     },
     addWound(target) {
@@ -219,6 +226,7 @@ export default {
 
       console.log('Object removed:', obj);
       
+      if(this.options.autoSync)
       return this.saveGame();
     },
     removeWound(target) {

@@ -117,8 +117,8 @@ const component = {
     });
     
     world.on('object:modified', () => {
-      // @todo add auto-save setting
-      this.$parent.saveGame();
+      if(this.options.autoSync)
+        this.$parent.saveGame();
     });
     
     world.on('object:selected', (e) => {
