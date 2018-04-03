@@ -96,8 +96,11 @@ const Entity = fabric.util.createClass(fabric.Object, {
   },
   
   removeCurrentLabel() {
-    if(this.currentLabel)
-      this.canvas.remove(this.currentLabel);
+    if(this.currentLabel) {
+      try {
+        this.canvas.remove(this.currentLabel);
+      } catch(ok) {}
+    }
     
     return this;
   },
