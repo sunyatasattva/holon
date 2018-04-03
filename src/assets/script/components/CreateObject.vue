@@ -107,7 +107,7 @@ export default {
           // @fixme I wish I could use computed props on this :(
           // too much tied into FabricJs
           baseAttributes: attrs,
-          equipment: data.equipment,
+          equipment: { ...data.equipment },
           width: world.tileSize,
           height: world.tileSize,
           radius: world.tileSize / 2,
