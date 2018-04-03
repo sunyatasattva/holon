@@ -1,7 +1,11 @@
 const fabric = require('fabric').fabric;
 const extend = fabric.util.object.extend;
 const Entity = require('./entity');
+const Label  = require('./label');
 
+import xor from 'lodash.xor';
+
+import Mechanics from '_mechanics';
 import Rules from '../modules/rules';
 import { prototype as Cover } from './cover'; 
 
@@ -12,7 +16,9 @@ import { prototype as Cover } from './cover';
  * @mixes fabric.Circle.prototype
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
-  attributes: {},
+  attributes: {
+    status: []
+  },
   equipment: {
     activeWeapon: {},
     armor: {},
@@ -79,6 +85,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.on('modified', () => {
       // @todo implement "moved" event
       this._updateCoverStatus();
+      // @todo labels should be grouped
+      this.displayStatus();
     });
   },
   
@@ -165,6 +173,45 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     });
   },
   
+  displayStatus() {
+    let statii = this.attributes.status,
+        icons;
+    
+    if(this.statusLabel)
+      this.canvas.remove(this.statusLabel);
+    
+    if(!statii || !statii.length)
+      return;
+    
+    icons = statii.map((status) => {
+      // @todo shouldn't hardcode this icon
+      if(status === 'overwatch')
+        return 'visibility';
+      else
+        return Mechanics.statii
+          .find( _ => _.id === status )
+          .icon;
+    });
+    
+    this.statusLabel = new Label('', {
+      icon: { icon: icons.join(' ') },
+      left: this.left - this.width / 2,
+      top: this.top - this.height / 2
+    });
+    
+    this.canvas.add(this.statusLabel);
+    
+    return this;
+  },
+  
+  executeCommand(command) {
+    console.log(`${this.attributes.name} is executing ${command.name}.`);
+    
+    command.effects.forEach((effect) => {
+      this[effect.type](...effect.arguments);
+    });
+  },
+  
   getDistanceFrom(target) {
     let thisCenter = this._calculateCenterCoordinates(),
         targetCenter;
@@ -240,15 +287,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   setAttribute(attr, val) {
     this.attributes[attr] = val;
     
-    this.fire('modified');
-    this.canvas.fire('object:modified');
+    this._update();
   },
   
   setProp(prop, val) {
     this[prop] = val;
     
-    this.fire('modified');
-    this.canvas.fire('object:modified');
+    this._update();
   },
   
   showMovementRange(showDashing = true) {
@@ -287,6 +332,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.highlightedTiles = [visionTiles];
     
     return this.highlightedTiles;
+  },
+  
+  toggleStatus(status) {
+    return this.setAttribute(
+      'status',
+      xor( this.attributes.status, [status] )
+    );
   },
   
   toObject: function(props = []) {
@@ -331,6 +383,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.on('deselected', () => {
       this.maxMovementRange = this.calculateMovementRange();
     });
+    
+    this.displayStatus();
   },
   
   _resetDefaultColor() {
@@ -366,6 +420,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         left: this.allowedLeft,
         top: this.allowedTop
       });
+  },
+  
+  _update() {
+    this.fire('modified');
+    this.canvas.fire('object:modified');
   },
   
   _updateCoverStatus() {

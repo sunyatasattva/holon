@@ -32,9 +32,12 @@ const Label = fabric.util.createClass(fabric.Group, {
   initialize(str, options = {}) {
     let objects;
     
-    this.setOptions(options);
+    this.setOptions({
+      text: { text: str },
+      ...options
+    });
     
-    objects = this._createLabelGroup(str, options);
+    objects = this._createLabelGroup(options);
     this.callSuper('initialize', objects, options);
     
     this.on('added', () => {
@@ -45,10 +48,12 @@ const Label = fabric.util.createClass(fabric.Group, {
   setOptions(options) {
     options.icon = extend(this.icon, options.icon);
     options.label = extend(this.label, options.label);
+    options.text = extend(this.text, options.text);
+    
     this.callSuper('setOptions', options);
   },
   
-  _createLabelGroup(str, opts) {
+  _createLabelGroup(opts) {
     let label = new fabric.Rect({
       opacity: 0.5,
       fill: this.label.fill,
@@ -66,7 +71,7 @@ const Label = fabric.util.createClass(fabric.Group, {
       left: label.left + 2,
       top: label.top + 5
     }),
-        text = new fabric.Text(str, {
+        text = new fabric.Text(this.text.text, {
       fill: this.text.fill,
       fontFamily: this.text.fontFamily,
       fontSize: this.text.fontSize,
@@ -80,7 +85,7 @@ const Label = fabric.util.createClass(fabric.Group, {
   _onObjectAdded() {
     let textObjects = this.getObjects('text'),
         labelObject = this.getObjects('rect')[0],
-        paddingRight = this.icon.icon ? 22 : 2,
+        paddingRight = this.icon.icon && this.text.text ? 22 : 2,
         textWidth;
     
     textWidth = textObjects
