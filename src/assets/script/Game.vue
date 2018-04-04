@@ -205,6 +205,8 @@ export default {
         x: object.left * zoom - canvasWidth / 2,
         y: object.top * zoom - canvasHeight / 2
       });
+      
+      object.blink();
     },
     removeAllActiveObjects() {
       if(this.activeObjects.length) {

@@ -43,6 +43,23 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
   },
   
+  blink() {
+    const canvas = this.canvas;
+    
+    this.animate('opacity', 0.5, {
+      duration: 500,
+      easing: fabric.util.ease.easeInSine,
+      onChange: canvas.renderAll.bind(canvas),
+      onComplete: () => {
+        this.animate('opacity', 1, {
+          duration: 500,
+          easing: fabric.util.ease.easeOutSine,
+          onChange: canvas.renderAll.bind(canvas)
+        });
+      }
+    });
+  },
+  
   calculateRelativeDirectionTo(to, center = true) {
     return this.canvas
           .calculateRelativeDirection(this, to, center);
