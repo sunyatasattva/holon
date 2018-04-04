@@ -79,7 +79,7 @@ export default {
   },
   watch: {
     activeCharacters(curr, last) {
-      if(this.autoPan)
+      if(this.autoPan && curr[0] !== last[0])
         this.selectCharacter(curr[0]);
     } 
   }
