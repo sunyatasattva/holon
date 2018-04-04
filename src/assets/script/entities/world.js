@@ -18,6 +18,13 @@ const World = fabric.util.createClass(fabric.Canvas, {
   },
   
   /**
+   * Indicates whether objects should remain in current stack position when selected. When false objects are brought to top and rendered as part of the selection group.
+   * @type Boolean
+   * @default
+   */
+  preserveObjectStacking: true,
+  
+  /**
    * Indicates whether group selection should be enabled.
    * @type Boolean
    * @default
