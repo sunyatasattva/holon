@@ -137,6 +137,9 @@
           </md-chip>
         </md-field>
       </section>
+      <section class="items">
+        <item-selection-menu @update="updateInventory" />
+      </section>
     </section>
     <md-button
       v-if='!isAddingObject'
@@ -157,6 +160,7 @@
 
 <script>
 import AttributeInput from './AttributeInput.vue';
+import ItemSelectionMenu from './ItemSelectionMenu.vue';
 import Network from '../modules/networking';
   
 import Equipment from '_equipment';
@@ -166,7 +170,8 @@ const db = Network.database();
 export default {
   name: 'character-creation',
   components: {
-    AttributeInput
+    AttributeInput,
+    ItemSelectionMenu
   },
   computed: {
     characterPoints() {
@@ -280,6 +285,10 @@ export default {
       this.selectedWeaponsTypes = character.equipment.weapons
         .map(weapon => weapon.type);
       this.name = character.attributes.name;
+    },
+    updateInventory(inventory) {
+      this.equipment.items = Object.values(inventory)
+        .filter(item => item.value > 0);
     }
   },
   props: ['isAddingObject']

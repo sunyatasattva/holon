@@ -29,6 +29,15 @@ import VueMaterial from 'vue-material';
 
 Vue.use(VueMaterial);
 
+import IconAmmo from 'vue-material-design-icons/video-input-component.vue';
+import IconOrnament from 'vue-material-design-icons/ornament.vue';
+import IconPill from 'vue-material-design-icons/pill.vue';
+import IconPistol from 'vue-material-design-icons/pistol.vue';
+ 
+Vue.component('icon-ammo', IconAmmo);
+Vue.component('icon-ornament', IconOrnament);
+Vue.component('icon-pill', IconPill);
+Vue.component('icon-pistol', IconPistol);
 
 import VueFire from 'vuefire';
 Vue.use(VueFire);
