@@ -2,13 +2,13 @@
   <div class="item-selection-menu">
     <md-menu md-direction="top-start" md-size="huge">
       <md-button md-menu-trigger class="md-raised">
-        <md-chip v-if="inventoryPoints">
+        <md-chip v-if="inventoryPoints && !hideCost">
           {{ inventoryPoints }}
         </md-chip>
         <span>Items</span>
       </md-button>
       <md-menu-content class="item-selection-menu-content">
-        <template v-for="category in $options.items">
+        <template v-for="category in groupedItems">
           <md-menu-item v-for="item in category">
             <component 
               :is="`icon-${$options.itemIcons[item.category]}`" />
@@ -33,7 +33,7 @@ import groupBy from 'lodash.groupby';
 
 import AttributeInput from './AttributeInput.vue';  
 
-import { items } from '_equipment';
+import { items as allItems } from '_equipment';
 
 const ITEM_ICONS = {
   "Ammo": "ammo",
@@ -44,10 +44,16 @@ const ITEM_ICONS = {
 
 export default {
   name: 'item-selection-menu',
+  props: ['hideCost', 'items'],
   components: {
     AttributeInput
   },
   computed: {
+    groupedItems() {
+      let items = this.items || allItems;
+      
+      return groupBy(items, "category");
+    },
     inventoryPoints() {
       return Object.values(this.inventory)
         .reduce(
@@ -57,12 +63,14 @@ export default {
     }
   },
   data() {
+    let items = this.items || allItems;
+    
     return {
       inventory: items
         .reduce((acc, curr) => {
           let id = curr.id;
           
-          acc[id] = { cost: 0, id, value: 0 }
+          acc[id] = { cost: 0, value: 0, ...curr }
           
           return acc;
         }, {})
@@ -73,8 +81,7 @@ export default {
       this.$emit('update', this.$data.inventory);
     }
   },
-  itemIcons: ITEM_ICONS,
-  items: groupBy(items, "category"),
+  itemIcons: ITEM_ICONS
 }
 </script>
 

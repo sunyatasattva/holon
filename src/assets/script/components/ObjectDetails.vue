@@ -82,6 +82,11 @@
             </li>
           </ul>
         </section>
+        <section class="items">
+          <item-selection-menu
+          :hideCost="true"
+          :items="object.equipment.items" />
+        </section>
       </section>
       <md-button
        class="md-primary md-raised"
@@ -117,6 +122,8 @@ import Vue from 'vue';
 import Mechanics from '_mechanics';
 
 import HealthBar from './HealthBar.vue';
+import ItemSelectionMenu from './ItemSelectionMenu.vue';
+
 import Network from '../modules/networking';
   
 const db = Network.database();
@@ -125,7 +132,8 @@ export default {
   name: 'object-details',
   props: ['object'],
   components: {
-    HealthBar
+    HealthBar,
+    ItemSelectionMenu
   },
   data() {
     return {
@@ -278,6 +286,8 @@ export default {
   }
   
   .weapons {
+    margin-bottom: 20px;
+    
     ul {
       list-style-type: none;
       margin:          0;
