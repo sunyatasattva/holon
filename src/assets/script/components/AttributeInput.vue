@@ -1,7 +1,7 @@
 <template>
  <div>
    <md-field>
-    <md-icon>{{ icon }}</md-icon>
+    <md-icon v-if="icon">{{ icon }}</md-icon>
     <label>{{ label }}</label>
     <md-input
       :max="max"
@@ -16,14 +16,21 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 export default {
   name: 'attribute-input',
   computed: {
-    rank() {
-      return this.model.value;
+    rank: {
+      get() {
+        return this.model.value;
+      },
+      set(val) {
+        Vue.set(this.model, 'value', val);
+      }
     },
     totalCost() {
-      return [...Array(this.model.value)]
+      return [...Array(this.rank)]
         .reduce(
           (sum, v, i) => sum + this.calculateCurrentPointCost(i + 1),
           0
@@ -86,6 +93,7 @@ export default {
     },
     update(e) {
       this.$emit('update:model', {
+        ...this.model,
         // @todo change `cost` to `totalCost`
         cost: this.totalCost,
         value: +e
