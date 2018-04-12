@@ -24,8 +24,6 @@
         <md-tab md-label="Details" md-icon="gps_fixed">
           <object-details
             :object='selectedObject'
-            v-on:wound='addWound'
-            v-on:heal='removeWound'
           />
         </md-tab>
         
@@ -143,9 +141,6 @@ export default {
       if(save && this.options.autoSync)
         this.saveGame();
     },
-    addWound(target) {
-      target.setAttribute('wounds', target.attributes.wounds + 1);
-    },
     exportCurrentState() {
       let currentState = this.activeObjects
         .map( (o) => o.toObject() ),
@@ -230,9 +225,6 @@ export default {
       
       if(this.options.autoSync)
       return this.saveGame();
-    },
-    removeWound(target) {
-      target.setAttribute('wounds', target.attributes.wounds - 1);
     },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,

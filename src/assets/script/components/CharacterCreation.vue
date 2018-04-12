@@ -200,6 +200,13 @@ export default {
       );
       
       if(weapons.length) {
+        weapons = weapons.map((weapon) => {
+          return {
+            ...weapon,
+            currentAmmo: weapon.ammo
+          }
+        });
+        
         this.equipment.weapons = weapons;
         this.equipment.activeWeapon = weapons[0];
       }

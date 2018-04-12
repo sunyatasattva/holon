@@ -5,7 +5,9 @@
       
       <health-bar 
         :health='object.attributes.resistance'
-        :wounds='object.attributes.wounds' />
+        :wounds='object.attributes.wounds'
+        @update='modifyHealth'
+        />
       
       <dl class="attributes">
         <template
@@ -76,7 +78,12 @@
                 </span>
                 <span class="weapon-critical">
                   <md-icon>settings_input_component</md-icon>
-                  {{ weapon.ammo }}
+                  <health-bar
+                    class="ammo-tracker"
+                    :health='weapon.ammo'
+                    :wounds='weapon.ammo - weapon.currentAmmo'
+                    @update='modifyAmmo(weapon, ...arguments)'
+                  />
                 </span>
               </div>
             </li>
@@ -152,6 +159,14 @@ export default {
       if(this.object.calculateModifiedAttributes)
         this.object.calculateModifiedAttributes();
     },
+    modifyAmmo(weapon, mod) {
+      weapon.currentAmmo += mod;
+    },
+    modifyHealth(mod) {
+      let target = this.object;
+      
+      target.setAttribute('wounds', target.attributes.wounds - mod);
+    },
     removeObjectFromDatabase() {
       let characterId = this.object.attributes.name.toLowerCase();
       
@@ -222,6 +237,25 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  .ammo-tracker.health-bar {
+    display:        inline-block;
+    vertical-align: sub;
+    
+    li {
+      border:        1px solid #8e9ca9;
+      border-radius: 15px;
+      margin-right:  2px;
+      transform:     none;
+      width:         15px;
+      
+      &:last-child::after {
+        display: none;
+      }
+    }
+  }
+</style>
+
 <style scoped lang="scss">
   @import "../../../../node_modules/vue-material/dist/theme/engine";
 
@@ -276,8 +310,8 @@ export default {
   
   .weapon-details {
     span {
-      display: inline-block;
-      margin-right: 10px;
+      display:      inline-block;
+      margin-right: 19px;
     }
   }
   
@@ -295,7 +329,7 @@ export default {
     }
     
     li {
-      cursor: pointer;
+      cursor:  pointer;
       opacity: 0.5;
       padding: 10px;
       
@@ -305,7 +339,7 @@ export default {
       
       &.is-selected {
         background-color: rgba(md-get-palette-color(blue, A200), 0.1);
-        opacity: 1;
+        opacity:          1;
       }
     }
   }
