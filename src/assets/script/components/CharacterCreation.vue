@@ -177,7 +177,7 @@ export default {
     characterPoints() {
       return Object.values(this.attributes)
         .reduce(
-          (sum, curr) => sum + curr.cost,
+          (sum, curr) => sum + curr.totalCost,
           0
         );
     },
@@ -220,35 +220,35 @@ export default {
       
       attributes: {
         action: {
-          cost: 0,
+          totalCost: 0,
           value: 2
         },
         aim: {
-          cost: 0,
+          totalCost: 0,
           value: 10
         },
         movement: {
-          cost: 0,
+          totalCost: 0,
           value: 6
         },
         reflexes: {
-          cost: 0,
+          totalCost: 0,
           value: 0
         },
         resistance: {
-          cost: 0,
+          totalCost: 0,
           value: 3
         },
         toughness: {
-          cost: 0,
+          totalCost: 0,
           value: 0
         },
         vision: {
-          cost: 0,
+          totalCost: 0,
           value: 12
         },
         will: {
-          cost: 0,
+          totalCost: 0,
           value: 20
         }
       },
@@ -280,6 +280,9 @@ export default {
       let character = this.characters.find(
         (char) => char['.key'] === id
       );
+      
+      if(!character)
+        return;
       
       console.log('Loaded character: ', character);
       

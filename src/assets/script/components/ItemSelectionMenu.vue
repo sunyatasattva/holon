@@ -57,7 +57,7 @@ export default {
     inventoryPoints() {
       return Object.values(this.inventory)
         .reduce(
-          (sum, curr) => sum + curr.cost,
+          (sum, curr) => sum + curr.value * curr.cost,
           0
       );
     }

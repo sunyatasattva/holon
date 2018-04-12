@@ -94,8 +94,7 @@ export default {
     update(e) {
       this.$emit('update:model', {
         ...this.model,
-        // @todo change `cost` to `totalCost`
-        cost: this.totalCost,
+        totalCost: this.totalCost,
         value: +e
       });
     }
