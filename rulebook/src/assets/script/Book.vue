@@ -176,7 +176,7 @@
         <h2>Coperture</h2>
         <p>Esistono due tipi di <em>coperture</em>: <em>copertura parziale</em> e <em>copertura totale</em>. La prima conferisce un <em class="plus">bonus di +20</em> alla <em>Difesa</em>, la seconda un <em class="plus">bonus di +40</em>.</p>
         <p>Un <em>difensore</em> si trova <em class="stat">in copertura</em> rispetto ad un determinato <em>attaccante</em>, se, al momento dell'<em>Attacco</em>, questi si trova subito dietro una <em>copertura</em> ed un piano proiettato da questa interseca la <em>linea visiva</em> dell'<em>Attaccante</em>.</p>
-        <p>Un <em>Attacco</em> contro un bersaglio <em class="stat">esposto</em> (non in <em>copertura</em>), ottiene un <em class="plus">bonus di +5</em> alla <em>possibilità di successo critico</em>.</p>
+        <p>Un <em>Attacco</em> contro un bersaglio <em class="stat">esposto</em> (non in <em>copertura</em>), ottiene un <em class="plus">bonus di +3</em> alla <em>possibilità di successo critico</em>.</p>
         
         <h2>Ferite</h2>
         <p>Un personaggio può subire un numero di <em>ferite</em> pari al proprio valore di <em>Resistenza</em> prima di rischiare la vita. Ogni <em>ferita</em> subita, conferisce al personaggio una <em class="minus">penalità di 5 punti</em> a tutte le <em>prove</em>.</p>
