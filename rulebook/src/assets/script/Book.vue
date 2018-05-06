@@ -162,10 +162,10 @@
         <p>Un bersaglio colpito riceve un numero di <em>ferite</em> come indicato dall'arma dell'<em>attaccante</em>, modificato dal proprio valore di <em>Robustezza</em> (<em class="stat">minimo 1</em>).</p>
         
         <h2>Tipologie di danni</h2>
+        <h3>Danni penetranti</h3>
+        <p>I <em>danni penetranti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
         <h3>Danni perforanti</h3>
-        <p>I <em>danni perforanti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
-        <h3>Danni devastanti</h3>
-        <p>I <em>danni devastanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
+        <p>I <em>danni perforanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
         
         <h2>Schivata</h2>
         <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
