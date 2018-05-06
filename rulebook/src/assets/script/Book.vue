@@ -486,6 +486,8 @@
         <p>Ogni personaggio ha un punteggio di <em>Risorse</em> che rappresenta il suo capitale economico e materiale, nonché la capacità di procurarsi ciò che si desira con altri mezzi non convenzionali.</p>
         <p>In determinate <em>situazioni di ristoro</em> decise dal <em>GM</em>, un personaggio può procurarsi equipaggiamento, oggetti ed altre risorse materiali in misura uguale all'interezza del suo punteggio di <em>Risorse</em>.</p>
         <p>Un personaggio può decidere di <em class="minus">spendere permanentemente</em> <em class="stat">3 di questi punti</em> per crearsi una <em>situazione di ristoro</em>. La situazione deve essere comunque vagamente ragionevole, ed il <em>GM</em> può sempre decidere quali beni sono acquistabili ad ogni situazione.</p>
+        <h2>Accumulare risorse</h2>
+        <p>Ad ogni <em>situazione di ristoro</em> un personaggio può decidere di conservare fino alla metà del proprio punteggio di <em>Risorse</em> per spenderlo in situazioni successive.</p>
         <h2>Risorse bloccate</h2>
         <p>In alcuni casi, come per l'acquisto di servizi su base continua, il <em>GM</em> può decretare che un certo numero di <em>Risorse</em> siano bloccate: in tal caso, il punteggio non cambia, ma queste non possono essere usate fin tanto che rimangono <em>bloccate</em>.</p>
         <p>Il costo di questi servizi viene indicato in <span class="ongoing-service">arancione</span>.</p>
