@@ -45,6 +45,9 @@
                 <a href="#item-list">Oggetti</a>
               </li>
               <li>
+                <a href="#section-cyberware-and-bioware">Cyberware e Bioware</a>
+              </li>
+              <li>
                 <a href="#section-immortality-protocol">Protocollo dell'Immortalità</a>
               </li>
             </ul>
@@ -561,6 +564,82 @@
             </li>
           </ul>
         </section>
+        <section class="items" id="section-cyberware-and-bioware">
+          <h2>Cyberware e Bioware</h2>
+          <p>È possibile potenziare il proprio corpo attraverso impianti neurali (<em>Cyberware</em>) e modifiche genetiche o impianti biologici (<em>Bioware</em>). Questi potenziamenti rimangono installati sul personaggio permanentemente, richiedono uno specialista con almeno <em class="stat">Medicina 2</em> per essere installati e <em class="stat">Medicina 3</em> per essere rimossi senza uccidere il personaggio.</p>
+          <p>In caso di morte, il corpo viene replicato con il <em>Bioware</em> appropriato, ma il <em>Cyberware</em> deve essere disinstallato e reinstallato nel nuovo corpo.</p>
+          <h3>Cyberware</h3>
+          <p>Ogni impianto neurale conferisce una <em class="minus">penalità</em> al <em>Focus</em> del personaggio.</p>
+          <p>Di norma, gli effetti del <em>Cyberware</em> sono sempre attivi; alcuni effetti, potrebbero richiedere l'attivazione conscia del personaggio attraverso un'<em>Azione</em> od avere un <em>Cooldown</em>, come specificato nella descrizione dalle apposite icone (<i class="material-icons">reply_all</i> e <i class="material-icons">settings_backup_restore</i>).</p>
+          <ul class="item-list">
+            <li v-for="item in $options.equipment.augmentations.cyberware">
+              <card>
+                <span slot="header-main">
+                  <span class="icon-container-inner">
+                    <component 
+                      :is="`icon-${$options.itemIcons[item.category]}`" />
+                  </span>
+                  {{ item.type }}
+
+                  <ul class="armor-stats attribute-modifiers">
+                    <li 
+                     class="modifier tooltip" 
+                     data-tooltip="Costo">
+                      <i class="material-icons">monetization_on</i>
+                      <span class="modifier-value">{{ item.cost }}</span>
+                    </li>
+                    <li 
+                     class="modifier tooltip" 
+                     data-tooltip="Focus">
+                      <i class="material-icons">brightness_7</i>
+                      <span class="modifier-value">{{ item.focus }}</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p v-if="item.description" v-html="item.description"></p>
+
+                <attribute-modifiers 
+                  slot="footer"
+                  v-if="item.modifiers"
+                  :modifiers="item.modifiers"
+                />
+              </card>
+            </li>
+          </ul>
+          <h3>Bioware</h3>
+          <p>Oltre ad eventuali effetti sempre attivi, in molti casi un <em>Bioware</em> ha un effetto supplementare che può essere attivato ad un costo in <em>Ferite</em>. Tranne dove diversamente specificato, l'attivazione non richiede un'<em>Azione</em> e non ha <em>Cooldown</em>.</p>
+          <ul class="item-list">
+            <li v-for="item in $options.equipment.augmentations.bioware">
+              <card>
+                <span slot="header-main">
+                  <span class="icon-container-inner">
+                    <component 
+                      :is="`icon-${$options.itemIcons[item.category]}`" />
+                  </span>
+                  {{ item.type }}
+
+                  <ul class="armor-stats attribute-modifiers">
+                    <li 
+                     class="modifier tooltip" 
+                     data-tooltip="Costo">
+                      <i class="material-icons">monetization_on</i>
+                      <span class="modifier-value">{{ item.cost }}</span>
+                    </li>
+                  </ul>
+                </span>
+                
+                <div v-if="item.description" v-html="item.description"></div>
+
+                <attribute-modifiers 
+                  slot="footer"
+                  v-if="item.modifiers"
+                  :modifiers="item.modifiers"
+                />
+              </card>
+            </li>
+          </ul>
+        </section>
         <section id="section-immortality-protocol">
           <h2>Protocollo dell'Immortalità</h2>
           <p>Un personaggio che <em>muore</em> può essere <em>resuscitato</em> attraverso il <em class="stat">Protocollo dell'Immortalità</em>, ma la resurrezione non arriva senza effetti collaterali:</p>
@@ -697,7 +776,9 @@ const groupedSkills = skills.skills
   
 const ITEM_ICONS = {
   "Ammo": "ammo",
+  "Cyberware": "memory",
   "Drugs": "pill",
+  "Bioware": "dna",
   "Grenades": "ornament",
   "Weapon Mods": "pistol"
 }
@@ -745,6 +826,7 @@ export default {
   
   equipment: {
     armors: equipment.armors,
+    augmentations: equipment.augmentations,
     items: groupBy(equipment.items, "category"),
     weapons: equipment.weapons
   },
