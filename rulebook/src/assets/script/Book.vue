@@ -4,7 +4,7 @@
       <nav class="table-of-contents">
         <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
 
-        <span class="version-number">2.0.0-beta.1</span>
+        <span class="version-number">2.0.0-beta.3</span>
         
         <ul>
           <li>
@@ -70,7 +70,7 @@
       </section>
       <section id="section-character-creation">
         <h1>Creazione del personaggio</h1>
-        <p>Alla creazione, un personaggio ottiene <em class="stat">150 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">20</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#section-resources">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
+        <p>Alla creazione, un personaggio ottiene <em class="stat">200 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">15</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#section-resources">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
         <p>Ogni <em>Attributo</em> ha un valore iniziale di base che può essere aumentato ad un costo per punto che aumenta proporzionalmente al punteggio. Il costo effettivo di ogni punto viene calcolato in questo modo:</p>
         <ol>
           <li>Se il punto da acquisire è minore del valore di <em>cap</em> dell'<em>Attributo</em>, allora il costo è semplicemente quello indicato.</li>
@@ -784,6 +784,8 @@ const ITEM_ICONS = {
   "Grenades": "ornament",
   "Weapon Mods": "pistol"
 }
+
+const STARTING_CHARACTER_POINTS = 200;
   
 export default {
   name: "book",
@@ -797,7 +799,7 @@ export default {
   },
   computed: {
     availableCharacterPoints() {
-      return 150 - this.characterPoints;
+      return STARTING_CHARACTER_POINTS - this.characterPoints;
     },
     characterPoints() {
       return this.attributes
