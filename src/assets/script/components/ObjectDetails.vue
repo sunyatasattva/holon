@@ -76,7 +76,7 @@
                   <md-icon>new_releases</md-icon>
                   {{ weapon.criticalHitChance }}
                 </span>
-                <span class="weapon-critical">
+                <span class="weapon-ammo" v-if='weapon.ammo > 0'>
                   <md-icon>settings_input_component</md-icon>
                   <health-bar
                     class="ammo-tracker"
