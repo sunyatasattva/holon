@@ -144,6 +144,24 @@
         @update="updateInventory" />
       </section>
     </section>
+    <section class="skills">
+      <md-field>
+        <label for="skills-select">Skills</label>
+        <md-select
+         id="skills-select"
+         v-model="skills"
+         multiple
+         >
+          <md-optgroup
+           v-for="(group, i) in Skills"
+           :label="`Level ${i + 1}`">
+            <md-option v-for="skill in group" :value="skill.id">
+              {{ skill.name }}
+            </md-option>
+          </md-optgroup>
+        </md-select>
+      </md-field>
+    </section>
     <md-button
       v-if='!isAddingObject'
       class='md-raised md-primary'
@@ -165,7 +183,9 @@
 import AttributeInput from './AttributeInput.vue';
 import ItemSelectionMenu from './ItemSelectionMenu.vue';
 import Network from '../modules/networking';
-  
+
+import { groupedSkills } from '../../../../rulebook/src/assets/script/lib/utils';
+
 import Equipment from '_equipment';
   
 const db = Network.database();
@@ -220,6 +240,7 @@ export default {
   data() {
     return {
       Equipment: Equipment,
+      Skills: groupedSkills,
       
       attributes: {
         action: {
@@ -260,6 +281,7 @@ export default {
         items: [],
         weapons: []
       },
+      skills: [],
       
       loadedCharacterId: null,
       name: '',
