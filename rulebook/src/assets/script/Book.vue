@@ -4,7 +4,7 @@
       <nav class="table-of-contents">
         <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
 
-        <span class="version-number">2.0.0-beta.1</span>
+        <span class="version-number">2.0.0-beta.3</span>
         
         <ul>
           <li>
@@ -45,6 +45,9 @@
                 <a href="#item-list">Oggetti</a>
               </li>
               <li>
+                <a href="#section-cyberware-and-bioware">Cyberware e Bioware</a>
+              </li>
+              <li>
                 <a href="#section-immortality-protocol">Protocollo dell'Immortalità</a>
               </li>
             </ul>
@@ -67,7 +70,7 @@
       </section>
       <section id="section-character-creation">
         <h1>Creazione del personaggio</h1>
-        <p>Alla creazione, un personaggio ottiene <em class="stat">150 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">20</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#section-resources">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
+        <p>Alla creazione, un personaggio ottiene <em class="stat">200 Punti Esperienza</em> che può distribuire ai valori dei suoi <em>Attributi</em> o utilizzare per acquisire <em><a href="#skill-list">Abilità</a></em>, un numero di <em class="stat">Punti Risorse</em> pari a <em class="stat">15</em> + il doppio del suo punteggio di <em>Risorse</em> che può spendere in <a href="#section-resources">equipaggiamento ed oggetti</a>, un <em>Talento</em> primario (a <em class="stat">livello di competenza 2</em>), ed uno secondario (a <em class="stat">livello di competenza 1</em>).</p>
         <p>Ogni <em>Attributo</em> ha un valore iniziale di base che può essere aumentato ad un costo per punto che aumenta proporzionalmente al punteggio. Il costo effettivo di ogni punto viene calcolato in questo modo:</p>
         <ol>
           <li>Se il punto da acquisire è minore del valore di <em>cap</em> dell'<em>Attributo</em>, allora il costo è semplicemente quello indicato.</li>
@@ -159,10 +162,10 @@
         <p>Un bersaglio colpito riceve un numero di <em>ferite</em> come indicato dall'arma dell'<em>attaccante</em>, modificato dal proprio valore di <em>Robustezza</em> (<em class="stat">minimo 1</em>).</p>
         
         <h2>Tipologie di danni</h2>
+        <h3>Danni penetranti</h3>
+        <p>I <em>danni penetranti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
         <h3>Danni perforanti</h3>
-        <p>I <em>danni perforanti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
-        <h3>Danni devastanti</h3>
-        <p>I <em>danni devastanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
+        <p>I <em>danni perforanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
         
         <h2>Schivata</h2>
         <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
@@ -173,7 +176,7 @@
         <h2>Coperture</h2>
         <p>Esistono due tipi di <em>coperture</em>: <em>copertura parziale</em> e <em>copertura totale</em>. La prima conferisce un <em class="plus">bonus di +20</em> alla <em>Difesa</em>, la seconda un <em class="plus">bonus di +40</em>.</p>
         <p>Un <em>difensore</em> si trova <em class="stat">in copertura</em> rispetto ad un determinato <em>attaccante</em>, se, al momento dell'<em>Attacco</em>, questi si trova subito dietro una <em>copertura</em> ed un piano proiettato da questa interseca la <em>linea visiva</em> dell'<em>Attaccante</em>.</p>
-        <p>Un <em>Attacco</em> contro un bersaglio <em class="stat">esposto</em> (non in <em>copertura</em>), ottiene un <em class="plus">bonus di +5</em> alla <em>possibilità di successo critico</em>.</p>
+        <p>Un <em>Attacco</em> contro un bersaglio <em class="stat">esposto</em> (non in <em>copertura</em>), ottiene un <em class="plus">bonus di +3</em> alla <em>possibilità di successo critico</em>.</p>
         
         <h2>Ferite</h2>
         <p>Un personaggio può subire un numero di <em>ferite</em> pari al proprio valore di <em>Resistenza</em> prima di rischiare la vita. Ogni <em>ferita</em> subita, conferisce al personaggio una <em class="minus">penalità di 5 punti</em> a tutte le <em>prove</em>.</p>
@@ -483,6 +486,8 @@
         <p>Ogni personaggio ha un punteggio di <em>Risorse</em> che rappresenta il suo capitale economico e materiale, nonché la capacità di procurarsi ciò che si desira con altri mezzi non convenzionali.</p>
         <p>In determinate <em>situazioni di ristoro</em> decise dal <em>GM</em>, un personaggio può procurarsi equipaggiamento, oggetti ed altre risorse materiali in misura uguale all'interezza del suo punteggio di <em>Risorse</em>.</p>
         <p>Un personaggio può decidere di <em class="minus">spendere permanentemente</em> <em class="stat">3 di questi punti</em> per crearsi una <em>situazione di ristoro</em>. La situazione deve essere comunque vagamente ragionevole, ed il <em>GM</em> può sempre decidere quali beni sono acquistabili ad ogni situazione.</p>
+        <h2>Accumulare risorse</h2>
+        <p>Ad ogni <em>situazione di ristoro</em> un personaggio può decidere di conservare fino alla metà del proprio punteggio di <em>Risorse</em> per spenderlo in situazioni successive.</p>
         <h2>Risorse bloccate</h2>
         <p>In alcuni casi, come per l'acquisto di servizi su base continua, il <em>GM</em> può decretare che un certo numero di <em>Risorse</em> siano bloccate: in tal caso, il punteggio non cambia, ma queste non possono essere usate fin tanto che rimangono <em>bloccate</em>.</p>
         <p>Il costo di questi servizi viene indicato in <span class="ongoing-service">arancione</span>.</p>
@@ -561,6 +566,82 @@
             </li>
           </ul>
         </section>
+        <section class="items" id="section-cyberware-and-bioware">
+          <h2>Cyberware e Bioware</h2>
+          <p>È possibile potenziare il proprio corpo attraverso impianti neurali (<em>Cyberware</em>) e modifiche genetiche o impianti biologici (<em>Bioware</em>). Questi potenziamenti rimangono installati sul personaggio permanentemente, richiedono uno specialista con almeno <em class="stat">Medicina 2</em> per essere installati e <em class="stat">Medicina 3</em> per essere rimossi senza uccidere il personaggio.</p>
+          <p>In caso di morte, il corpo viene replicato con il <em>Bioware</em> appropriato, ma il <em>Cyberware</em> deve essere disinstallato e reinstallato nel nuovo corpo.</p>
+          <h3>Cyberware</h3>
+          <p>Ogni impianto neurale conferisce una <em class="minus">penalità</em> al <em>Focus</em> del personaggio.</p>
+          <p>Di norma, gli effetti del <em>Cyberware</em> sono sempre attivi; alcuni effetti, potrebbero richiedere l'attivazione conscia del personaggio attraverso un'<em>Azione</em> od avere un <em>Cooldown</em>, come specificato nella descrizione dalle apposite icone (<i class="material-icons">reply_all</i> e <i class="material-icons">settings_backup_restore</i>).</p>
+          <ul class="item-list">
+            <li v-for="item in $options.equipment.augmentations.cyberware">
+              <card>
+                <span slot="header-main">
+                  <span class="icon-container-inner">
+                    <component 
+                      :is="`icon-${$options.itemIcons[item.category]}`" />
+                  </span>
+                  {{ item.type }}
+
+                  <ul class="armor-stats attribute-modifiers">
+                    <li 
+                     class="modifier tooltip" 
+                     data-tooltip="Costo">
+                      <i class="material-icons">monetization_on</i>
+                      <span class="modifier-value">{{ item.cost }}</span>
+                    </li>
+                    <li 
+                     class="modifier tooltip" 
+                     data-tooltip="Focus">
+                      <i class="material-icons">brightness_7</i>
+                      <span class="modifier-value">{{ item.focus }}</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p v-if="item.description" v-html="item.description"></p>
+
+                <attribute-modifiers 
+                  slot="footer"
+                  v-if="item.modifiers"
+                  :modifiers="item.modifiers"
+                />
+              </card>
+            </li>
+          </ul>
+          <h3>Bioware</h3>
+          <p>Oltre ad eventuali effetti sempre attivi, in molti casi un <em>Bioware</em> ha un effetto supplementare che può essere attivato ad un costo in <em>Ferite</em>. Tranne dove diversamente specificato, l'attivazione non richiede un'<em>Azione</em> e non ha <em>Cooldown</em>.</p>
+          <ul class="item-list">
+            <li v-for="item in $options.equipment.augmentations.bioware">
+              <card>
+                <span slot="header-main">
+                  <span class="icon-container-inner">
+                    <component 
+                      :is="`icon-${$options.itemIcons[item.category]}`" />
+                  </span>
+                  {{ item.type }}
+
+                  <ul class="armor-stats attribute-modifiers">
+                    <li 
+                     class="modifier tooltip" 
+                     data-tooltip="Costo">
+                      <i class="material-icons">monetization_on</i>
+                      <span class="modifier-value">{{ item.cost }}</span>
+                    </li>
+                  </ul>
+                </span>
+                
+                <div v-if="item.description" v-html="item.description"></div>
+
+                <attribute-modifiers 
+                  slot="footer"
+                  v-if="item.modifiers"
+                  :modifiers="item.modifiers"
+                />
+              </card>
+            </li>
+          </ul>
+        </section>
         <section id="section-immortality-protocol">
           <h2>Protocollo dell'Immortalità</h2>
           <p>Un personaggio che <em>muore</em> può essere <em>resuscitato</em> attraverso il <em class="stat">Protocollo dell'Immortalità</em>, ma la resurrezione non arriva senza effetti collaterali:</p>
@@ -627,9 +708,9 @@ import WeaponCard from "./components/WeaponCard.vue";
 
 import AttributeInput from "../../../../src/assets/script/components/AttributeInput.vue";
   
-import equipment from "../../../../src/assets/script/modules/equipment.json";
-import mechanics from "../../../../src/assets/script/modules/mechanics.json";
-import skills from "../../../../src/assets/script/modules/skills.json";
+import equipment from "../../../rules/equipment.json";
+import mechanics from "../../../rules/mechanics.json";
+import skills from "../../../rules/skills.json";
 
 function parseRequirements(requirements, curr) {
   let nestedRequirements = [],
@@ -697,10 +778,14 @@ const groupedSkills = skills.skills
   
 const ITEM_ICONS = {
   "Ammo": "ammo",
+  "Cyberware": "memory",
   "Drugs": "pill",
+  "Bioware": "dna",
   "Grenades": "ornament",
   "Weapon Mods": "pistol"
 }
+
+const STARTING_CHARACTER_POINTS = 200;
   
 export default {
   name: "book",
@@ -714,7 +799,7 @@ export default {
   },
   computed: {
     availableCharacterPoints() {
-      return 150 - this.characterPoints;
+      return STARTING_CHARACTER_POINTS - this.characterPoints;
     },
     characterPoints() {
       return this.attributes
@@ -745,6 +830,7 @@ export default {
   
   equipment: {
     armors: equipment.armors,
+    augmentations: equipment.augmentations,
     items: groupBy(equipment.items, "category"),
     weapons: equipment.weapons
   },
