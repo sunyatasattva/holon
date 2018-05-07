@@ -137,6 +137,12 @@
           </md-chip>
         </md-field>
       </section>
+      <section class="items">
+        <item-selection-menu
+        :items="equipment.items" 
+        :showAllItems="true"
+        @update="updateInventory" />
+      </section>
     </section>
     <md-button
       v-if='!isAddingObject'
@@ -157,6 +163,7 @@
 
 <script>
 import AttributeInput from './AttributeInput.vue';
+import ItemSelectionMenu from './ItemSelectionMenu.vue';
 import Network from '../modules/networking';
   
 import Equipment from '_equipment';
@@ -166,13 +173,14 @@ const db = Network.database();
 export default {
   name: 'character-creation',
   components: {
-    AttributeInput
+    AttributeInput,
+    ItemSelectionMenu
   },
   computed: {
     characterPoints() {
       return Object.values(this.attributes)
         .reduce(
-          (sum, curr) => sum + curr.cost,
+          (sum, curr) => sum + curr.totalCost,
           0
         );
     },
@@ -195,6 +203,13 @@ export default {
       );
       
       if(weapons.length) {
+        weapons = weapons.map((weapon) => {
+          return {
+            ...weapon,
+            currentAmmo: weapon.ammo
+          }
+        });
+        
         this.equipment.weapons = weapons;
         this.equipment.activeWeapon = weapons[0];
       }
@@ -208,35 +223,35 @@ export default {
       
       attributes: {
         action: {
-          cost: 0,
+          totalCost: 0,
           value: 2
         },
         aim: {
-          cost: 0,
+          totalCost: 0,
           value: 10
         },
         movement: {
-          cost: 0,
+          totalCost: 0,
           value: 6
         },
         reflexes: {
-          cost: 0,
+          totalCost: 0,
           value: 0
         },
         resistance: {
-          cost: 0,
+          totalCost: 0,
           value: 3
         },
         toughness: {
-          cost: 0,
+          totalCost: 0,
           value: 0
         },
         vision: {
-          cost: 0,
+          totalCost: 0,
           value: 12
         },
         will: {
-          cost: 0,
+          totalCost: 0,
           value: 20
         }
       },
@@ -269,6 +284,9 @@ export default {
         (char) => char['.key'] === id
       );
       
+      if(!character)
+        return;
+      
       console.log('Loaded character: ', character);
       
       Object.keys(character.baseAttributes)
@@ -280,6 +298,13 @@ export default {
       this.selectedWeaponsTypes = character.equipment.weapons
         .map(weapon => weapon.type);
       this.name = character.attributes.name;
+
+      if(character.equipment.items)
+        this.updateInventory(character.equipment.items);
+    },
+    updateInventory(inventory) {
+      this.equipment.items = Object.values(inventory)
+        .filter(item => item.value > 0);
     }
   },
   props: ['isAddingObject']

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Book from "./Book.vue";
 
-import VueMaterial from 'vue-material';
+import VueMaterial from "vue-material";
 
 import IconAmmo from "vue-material-design-icons/video-input-component.vue";
 import IconOrnament from "vue-material-design-icons/ornament.vue";

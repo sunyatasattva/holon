@@ -5,7 +5,9 @@
       
       <health-bar 
         :health='object.attributes.resistance'
-        :wounds='object.attributes.wounds' />
+        :wounds='object.attributes.wounds'
+        @update='modifyHealth'
+        />
       
       <dl class="attributes">
         <template
@@ -74,13 +76,23 @@
                   <md-icon>new_releases</md-icon>
                   {{ weapon.criticalHitChance }}
                 </span>
-                <span class="weapon-critical">
+                <span class="weapon-ammo" v-if='weapon.ammo > 0'>
                   <md-icon>settings_input_component</md-icon>
-                  {{ weapon.ammo }}
+                  <health-bar
+                    class="ammo-tracker"
+                    :health='weapon.ammo'
+                    :wounds='weapon.ammo - weapon.currentAmmo'
+                    @update='modifyAmmo(weapon, ...arguments)'
+                  />
                 </span>
               </div>
             </li>
           </ul>
+        </section>
+        <section class="items">
+          <item-selection-menu
+          :hideCost="true"
+          :items="object.equipment.items" />
         </section>
       </section>
       <md-button
@@ -117,6 +129,8 @@ import Vue from 'vue';
 import Mechanics from '_mechanics';
 
 import HealthBar from './HealthBar.vue';
+import ItemSelectionMenu from './ItemSelectionMenu.vue';
+
 import Network from '../modules/networking';
   
 const db = Network.database();
@@ -125,7 +139,8 @@ export default {
   name: 'object-details',
   props: ['object'],
   components: {
-    HealthBar
+    HealthBar,
+    ItemSelectionMenu
   },
   data() {
     return {
@@ -143,6 +158,14 @@ export default {
     calculateModifiedAttributes() {
       if(this.object.calculateModifiedAttributes)
         this.object.calculateModifiedAttributes();
+    },
+    modifyAmmo(weapon, mod) {
+      weapon.currentAmmo += mod;
+    },
+    modifyHealth(mod) {
+      let target = this.object;
+      
+      target.setAttribute('wounds', target.attributes.wounds - mod);
     },
     removeObjectFromDatabase() {
       let characterId = this.object.attributes.name.toLowerCase();
@@ -214,6 +237,25 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  .ammo-tracker.health-bar {
+    display:        inline-block;
+    vertical-align: sub;
+    
+    li {
+      border:        1px solid #8e9ca9;
+      border-radius: 15px;
+      margin-right:  2px;
+      transform:     none;
+      width:         15px;
+      
+      &:last-child::after {
+        display: none;
+      }
+    }
+  }
+</style>
+
 <style scoped lang="scss">
   @import "../../../../node_modules/vue-material/dist/theme/engine";
 
@@ -268,8 +310,8 @@ export default {
   
   .weapon-details {
     span {
-      display: inline-block;
-      margin-right: 10px;
+      display:      inline-block;
+      margin-right: 19px;
     }
   }
   
@@ -278,6 +320,8 @@ export default {
   }
   
   .weapons {
+    margin-bottom: 20px;
+    
     ul {
       list-style-type: none;
       margin:          0;
@@ -285,7 +329,7 @@ export default {
     }
     
     li {
-      cursor: pointer;
+      cursor:  pointer;
       opacity: 0.5;
       padding: 10px;
       
@@ -295,7 +339,7 @@ export default {
       
       &.is-selected {
         background-color: rgba(md-get-palette-color(blue, A200), 0.1);
-        opacity: 1;
+        opacity:          1;
       }
     }
   }
