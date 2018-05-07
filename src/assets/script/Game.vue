@@ -89,7 +89,7 @@
       :characters="activeObjects.filter(x => x.attributes)"
       :currentTurn="currentTurn"
       @endTurn="endTurn"
-      @play="toggleActedState"
+      @play="endCharacterTurn"
       @resetTurnCounter="resetTurnCounter"
       @select="panToObject" />
       
@@ -149,8 +149,12 @@ export default {
       if(save && this.options.autoSync)
         this.saveGame();
     },
+    endCharacterTurn(character) {
+      character.setProp('hasActed', !character.hasActed);
+      character.reduceCountdowns();
+    },
     endTurn() {
-      console.log('Ending turn');
+      console.log(`Ending turn ${this.currentTurn}`);
       
       this.currentTurn++;
     },
@@ -262,9 +266,6 @@ export default {
     },
     select(object) {
       this.selectedObject = object;
-    },
-    toggleActedState(character) {
-      character.setProp('hasActed', !character.hasActed);
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();

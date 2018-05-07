@@ -62,10 +62,9 @@ export default {
   },
   methods: {
     playTurn() {
-      if(this.activeCharacters.length > 1) {
-        this.$emit('play', this.activeCharacters[0]);
-      }
-      else {
+      this.$emit('play', this.activeCharacters[0]);
+      
+      if(this.activeCharacters.length < 1) {
         this.$emit('endTurn');
         
         this.sortedCharacters
