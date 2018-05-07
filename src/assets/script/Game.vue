@@ -89,6 +89,8 @@
       :characters="activeObjects.filter(x => x.attributes)"
       @play="toggleActedState"
       @select="panToObject" />
+      
+    <command-card v-if="selectedObject.attributes" :character="selectedObject" />
   </div>
 </template>
 
@@ -97,6 +99,7 @@ import { fabric } from 'fabric';
 import Vue from 'vue';
 import World from './components/World.vue';
 import ObjectDetails from './components/ObjectDetails.vue';
+import CommandCard from './components/CommandCard.vue';
 import CreateObject from './components/CreateObject.vue';
 import TurnControls from './components/TurnControls.vue';
 import Network from './modules/networking';
@@ -108,6 +111,7 @@ export default {
   components: {
     'game-world': World,
     ObjectDetails,
+    CommandCard,
     CreateObject,
     TurnControls
   },
@@ -224,7 +228,7 @@ export default {
       console.log('Object removed:', obj);
       
       if(this.options.autoSync)
-      return this.saveGame();
+        return this.saveGame();
     },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,
