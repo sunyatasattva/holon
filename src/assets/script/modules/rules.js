@@ -70,7 +70,7 @@ export default {
     else if( get(activeWeapon, 'range') === 'long')
       return Math.min(
         50,
-        baseHitChanceModifier + Math.max(0, distance - falloffPoint) * 10
+        baseHitChanceModifier + Math.max(0, distance - falloffPoint) * 5
       );
     else
       return baseHitChanceModifier;
