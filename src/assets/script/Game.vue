@@ -87,7 +87,10 @@
       ref="turnControls"
       :autoPan="options.autoPan"
       :characters="activeObjects.filter(x => x.attributes)"
+      :currentTurn="currentTurn"
+      @endTurn="endTurn"
       @play="toggleActedState"
+      @resetTurnCounter="resetTurnCounter"
       @select="panToObject" />
       
     <command-card v-if="selectedObject.attributes" :character="selectedObject" />
@@ -118,6 +121,7 @@ export default {
   data() {
     return {
       activeObjects: [],
+      currentTurn: 0,
       editMode: false,
       selectedObject: false,
       options: {
@@ -144,6 +148,11 @@ export default {
       
       if(save && this.options.autoSync)
         this.saveGame();
+    },
+    endTurn() {
+      console.log('Ending turn');
+      
+      this.currentTurn++;
     },
     exportCurrentState() {
       let currentState = this.activeObjects
@@ -181,6 +190,8 @@ export default {
             );
           }
         );
+        
+        this.currentTurn = state.currentTurn;
         
         console.log("Saved state loaded:", state);
       }
@@ -230,12 +241,18 @@ export default {
       if(this.options.autoSync)
         return this.saveGame();
     },
+    resetTurnCounter() {
+      this.currentTurn = 0;
+      
+      return this.saveGame();
+    },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,
           objs = this.activeObjects.map( (o) => o.toObject() );
       
       savedState.update({ 
         clientID: this.$data._clientID,
+        currentTurn: this.currentTurn,
         gameObjects: objs
       });
       
@@ -295,6 +312,6 @@ export default {
   .turn-controls {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 20px;
   }
 </style>

@@ -15,6 +15,10 @@
      >
       <md-icon>play_arrow</md-icon>
     </md-button>
+    <div class="current-turn" @click.alt="resetTurnCounter">
+      {{ currentTurn }}
+      <md-tooltip md-direction="bottom">Current turn</md-tooltip>
+    </div>
   </div>
 </template>
 
@@ -26,7 +30,7 @@ const walkerSingleton = new Walker();
 
 export default {
   name: 'turn-controls',
-  props: ['autoPan', 'characters'],
+  props: ['autoPan', 'characters', 'currentTurn'],
   components: {
     TurnListItem
   },
@@ -62,6 +66,8 @@ export default {
         this.$emit('play', this.activeCharacters[0]);
       }
       else {
+        this.$emit('endTurn');
+        
         this.sortedCharacters
           .forEach((character) => {
             character.hasActed = false;
@@ -72,6 +78,9 @@ export default {
         this.sortedCharacters[0].canvas
           .fire('object:modified');
       }
+    },
+    resetTurnCounter() {
+      this.$emit('resetTurnCounter');
     },
     selectCharacter(character) {
       this.$emit('select', character);
@@ -113,6 +122,22 @@ export default {
     .md-button {
       vertical-align: middle;
     }
+  }
+  
+  .current-turn {
+    background-color: rgba(150,150,150,0.2);
+    border:           1px solid #ccc;
+    border-radius:    100%;
+    cursor:           pointer;
+    float:            right;
+    font-weight:      bold;
+    line-height:      31px;
+    margin-right:     5px;
+    text-align:       center;
+    text-shadow:      0 0 8px #fff;
+    user-select:      none;
+    width:            32px;
+    height:           32px;
   }
   
   .team-affiliation {
