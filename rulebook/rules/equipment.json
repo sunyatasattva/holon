@@ -47,6 +47,63 @@
       "type": "Casacca tattica"
     }
   ],
+  "augmentations": {
+    "bioware": [
+      {
+        "category": "Bioware",
+        "cost": 16,
+        "description": "<p><i class=\"material-icons\">favorite</i> : Il personaggio ottiene un <em class=\"plus\">bonus di +10 punti</em> al punteggio di <em>Visione</em>, tuttavia diviene completamente cieco entro i primi <em class=\"stat\">10 punti</em> di <em>Visione</em>.</p><p>Dura fintanto che non viene disattivato: disattivarlo costa un'<em>Azione</em>.</p>",
+        "effects": [],
+        "id": "item-retinalImplants",
+        "type": "Impianti epiretinali"
+      },
+      {
+        "category": "Bioware",
+        "cost": 18,
+        "description": "<p>Il personaggio ignora le penalità alle prove dovute ad una <em>Ferita</em></p><p><i class=\"material-icons\">favorite</i> : Il personaggio ignora le penalità alle prove dovute alle <em>Ferite</em>. Dura <em class=\"stat\">2 turni</em>.</p>",
+        "effects": [],
+        "id": "item-endocrineControl",
+        "type": "Controllo endocrino"
+      },
+      {
+        "category": "Bioware",
+        "cost": 12,
+        "description": "<p>Il personaggio può sopravvivere al dissanguamento per un numero di turni pari a <em class=\"stat\">3 volte</em> il proprio punteggio di <em>Resistenza</em>.</p><p><i class=\"material-icons\">favorite</i> : Il personaggio rimuove immediatamente la condizione di <em>Intossicazione</em>.</p>",
+        "effects": [],
+        "id": "item-emergencyLifeSupport",
+        "type": "Stimolatore cardiovascolare"
+      }
+    ],
+    "cyberware": [
+      {
+        "category": "Cyberware",
+        "cost": 14,
+        "description": "Il personaggio può vedere entro <em class=\"stat\">360°</em> intorno a sé. Questo gli permette anche di <em>Sorvegliare</em> in quest'area.",
+        "effects": [],
+        "focus": 6,
+        "id": "item-beholderModule",
+        "type": "Beholder Module"
+      },
+      {
+        "category": "Cyberware",
+        "cost": 18,
+        "description": "Il personaggio è immune al <em>Panico</em>.",
+        "effects": [],
+        "focus": 10,
+        "id": "item-amygdalaInterface",
+        "type": "Interfaccia Amigdaloidea"
+      },
+      {
+        "category": "Cyberware",
+        "cost": 18,
+        "description": "Il personaggio può vedere entro <em class=\"stat\">il triplo del suo punteggio di</em> <em>Visione</em> ed attraverso ostacoli che non bloccano le onde radio.",
+        "effects": [],
+        "focus": 10,
+        "id": "item-neuroradar",
+        "type": "Neuroradar"
+      }
+    ]
+  },
   "items": [
     {
       "category": "Drugs",
@@ -296,15 +353,12 @@
   ],
   "weapons": [
     {
-      "ammo": 4,
+      "ammo": 3,
       "category": "Media",
       "cost": 4,
       "criticalHitChance": 1,
       "damage": "1d4+1",
       "id": "weapon-bullpop",
-      "modifiers": {
-        "aim": 5
-      },
       "range": "medium",
       "type": "Bullpop"
     },
@@ -369,6 +423,7 @@
       "hitChanceModifier": -50,
       "id": "weapon-sniperRifle",
       "modifiers": {
+        "movement": -1,
         "vision": 4
       },
       "range": "long",
@@ -382,7 +437,7 @@
       "damage": "1d4+1",
       "id": "weapon-smg",
       "modifiers": {
-        "aim": 10
+        "aim": 5
       },
       "range": "medium",
       "type": "SMG"
@@ -393,6 +448,7 @@
       "cost": 4,
       "criticalHitChance": 3,
       "damage": "2d4",
+      "description": "La <em>Spada d'assalto</em> non riceve i normali bonus al <em>successo critico</em> conferiti in caso di attacchi contro bersagli <em class=\"stat\">esposti</em>.",
       "id": "weapon-assaultBlade",
       "range": "melee",
       "type": "Spada d'assalto"

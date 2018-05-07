@@ -23,6 +23,7 @@
           <span class="modifier-value">{{ weapon.criticalHitChance }}</span>
         </li>
         <li 
+         v-if="weapon.ammo > 0"
          class="modifier tooltip" 
          data-tooltip="Munizioni">
           <i class="material-icons">settings_input_composite</i>
@@ -45,11 +46,13 @@
 </template>
 
 <script>
+import AttributeModifiers from "./AttributeModifiers.vue";
 import Card from "./Card.vue";
 
 export default {
   name: "weapon-card",
   components: {
+    AttributeModifiers,
     Card
   },
   props: {
