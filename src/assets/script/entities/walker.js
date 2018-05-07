@@ -184,15 +184,19 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       return;
     
     icons = statii.map((status) => {
-      // @todo shouldn't hardcode this icon
-      if(status === 'overwatch')
-        return 'visibility';
-      else
-        return Mechanics.statii
+      let icon;
+
+      try {
+        icon = Mechanics.statii
           .find( _ => _.id === status )
           .icon;
+        
+        return icon;
+      } catch (e) {
+        console.error(`Status ${status} is invalid.`);
+      }
     });
-    
+
     this.statusLabel = new Label('', {
       icon: { icon: icons.join(' ') },
       left: this.left - this.width / 2,
@@ -235,6 +239,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   getValidTargets() {
     return this.canvas.getActiveObjects('walker')
       .filter(this.isValidTarget.bind(this));
+  },
+  
+  hasStatus(statusId) {
+    return this.attributes.status && this.attributes.status.some(
+      (status) => status === statusId
+    )
   },
   
   highlightAllHitChances() {

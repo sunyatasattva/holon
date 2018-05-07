@@ -50,9 +50,10 @@ export default {
   
   _hitModCover(source, target) {
     let targetCover = this.isTargetInCoverRelativeToSource(
-          source, target);
+          source, target),
+        mod = !targetCover ? 0 : targetCover === 1 ? -20 : -40;
     
-    return !targetCover ? 0 : targetCover === 1 ? -20 : -40;
+    return target.hasStatus('_hunkerDown') ? mod * 2 : mod;
   },
   _hitModWeapons(source, target) {
     let activeWeapon = get(source, 'equipment.activeWeapon'),
