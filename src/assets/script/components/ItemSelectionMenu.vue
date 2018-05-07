@@ -44,15 +44,26 @@ const ITEM_ICONS = {
 
 export default {
   name: 'item-selection-menu',
-  props: ['hideCost', 'items'],
+  props: ['hideCost', 'items', 'showAllItems'],
   components: {
     AttributeInput
   },
   computed: {
     groupedItems() {
-      let items = this.items || allItems;
+      let items = this.showAllItems ? allItems : this.items;
       
       return groupBy(items, "category");
+    },
+    inventory() {
+      return allItems
+        .concat(this.items)
+        .reduce((acc, curr) => {
+          let id = curr.id;
+          
+          acc[id] = { cost: 0, value: 0, ...curr }
+          
+          return acc;
+        }, {});
     },
     inventoryPoints() {
       return Object.values(this.inventory)
@@ -62,23 +73,9 @@ export default {
       );
     }
   },
-  data() {
-    let items = this.items || allItems;
-    
-    return {
-      inventory: items
-        .reduce((acc, curr) => {
-          let id = curr.id;
-          
-          acc[id] = { cost: 0, value: 0, ...curr }
-          
-          return acc;
-        }, {})
-    }
-  },
   methods: {
     update() {
-      this.$emit('update', this.$data.inventory);
+      this.$emit('update', this.inventory);
     }
   },
   itemIcons: ITEM_ICONS

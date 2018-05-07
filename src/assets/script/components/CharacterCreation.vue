@@ -138,7 +138,10 @@
         </md-field>
       </section>
       <section class="items">
-        <item-selection-menu @update="updateInventory" />
+        <item-selection-menu
+        :items="equipment.items" 
+        :showAllItems="true"
+        @update="updateInventory" />
       </section>
     </section>
     <md-button
@@ -295,6 +298,9 @@ export default {
       this.selectedWeaponsTypes = character.equipment.weapons
         .map(weapon => weapon.type);
       this.name = character.attributes.name;
+
+      if(character.equipment.items)
+        this.updateInventory(character.equipment.items);
     },
     updateInventory(inventory) {
       this.equipment.items = Object.values(inventory)
