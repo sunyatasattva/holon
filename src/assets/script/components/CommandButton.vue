@@ -4,6 +4,7 @@
    class="command-button"
    :class="{ 'is-cooldown': currentCooldown }">
     <img :src="`rulebook/src/assets/images/skills-icons/${command.icon}.png`" alt="">
+    <md-tooltip md-direction="top">{{ command.name }}</md-tooltip>
     <div class="cooldown-counter" v-if="currentCooldown">
       <md-progress-spinner 
         md-mode="determinate"
