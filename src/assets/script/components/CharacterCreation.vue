@@ -323,6 +323,9 @@ export default {
 
       if(character.equipment.items)
         this.updateInventory(character.equipment.items);
+      
+      if(character.attributes.skills)
+        this.skills = character.attributes.skills.map(skill => skill.id);
     },
     updateInventory(inventory) {
       this.equipment.items = Object.values(inventory)
