@@ -94,6 +94,12 @@
           :hideCost="true"
           :items="object.equipment.items" />
         </section>
+        <section class="skills">
+          <div class="skill-container" v-for="skill in object.attributes.skills">
+            <img :src="`rulebook/src/assets/images/skills-icons/${skill.icon}.png`" alt="">
+            <md-tooltip>{{ skill.name }}</md-tooltip>
+          </div>
+        </section>
       </section>
       <md-button
        class="md-primary md-raised"
@@ -306,6 +312,17 @@ export default {
   
   .modifier-value {
     margin-right: 10px;
+  }
+  
+  .skills {
+    margin-bottom: 1rem;
+    
+    .skill-container {
+      cursor: help;
+      width: 35px;
+      height: 35px;
+      display: inline-block;
+    }
   }
   
   .weapon-details {
