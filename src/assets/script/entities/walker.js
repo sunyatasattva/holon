@@ -73,7 +73,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     if(this.attributes.skills.length)
       this.attributes.skills = this.attributes.skills
         .map((skill) => {
-          if(skill.cooldown)
+          if(skill.cooldown && !skill.currentCooldown)
             return { ...skill, currentCooldown: false }
           else
             return skill;
