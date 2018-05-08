@@ -60,6 +60,8 @@ import CharacterCreation from './CharacterCreation.vue';
 import Cover from '../entities/cover';
 import Walker from '../entities/walker';
   
+import Skills from '_skills';
+  
 export default {
   name: 'create-object',
   components: {
@@ -103,6 +105,11 @@ export default {
           attributes: {
             ...attrs,
             name: data.name,
+            skills: data.skills.map(
+              (skill) => {
+                return Skills.skills.find( _ => _.id === skill );
+              }
+            )
           },
           // @fixme I wish I could use computed props on this :(
           // too much tied into FabricJs

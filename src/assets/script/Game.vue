@@ -87,8 +87,13 @@
       ref="turnControls"
       :autoPan="options.autoPan"
       :characters="activeObjects.filter(x => x.attributes)"
-      @play="toggleActedState"
+      :currentTurn="currentTurn"
+      @endTurn="endTurn"
+      @play="endCharacterTurn"
+      @resetTurnCounter="resetTurnCounter"
       @select="panToObject" />
+      
+    <command-card v-if="selectedObject.attributes" :character="selectedObject" />
   </div>
 </template>
 
@@ -97,6 +102,7 @@ import { fabric } from 'fabric';
 import Vue from 'vue';
 import World from './components/World.vue';
 import ObjectDetails from './components/ObjectDetails.vue';
+import CommandCard from './components/CommandCard.vue';
 import CreateObject from './components/CreateObject.vue';
 import TurnControls from './components/TurnControls.vue';
 import Network from './modules/networking';
@@ -108,12 +114,14 @@ export default {
   components: {
     'game-world': World,
     ObjectDetails,
+    CommandCard,
     CreateObject,
     TurnControls
   },
   data() {
     return {
       activeObjects: [],
+      currentTurn: 0,
       editMode: false,
       selectedObject: false,
       options: {
@@ -140,6 +148,15 @@ export default {
       
       if(save && this.options.autoSync)
         this.saveGame();
+    },
+    endCharacterTurn(character) {
+      character.setProp('hasActed', !character.hasActed);
+      character.reduceCountdowns();
+    },
+    endTurn() {
+      console.log(`Ending turn ${this.currentTurn}`);
+      
+      this.currentTurn++;
     },
     exportCurrentState() {
       let currentState = this.activeObjects
@@ -177,6 +194,8 @@ export default {
             );
           }
         );
+        
+        this.currentTurn = state.currentTurn;
         
         console.log("Saved state loaded:", state);
       }
@@ -224,6 +243,11 @@ export default {
       console.log('Object removed:', obj);
       
       if(this.options.autoSync)
+        return this.saveGame();
+    },
+    resetTurnCounter() {
+      this.currentTurn = 0;
+      
       return this.saveGame();
     },
     saveGame() {
@@ -232,6 +256,7 @@ export default {
       
       savedState.update({ 
         clientID: this.$data._clientID,
+        currentTurn: this.currentTurn,
         gameObjects: objs
       });
       
@@ -241,9 +266,6 @@ export default {
     },
     select(object) {
       this.selectedObject = object;
-    },
-    toggleActedState(character) {
-      character.setProp('hasActed', !character.hasActed);
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();
@@ -291,6 +313,6 @@ export default {
   .turn-controls {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 20px;
   }
 </style>

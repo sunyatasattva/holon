@@ -3,7 +3,7 @@ const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 const Label  = require('./label');
 
-import xor from 'lodash.xor';
+import xorBy from 'lodash.xorby';
 
 import Mechanics from '_mechanics';
 import Rules from '../modules/rules';
@@ -17,6 +17,7 @@ import { prototype as Cover } from './cover';
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   attributes: {
+    skills: [],
     status: []
   },
   equipment: {
@@ -59,6 +60,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   initialize(options = {}) {
     this.callSuper('initialize', options);
 
+    this.attributes.skills = this.attributes.skills || [];
+    this.attributes.status = this.attributes.status || [];
     this.attributes.wounds = this.attributes.wounds || 0;
     this.calculateModifiedAttributes();
     this.set('defaultFill', this.teamFills[this.team]);
@@ -66,6 +69,15 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this._allowRotationOnly();
     this.set('allowedLeft', this.left);
     this.set('allowedTop', this.top);
+    
+    if(this.attributes.skills.length)
+      this.attributes.skills = this.attributes.skills
+        .map((skill) => {
+          if(skill.cooldown && !skill.currentCooldown)
+            return { ...skill, currentCooldown: false }
+          else
+            return skill;
+        });
     
     if(this.showRangeOnSelected) {
       this.on('selected', () => {
@@ -188,7 +200,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
 
       try {
         icon = Mechanics.statii
-          .find( _ => _.id === status )
+          .find( _ => _.id === status.id )
           .icon;
         
         return icon;
@@ -211,9 +223,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   executeCommand(command) {
     console.log(`${this.attributes.name} is executing ${command.name}.`);
     
-    command.effects.forEach((effect) => {
-      this[effect.type](...effect.arguments);
-    });
+    try {
+      command.effects.forEach((effect) => {
+        this[effect.type](...effect.arguments);
+      });
+    } catch(e) {
+      console.warn(`Couldn't execute effects for ${command.name}`);
+    }
   },
   
   getDistanceFrom(target) {
@@ -243,7 +259,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   
   hasStatus(statusId) {
     return this.attributes.status && this.attributes.status.some(
-      (status) => status === statusId
+      (status) => status.id === statusId
     )
   },
   
@@ -274,6 +290,26 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.getDistanceFrom(target) <= this.attributes.vision;
   },
   
+  reduceCountdowns() {
+    this.attributes.skills
+      .forEach(skill => skill.currentCooldown && skill.currentCooldown--);
+    
+    this.attributes.status
+      .forEach((status) => {
+        if(status.duration > 0) {
+          status.duration--;
+          
+          if(status.duration === 0)
+            this.toggleStatus(status);
+        }
+      });
+    
+    
+    this._update();
+    
+    return this;
+  },
+  
   resetBaseAttributes() {
     this.attributes = {
       ...this.attributes,
@@ -298,12 +334,16 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.attributes[attr] = val;
     
     this._update();
+    
+    return this;
   },
   
   setProp(prop, val) {
     this[prop] = val;
     
     this._update();
+    
+    return this;
   },
   
   showMovementRange(showDashing = true) {
@@ -347,7 +387,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   toggleStatus(status) {
     return this.setAttribute(
       'status',
-      xor( this.attributes.status, [status] )
+      xorBy( this.attributes.status, [{...status}], 'id' )
     );
   },
   
