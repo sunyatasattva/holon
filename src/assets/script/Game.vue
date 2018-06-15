@@ -72,6 +72,13 @@
               />
             </md-field>
           </section>
+          <section class="version-details">
+            <h2>Version</h2>
+            <div>
+              <strong>App:</strong> <span class="version-tag">{{ $options._appVersion }}</span>
+              <strong>Rules:</strong> <span class="version-tag">{{ $options._rulebookVersion }}</span>
+            </div>
+          </section>
         </md-tab>
       </md-tabs>
     </md-drawer>
@@ -99,6 +106,7 @@
 
 <script>
 import { fabric } from 'fabric';
+import { version, rulebookVersion } from '../../../package.json';
 import Vue from 'vue';
 import World from './components/World.vue';
 import ObjectDetails from './components/ObjectDetails.vue';
@@ -287,11 +295,18 @@ export default {
       else
         this.loadGame(state);
     }
-  }
+  },
+  _appVersion: version,
+  _rulebookVersion: rulebookVersion
 }
 </script>
 
 <style>
+  .md-tabs,
+  .md-tabs-container {
+    height: 100%;
+  }
+  
   #Game {
     overflow: hidden;
     position: relative;
@@ -302,8 +317,14 @@ export default {
     pointer-events: none;
   }
   
+  .md-tab {
+    position: relative;
+    min-height: 100%;
+  }
+  
   .md-tabs-content {
-    overflow: visible;
+    overflow:   visible;
+    min-height: calc(100% - 72px);
   }
   
   .md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
@@ -314,5 +335,31 @@ export default {
     position: fixed;
     top: 20px;
     left: 20px;
+  }
+  
+  .version-details {
+    display:  flex;
+    position: absolute;
+    bottom:   0;
+    left:     16px;
+    right:    16px;
+  }
+  
+  .version-details h2,
+  .version-details div {
+    display:   inline-block;
+    flex:      1;
+    font-size: 12px;
+    margin:    0.83em 0;
+  }
+  
+  .version-details div {
+    color:      #959595;
+    flex:       2;
+    text-align: right;
+  }
+  
+  .version-details strong {
+    margin-left: 1em;
   }
 </style>
