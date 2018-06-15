@@ -1,0 +1,457 @@
+{
+  "armors": [
+    {
+      "cost": 12,
+      "id": "armor-carapace",
+      "modifiers": {
+        "movement": -3,
+        "resistance": 2,
+        "toughness": 1
+      },
+      "type": "Carapace"
+    },
+    {
+      "cost": 4,
+      "id": "armor-kevlarJacket",
+      "modifiers": {
+        "resistance": 1
+      },
+      "type": "Giubbotto di kevlar"
+    },
+    {
+      "cost": 10,
+      "id": "armor-phalanx",
+      "modifiers": {
+        "movement": -2,
+        "resistance": 1,
+        "toughness": 1
+      },
+      "type": "Phalanx"
+    },
+    {
+      "cost": 8,
+      "id": "armor-tacticalArmor",
+      "modifiers": {
+        "movement": -3,
+        "resistance": 3
+      },
+      "type": "Armatura tattica"
+    },
+    {
+      "cost": 6,
+      "id": "armor-tacticalVest",
+      "modifiers": {
+        "movement": -1,
+        "resistance": 2
+      },
+      "type": "Casacca tattica"
+    }
+  ],
+  "augmentations": {
+    "bioware": [
+      {
+        "category": "Bioware",
+        "cost": 16,
+        "description": "<p><i class=\"material-icons\">favorite</i> : Il personaggio ottiene un <em class=\"plus\">bonus di +10 punti</em> al punteggio di <em>Visione</em>, tuttavia diviene completamente cieco entro i primi <em class=\"stat\">10 punti</em> di <em>Visione</em>.</p><p>Dura fintanto che non viene disattivato: disattivarlo costa un'<em>Azione</em>.</p>",
+        "effects": [],
+        "id": "item-retinalImplants",
+        "type": "Impianti epiretinali"
+      },
+      {
+        "category": "Bioware",
+        "cost": 18,
+        "description": "<p>Il personaggio ignora le penalità alle prove dovute ad una <em>Ferita</em></p><p><i class=\"material-icons\">favorite</i> : Il personaggio ignora le penalità alle prove dovute alle <em>Ferite</em>. Dura <em class=\"stat\">2 turni</em>.</p>",
+        "effects": [],
+        "id": "item-endocrineControl",
+        "type": "Controllo endocrino"
+      },
+      {
+        "category": "Bioware",
+        "cost": 12,
+        "description": "<p>Il personaggio può sopravvivere al dissanguamento per un numero di turni pari a <em class=\"stat\">3 volte</em> il proprio punteggio di <em>Resistenza</em>.</p><p><i class=\"material-icons\">favorite</i> : Il personaggio rimuove immediatamente la condizione di <em>Intossicazione</em>.</p>",
+        "effects": [],
+        "id": "item-emergencyLifeSupport",
+        "type": "Stimolatore cardiovascolare"
+      }
+    ],
+    "cyberware": [
+      {
+        "category": "Cyberware",
+        "cost": 14,
+        "description": "Il personaggio può vedere entro <em class=\"stat\">360°</em> intorno a sé. Questo gli permette anche di <em>Sorvegliare</em> in quest'area.",
+        "effects": [],
+        "focus": 6,
+        "id": "item-beholderModule",
+        "type": "Beholder Module"
+      },
+      {
+        "category": "Cyberware",
+        "cost": 18,
+        "description": "Il personaggio è immune al <em>Panico</em>.",
+        "effects": [],
+        "focus": 10,
+        "id": "item-amygdalaInterface",
+        "type": "Interfaccia Amigdaloidea"
+      },
+      {
+        "category": "Cyberware",
+        "cost": 18,
+        "description": "Il personaggio può vedere entro <em class=\"stat\">il triplo del suo punteggio di</em> <em>Visione</em> ed attraverso ostacoli che non bloccano le onde radio.",
+        "effects": [],
+        "focus": 10,
+        "id": "item-neuroradar",
+        "type": "Neuroradar"
+      }
+    ]
+  },
+  "items": [
+    {
+      "category": "Drugs",
+      "cost": 8,
+      "description": "Resetta il <em>Cooldown</em> di tutte le <em>abilità</em>.",
+      "effects": [],
+      "id": "item-amphetamines",
+      "type": "Anfetamine"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "L'arma può contenere 2 cartucce di munizioni alla volta (ognuna deve essere <em>Ricaricata</em> separatamente): quando l'arma termina le munizioni, si <em>Ricarica</em> automaticamente.",
+      "effects": [],
+      "id": "item-autoLoader",
+      "type": "Auto-caricatore"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 6,
+      "description": "Conferisce un <em class='plus'>bonus di +10</em> alla <em>Mira</em> quando <em>stabilizza l'arma</em>.",
+      "effects": [],
+      "id": "item-bipod",
+      "modifiers": {
+        "aim": 10
+      },
+      "type": "Bipiede"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di +5</em> alla <em>Visione</em> quando <em>stabilizza l'arma</em>.",
+      "effects": [],
+      "id": "item-scope",
+      "modifiers": {
+        "vision": 5
+      },
+      "type": "Cannocchiale"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "L'arma può contenere <em class='plus'>2 munizioni in più</em>.",
+      "effects": [],
+      "id": "item-highCapacityCartridge",
+      "type": "Cartuccia ad alta capacità"
+    },
+    {
+      "category": "Ammo",
+      "cost": 1,
+      "description": "Permette di ricaricare completamente la propria arma.",
+      "effects": [ "reloadWeapon" ],
+      "id": "item-regularAmmo",
+      "type": "Cartuccia munizioni"
+    },
+    {
+      "category": "Grenades",
+      "cost": 6,
+      "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), infligge <em class='stat'>disorientamento</em> a tutti i soggetti entro un <em class='stat'>raggio di 2mt</em> che non siano in <em>copertura totale</em> rispetto al centro dell'esplosione.",
+      "effects": [],
+      "id": "item-flashbang",
+      "type": "Flashbang"
+    },
+    {
+      "category": "Grenades",
+      "cost": 5,
+      "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), emette una nuvola di gas entro un <em class='stat'>raggio di 3mt</em> che dura <em class='stat'>3 turni</em>. Questo gas infligge <em class='stat'>2 danni penetrante</em> e <em>Confusione</em> a tutti i bersagli <em>biologici</em> entro l'area d'effetto.",
+      "effects": [
+      ],
+      "id": "item-nerveGas",
+      "type": "Gas nervino"
+    },
+    {
+      "category": "Grenades",
+      "cost": 5,
+      "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), infligge <em class='stat'>1d4+1 danni</em> entro un <em class='stat'>raggio di 2mt</em>. Bersagli protetti da <em>copertura parziale</em> rispetto al centro di esplosione hanno un <em class='plus'>bonus di 1 punto</em> alla <em>Robustezza</em>, <em>copertura totale</em> <em class='plus'>bonus 2</em>. Può danneggiare coperture.",
+      "effects": [
+        {
+          "type": "inflictAreaDamage",
+          "arguments": ["1d4+1", 2],
+          "filters": {
+            "isTargetInFullCover": -2,
+            "isTargetInPartialCover": -1
+          }
+        },
+        {
+          "type": "inflictAreaDamage",
+          "arguments": [1, 2, { "type": "cover" }],
+          "conditions": {
+            "chance": 50
+          }
+        }
+      ],
+      "id": "item-fragGrenade",
+      "type": "Granata a frammentazione"
+    },
+    {
+      "category": "Grenades",
+      "cost": 4,
+      "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), tutti i soggetti entro un <em class='stat'>raggio di 3mt</em> ottengono un <em class='plus'>bonus di 20 punti</em> alla <em>Difesa</em>. Inoltre, il bonus al successo critico contro di loro se esposti <em class='plus'>diminuisce di 3 punti</em>. Dura <em class='stat'>3 turni</em>.",
+      "effects": [
+        {
+          "type": "grantAreaModifiers",
+          "arguments": [
+            {
+              "defense": {
+                "bonus": 20
+              },
+              "dodge": {
+                "bonus": 2,
+                "conditions": [
+                  "isFlanked"
+                ]
+              }
+            },
+            2,
+            3
+          ]
+        }
+      ],
+      "id": "item-smokeGrenade",
+      "type": "Granata fumogena"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "Quando <em>attacca</em> un bersaglio, indipendentemente dall'esito, conferisce un <em class='plus'>bonus di +10</em> alla <em>Mira</em> contro questi per <em class='stat'>1 turno</em>.",
+      "effects": [],
+      "id": "item-holoScope",
+      "type": "Holo-mirino"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 8,
+      "description": "Conferisce un <em class='plus'>bonus di +5</em> alla <em>Mira</em> e permette di conoscere la <em>percentuale di successo</em> dei propri attacchi.",
+      "effects": [],
+      "id": "item-holoVisor",
+      "modifiers": {
+        "aim": 5
+      },
+      "type": "Holo-visore"
+    },
+    {
+      "category": "Drugs",
+      "cost": 4,
+      "description": "<em class='plus'>Cura 4</em> <em>Ferite</em> e ferma il <em>dissanguamento</em> di un personaggio privo di sensi.",
+      "effects": [],
+      "id": "item-medkit",
+      "type": "Medkit"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "Conferisce un <em class='plus'>bonus di +10</em> alla <em>Mira</em>.",
+      "effects": [],
+      "id": "item-gunsight",
+      "modifiers": {
+        "aim": 10
+      },
+      "type": "Mirino"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 8,
+      "description": "Conferisce un <em class='plus'>bonus di +1</em> alla <em>probabilità di successo critico</em>.",
+      "effects": [],
+      "id": "item-precisionModule",
+      "modifiers": {
+        "criticalHitChance": 1
+      },
+      "type": "Modulo di precisione"
+    },
+    {
+      "category": "Grenades",
+      "cost": 5,
+      "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), infligge <em class='stat'>1d4 danni</em> entro un <em class='stat'>raggio di 2mt</em>. Bersagli protetti da <em>copertura parziale</em> rispetto al centro di esplosione hanno un <em class='plus'>bonus di 2 punto</em> alla <em>Robustezza</em>, <em>copertura totale</em> <em class='plus'>bonus 3</em>. Ha una <em class='stat'>possibilità del 50%</em> di <em>ustionare</em> il bersaglio non in <em>copertura</em>.",
+      "effects": [
+        {
+          "type": "inflictAreaDamage",
+          "arguments": ["1d4", 2],
+          "filters": {
+            "isTargetInFullCover": -3,
+            "isTargetInPartialCover": -2
+          }
+        },
+        {
+          "type": "inflictAreaStatusEffect",
+          "arguments": ["burn", 2],
+          "conditions": {
+            "chance": 50,
+            "filters": {
+              "isTargetInCover": -50
+            }
+          }
+        }
+      ],
+      "id": "item-molotov",
+      "type": "Molotov"
+    },
+    {
+      "category": "Ammo",
+      "cost": 2,
+      "description": "Ricarica completamente l’arma con munizioni che infliggono <em class='plus'>×2 danni</em> in caso di <em>successo critico</em>.",
+      "effects": [],
+      "id": "item-hollowPointRounds",
+      "type": "Munizioni a punta cava"
+    },
+    {
+      "category": "Ammo",
+      "cost": 2,
+      "description": "Ricarica completamente l’arma con munizioni che infliggono <em class='plus'>2 danni addizionali</em> entro <em class='stat'>5 metri</em>, ma <em class='minus'>2 danni in meno</em> oltre i <em class='stat'>10 metri</em>.",
+      "effects": [],
+      "id": "item-flechetteRounds",
+      "type": "Munizioni fléchette"
+    },
+    {
+      "category": "Ammo",
+      "cost": 2,
+      "description": "Ricarica completamente l’arma con munizioni che infliggono <em class='plus'>1 danno addizionale.</em>",
+      "effects": [
+        {
+          "type": "reloadWeapon",
+          "options": {
+            "modifiers": {
+              "damage": {
+                "bonus": 1
+              }
+            }
+          }
+        }
+      ],
+      "id": "item-fmjRounds",
+      "type": "Munizioni FMJ"
+    },
+    {
+      "category": "Drugs",
+      "cost": 4,
+      "description": "Conferisce un <em class='plus'>bonus di +1</em> alla <em>probabilità di successo critico</em>, <em class='plus'>×1.5</em> al <em>Movimento</em>, <em class='plus'>immunità ai colpi critici</em> quando si è in <em>copertura</em>, e la capacità di <em class='plus'>ignorare la penalità</em> alla <em>Mira</em> dovuta alle <em>ferite</em>. Dura <em class='stat'>3 turni</em>.",
+      "effects": [],
+      "id": "item-stimpack",
+      "modifiers": {
+        "criticalHitChance": 1,
+        "movement": "×1.5"
+      },
+      "type": "Stimpack"
+    }
+  ],
+  "weapons": [
+    {
+      "ammo": 3,
+      "category": "Media",
+      "cost": 4,
+      "criticalHitChance": 1,
+      "damage": "1d4+1",
+      "id": "weapon-bullpop",
+      "range": "medium",
+      "type": "Bullpop"
+    },
+    {
+      "ammo": 4,
+      "category": "Media",
+      "cost": 4,
+      "criticalHitChance": 1,
+      "damage": "1d4+2",
+      "id": "weapon-assaultRifle",
+      "modifiers": {
+        "movement": -1
+      },
+      "range": "medium",
+      "type": "Fucile d'assalto"
+    },
+    {
+      "ammo": 4,
+      "category": "Pesante",
+      "cost": 6,
+      "criticalHitChance": 2,
+      "damage": "2d4",
+      "id": "weapon-heavyAssaultRifle",
+      "modifiers": {
+        "movement": -2  
+      },
+      "range": "medium",
+      "type": "Fucile d'assalto pesante"
+    },
+    {
+      "ammo": 6,
+      "category": "Leggera",
+      "cost": 2,
+      "criticalHitChance": 0,
+      "damage": "1d4",
+      "description": "Il <em>Revolver</em> subisce una penalità alla <em>Mira</em> di 10 punti per ogni metro di distanza dal bersaglio dopo il decimo, fino ad un minimo di -50. Il <em>Revolver</em> può colpire bersagli adiacenti all’attaccante. <em>Ricaricare</em> un <em>Revolver</em> richiede <em class='stat'>2 azioni</em>.",
+      "id": "weapon-revolver",
+      "falloffPoint": 10,
+      "range": "short",
+      "type": "Revolver"
+    },
+    {
+      "ammo": 4,
+      "category": "Media",
+      "cost": 6,
+      "criticalHitChance": 2,
+      "damage": "1d6+2",
+      "description": "Lo <em>Shotgun</em> conferisce un bonus alla <em>Mira</em> di +50, che diminuisce di 10 punti per ogni metro di distanza dal bersaglio, fino ad un minimo di -50. Lo <em>Shotgun</em> può colpire bersagli adiacenti all’attaccante.",
+      "hitChanceModifier": 50,
+      "id": "weapon-shotgun",
+      "range": "short",
+      "type": "Shotgun"
+    },
+    {
+      "ammo": 2,
+      "category": "Pesante",
+      "cost": 8,
+      "criticalHitChance": 3,
+      "damage": "1d6+2",
+      "description": "Il <em>Fucile da cecchino</em> subisce una penalità alla <em>Mira</em> di -50, che diminuisce di 5 punti per ogni metro di distanza dal bersaglio dopo il quarto, fino ad un massimo di +50. Un <em>attacco</em> o <em>sorvegliare</em> con il <em>Fucile da cecchino</em> costa 2 <em>Punti Azione</em>",
+      "falloffPoint": 4,
+      "hitChanceModifier": -50,
+      "id": "weapon-sniperRifle",
+      "modifiers": {
+        "movement": -1,
+        "vision": 4
+      },
+      "range": "long",
+      "type": "Fucile da cecchino"
+    },
+    {
+      "ammo": 3,
+      "category": "Leggera",
+      "cost": 2,
+      "criticalHitChance": 0,
+      "damage": "1d4+1",
+      "id": "weapon-smg",
+      "modifiers": {
+        "aim": 5
+      },
+      "range": "medium",
+      "type": "SMG"
+    },
+    {
+      "ammo": -1,
+      "category": "Mischia",
+      "cost": 4,
+      "criticalHitChance": 3,
+      "damage": "2d4",
+      "description": "La <em>Spada d'assalto</em> non riceve i normali bonus al <em>successo critico</em> conferiti in caso di attacchi contro bersagli <em class=\"stat\">esposti</em>.",
+      "id": "weapon-assaultBlade",
+      "range": "melee",
+      "type": "Spada d'assalto"
+    }
+  ]
+}

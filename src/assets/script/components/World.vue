@@ -51,7 +51,10 @@ const component = {
       if(e.key === 'Shift') {
         selectedObject = world.getActiveObject();
         if(selectedObject && selectedObject.showVisionRange) {
-          selectedObject.highlightAllHitChances();
+          if(this.options.showHitChance)
+            selectedObject.highlightAllHitChances();
+          else
+            selectedObject.showVisionRange();
         }
       }
     });
@@ -114,8 +117,8 @@ const component = {
     });
     
     world.on('object:modified', () => {
-      // @todo add auto-save setting
-      this.$parent.saveGame();
+      if(this.options.autoSync)
+        this.$parent.saveGame();
     });
     
     world.on('object:selected', (e) => {
@@ -190,6 +193,7 @@ const component = {
           target = e.target;
       
       if(selectedObject
+         && this.options.showHitChance
          && selectedObject.calculateChanceToHit
          && selectedObject.isValidTarget(target)) {
           target._highlightChanceToBeHitBy(selectedObject);
@@ -223,7 +227,7 @@ const component = {
     world.on('mouse:move', (opts) => {
       let e = opts.e;
       
-      if(e.button === 2) {
+      if(e.button === 2 || e.which === 3) {
         this.canvas.relativePan(
           { x: e.movementX, y: e.movementY }
         );

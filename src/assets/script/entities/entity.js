@@ -37,6 +37,27 @@ const Entity = fabric.util.createClass(fabric.Object, {
     this.on('modified', () => {
       this.updateGridCoordinates();
     });
+    
+    this.on('before:remove', () => {
+      this.removeCurrentLabel();
+    });
+  },
+  
+  blink() {
+    const canvas = this.canvas;
+    
+    this.animate('opacity', 0.5, {
+      duration: 500,
+      easing: fabric.util.ease.easeInSine,
+      onChange: canvas.renderAll.bind(canvas),
+      onComplete: () => {
+        this.animate('opacity', 1, {
+          duration: 500,
+          easing: fabric.util.ease.easeOutSine,
+          onChange: canvas.renderAll.bind(canvas)
+        });
+      }
+    });
   },
   
   calculateRelativeDirectionTo(to, center = true) {
@@ -92,8 +113,11 @@ const Entity = fabric.util.createClass(fabric.Object, {
   },
   
   removeCurrentLabel() {
-    if(this.currentLabel)
-      this.canvas.remove(this.currentLabel);
+    if(this.currentLabel) {
+      try {
+        this.canvas.remove(this.currentLabel);
+      } catch(ok) {}
+    }
     
     return this;
   },
