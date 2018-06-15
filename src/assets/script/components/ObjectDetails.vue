@@ -1,7 +1,10 @@
 <template>
   <div class='object-details'>
     <div v-if='object && object.attributes'>
-      <h2>{{object.attributes.name}}</h2>
+      <header>
+        <h2>{{ object.attributes.name }}</h2>
+        <status-drawer :character="object" />
+      </header>
       
       <health-bar 
         :health='object.attributes.resistance'
@@ -136,6 +139,7 @@ import Mechanics from '_mechanics';
 
 import HealthBar from './HealthBar.vue';
 import ItemSelectionMenu from './ItemSelectionMenu.vue';
+import StatusDrawer from './StatusDrawer.vue';
 
 import Network from '../modules/networking';
   
@@ -146,7 +150,17 @@ export default {
   props: ['object'],
   components: {
     HealthBar,
-    ItemSelectionMenu
+    ItemSelectionMenu,
+    StatusDrawer
+  },
+  computed: {
+    statii() {
+      if(this.object.attributes.status)
+        return this.object.attributes.status
+          .map(
+            (status) => Mechanics.statii.find( _ => _.id === status.id )
+          );
+    }
   },
   data() {
     return {
@@ -289,6 +303,16 @@ export default {
   
   dd {
     width: 30px;
+  }
+  
+  header {
+    display: flex;
+    margin-top: 10px;
+    
+    h2 {
+      margin-right:   15px;
+      vertical-align: middle;
+    }
   }
   
   i { margin-right: 10px; }

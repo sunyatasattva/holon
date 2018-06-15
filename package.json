@@ -40,6 +40,7 @@
     "lodash.xor": "^4.5.0",
     "lodash.xorby": "^4.7.0",
     "spectre.css": "^0.5.0",
+    "velocity-animate": "^1.5.1",
     "vue": "^2.5.13",
     "vue-material": "^1.0.0-beta-8",
     "vue-material-design-icons": "^1.2.1",
