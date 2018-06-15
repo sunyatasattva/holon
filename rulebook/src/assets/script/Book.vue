@@ -4,7 +4,7 @@
       <nav class="table-of-contents">
         <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
 
-        <span class="version-number">2.0.0-beta.3</span>
+        <span class="version-number">{{ $options._rulebookVersion }}</span>
         
         <ul>
           <li>
@@ -713,7 +713,7 @@ import AttributeInput from "../../../../src/assets/script/components/AttributeIn
 import equipment from "_equipment";
 import mechanics from "_mechanics";
 import skills from "_skills";
-
+import { rulebookVersion } from '../../../../package.json';
   
 const ITEM_ICONS = {
   "Ammo": "ammo",
@@ -777,7 +777,8 @@ export default {
   mechanics: mechanics,
   groupedSkills: groupedSkills,
   skills: skills.skills,
-  talents: skills.talents
+  talents: skills.talents,
+  _rulebookVersion: rulebookVersion
 }
 </script>
 
@@ -828,6 +829,13 @@ export default {
   
   h1 {
     margin: $line-height * 2 0;
+  }
+  
+  section {
+    > h1 {
+      border-bottom:  1px solid rgba($blue-color, 0.25);
+      padding-bottom: 0.5em;
+    }
   }
   
   ul {
