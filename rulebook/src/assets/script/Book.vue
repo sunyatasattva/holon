@@ -200,6 +200,12 @@
         
         <h2>Turno</h2>
         <p>Un <em>turno</em> si conclude quando tutti i partecipanti alla scena hanno esaurito i propri <em>punti azione</em>. Tutti gli effetti collaterali si risolvono alla fine del turno.</p>
+        
+        <h2>Ordine di Azione</h2>
+        <p>I personaggi partecipanti alla scena agiscono in un turno in ordine decrescente di <em>Riflessi</em>.</p>
+        <p>Personaggi con un punteggio uguale di <em>Riflessi</em>, agiscono in ordine decrescente in base al loro punteggio di <em>Focus</em>.</p>
+        <p>Un personaggio può decidere di <em>ritardare</em> il dispendio di uno o più <em>punti azione</em> alla fine del turno. Se lo fa, la sua posizione nel turno rimane quella fintanto che non <em>ritarda</em> di nuovo.</p>
+        <p>Se più personaggi scelgono di <em>ritardare</em> alla fine del turno, l'ordine delle loro azioni è definito in maniera crescente in base ai <em>Riflessi</em>.</p>
       </section>
       <section id="section-status-conditions">
         <h1>Condizioni alterate</h1>
