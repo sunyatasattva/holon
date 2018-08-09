@@ -146,7 +146,7 @@
         
         <h2>Successi e fallimenti marginali</h2>
         <p>Una <em>prova</em> che ha successo o fallisce <em class="stat">entro ±10%</em> della <em>possibilità di successo</em> viene chiamata <em>successo</em> o <em>fallimento marginale</em>.</p>
-        <p>Le conseguenze di <em>successi</em> e <em>fallimenti critici</em> sono specificate nelle rispettive azioni.</p>
+        <p>Le conseguenze di <em>successi</em> e <em>fallimenti marginali</em> sono specificate nelle rispettive azioni.</p>
         
         <h2>Successi e fallimenti critici</h2>
         <p>Ogni azione ha una <em>possibilità di successo</em> e <em>fallimento critico</em> che va <em class="stat">da 0 a 10</em>. Dove non diversamente specificato, questi valori sono 0. Quando questi valori sono maggiori di 0, un risultato si considera <em>critico</em> quando il valore dell’unità dello stesso è minore o uguale al valore critico (od in ogni caso, se 10).</p>
