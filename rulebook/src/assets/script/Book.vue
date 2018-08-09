@@ -168,7 +168,8 @@
         <h3>Danni penetranti</h3>
         <p>I <em>danni penetranti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
         <h3>Danni perforanti</h3>
-        <p>I <em>danni perforanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
+        <p>I <em>danni perforanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">10 turni</em>.</p>
+        <p>Se il bersaglio non ha nessuna <em>Robustezza</em>, vengono trattati come danni normali.</p>
         
         <h2>Schivata</h2>
         <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
