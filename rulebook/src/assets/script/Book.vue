@@ -907,8 +907,152 @@
             </card>
           </li>
         </ul>
+        </section>
+        <section>
         <h2>Furtività in combattimento</h2>
+          <p>Un personaggio dotato del talento <em>Infiltrazione</em> è in grado di rimanere nascosto anche nelle situazioni più agitate.</p>
+        </section>
+        <section>
         <h2>Hacking</h2>
+          <p>Un personaggio dotato del talento <em>Interfacing</em> può tentare di hackare bersagli robotici in combattimento; per farlo, il personaggio deve averne l'accesso fisico o essere connesso al medesimo network.</p>
+          <p>In tal caso ha due scelte:</p>
+          
+          <ul class="advanced-combat-list">
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-interfacing-hack-disable.png" />
+                  </div>
+
+                  Hack (Disabilitare)
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip ends-turn"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                    <li
+                      class="modifier tooltip" 
+                      data-tooltip="Cooldown">
+                      <i class="material-icons">settings_backup_restore</i>
+                      <span class="modifier-value">2</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Interfacing</em> modificata dalla <em>Sicurezza</em> del bersaglio.
+                </p>
+                <p>
+                  In caso di successo, il bersaglio è <em>Immobilizzato</em> per <em class="stat">1 turno + 1 turno per ogni livello di competenza</em> del personaggio in <em>Interfacing</em>.
+                </p>
+                <p>
+                  Un personaggio può usare questa azione per riabilitare un bersaglio robotico <em>Immobilizzato</em>.
+                </p>
+
+                <div slot="footer">
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il bersaglio ottiene un <em class="plus">bonus di +20</em> alla <em>Sicurezza</em> ed un <em class="plus">bonus di +5</em> a <em>Mobilità</em> e <em>Riflessi</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il bersaglio rimane <em>Immobilizzato</em> per <em class="stat">1 turno + 2 turni per ogni livello di competenza del personaggio</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>Il bersaglio rimane <em>Immobilizzato</em> per <em class="stat">1 turno</em>.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-interfacing-hack-control.png" />
+                  </div>
+
+                  Hack (Controllare)
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip ends-turn"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                    <li
+                      class="modifier tooltip" 
+                      data-tooltip="Cooldown">
+                      <i class="material-icons">settings_backup_restore</i>
+                      <span class="modifier-value">2</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Interfacing</em> modificata dalla <em>Sicurezza</em> del bersaglio e con un'ulteriore <em class="minus">penalità di -30</em>.
+                </p>
+                <p>
+                  In caso di successo, il bersaglio può essere controllato dal personaggio per <em class="stat">1 turno per ogni livello di competenza</em> di questi in <em>Interfacing</em>.
+                </p>
+                <p>
+                  Controllare un bersaglio robotico per 1 turno costa <em class="stat">1 punto azione</em> del personaggio, indipendentemente dal numero di punti azione del bersaglio (il primo turno questo punto azione viene speso automaticamente, se possibile). Se il personaggio non intende controllare il bersaglio, per quel turno questi ripeterà l'ultimo comando del personaggio se possibile, altrimenti rimarrà immobile.
+                </p>
+                <p>
+                  Un personaggio può usare questa azione per riabilitare un bersaglio robotico <em>Immobilizzato</em>.
+                </p>
+
+                <div slot="footer">
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il bersaglio ottiene un <em class="plus">bonus di +20</em> alla <em>Sicurezza</em> ed un <em class="plus">bonus di +5</em> a <em>Mira</em>, <em>Mobilità</em> e <em>Riflessi</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il bersaglio rimane <em>Controllato</em> per <em class="stat">2 turni per ogni livello di competenza del personaggio</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>Il bersaglio viene <em>Confuso</em> per <em class="stat">1 turno</em>.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+          </ul>
+        </section>
       </section>
     </div>
   </div>
