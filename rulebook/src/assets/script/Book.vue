@@ -183,6 +183,9 @@
         <p>Un <em>difensore</em> si trova <em class="stat">in copertura</em> rispetto ad un determinato <em>attaccante</em>, se, al momento dell'<em>Attacco</em>, questi si trova subito dietro una <em>copertura</em> ed un piano proiettato da questa interseca la <em>linea visiva</em> dell'<em>Attaccante</em>.</p>
         <p>Un <em>Attacco</em> contro un bersaglio <em class="stat">esposto</em> (non in <em>copertura</em>), ottiene un <em class="plus">bonus di +3</em> alla <em>possibilità di successo critico</em>.</p>
         
+        <h3>Affacciarsi</h3>
+        <p>Se l'attaccante è in <em>copertura</em> rispetto al bersaglio, ed una posizione adiacente alla posizione attuale dell'attaccante è libera, l'attaccante può <em>affacciarsi</em>, e la sua <em>linea visiva</em> viene calcolata a partire da quella posizione.</p>
+        
         <h2>Ferite</h2>
         <p>Un personaggio può subire un numero di <em>ferite</em> pari al proprio valore di <em>Resistenza</em> prima di rischiare la vita. Ogni <em>ferita</em> subita, conferisce al personaggio una <em class="minus">penalità di 5 punti</em> a tutte le <em>prove</em>.</p>
         <p>Esaurita la <em>Resistenza</em> un personaggio cade privo di sensi. Un personaggio che esaurisce la <em>Resistenza</em> per via di un <em>successo critico</em> o che riceve un numero di <em>danni</em> pari o superiori alla sua <em>Resistenza</em> in un sol colpo, muore istantaneamente.</p>
