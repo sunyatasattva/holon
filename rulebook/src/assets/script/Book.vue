@@ -174,7 +174,8 @@
         <h2>Schivata</h2>
         <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
         <p>Questi punti si sottraggono alla probabilità di <em>successo critico</em> di un avversario che ha come bersaglio il personaggio.</p>
-        <p>Se il punteggio di <em>Schivata</em> del bersaglio è maggiore della probabilità di <em>successo critico</em> dell'attaccante, la differenza rappresenta la <em>probabilità di schivare</em>; la meccanica è identica a quella dei <em>risultati critici</em>: se l'unità della prova è minore o uguale alla <em>probabilità di schivare</em>, l'attacco si considera <em>schivato</em>.</p>
+        <p>Se il punteggio di <em>Schivata</em> del bersaglio è maggiore della probabilità di <em>successo critico</em> dell'attaccante, la differenza rappresenta la <em>probabilità di schivare</em>.</p>
+        <p>La meccanica è identica a quella dei <em>risultati critici</em>: se l'unità della prova è minore o uguale alla <em>probabilità di schivare</em>, l'attacco si considera <em>schivato</em>.</p>
         <p>Un attacco <em>schivato</em> <em class="plus">riduce di 1 livello</em> il successo della prova: sarebbe a dire, un successo normale diviene un <em>successo marginale</em>, ed un <em>successo marginale</em> diviene un fallimento.</p>
         
         <h2>Coperture</h2>
