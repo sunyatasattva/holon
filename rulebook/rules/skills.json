@@ -4,7 +4,7 @@
       "action": -1,
       "cooldown": false,
       "cost": 10,
-      "description": "Il personaggio <em class='plus'>aumenta del 150%</em> (arrotondato per eccesso) il bonus alla <em>Resistenza</em> ottenuto tramite le armature ed <em class='plus'>ignora le penalità</em> al <em>Movimento</em>.",
+      "description": "Il personaggio <em class='plus'>aumenta di +1</em>  il bonus alla <em>Resistenza</em> ottenuto tramite le armature e <em class='plus'>riduce di 1 punto la penalità</em> al <em>Movimento</em>.",
       "icon": "ico-heavyconditioning",
       "modifiers": {
         "equipment": {
