@@ -133,6 +133,14 @@
       "type": "Bipiede"
     },
     {
+      "category": "Ammo",
+      "cost": 1,
+      "description": "Permette di ricaricare completamente la propria arma.",
+      "effects": [ "reloadWeapon" ],
+      "id": "item-regularAmmo",
+      "type": "Cartuccia munizioni"
+    },
+    {
       "category": "Weapon Mods",
       "cost": 10,
       "description": "Conferisce un <em class='plus'>bonus di +5</em> alla <em>Visione</em> quando <em>stabilizza l'arma</em>.",
@@ -154,10 +162,10 @@
     {
       "category": "Ammo",
       "cost": 1,
-      "description": "Permette di ricaricare completamente la propria arma.",
+      "description": "Permette di ricaricare completamente la propria arma con munizioni che infliggono <em class=\"minus\">1 danno in meno</em>, ma una <em class=\"minus\">penalità cumulativa di -5</em> alla <em>Sicurezza</em> di un bersaglio robotico per <em class=\"stat\">3 turni</em>.",
       "effects": [ "reloadWeapon" ],
       "id": "item-regularAmmo",
-      "type": "Cartuccia munizioni"
+      "type": "Munizioni Bluescreen"
     },
     {
       "category": "Grenades",
@@ -226,6 +234,14 @@
       ],
       "id": "item-smokeGrenade",
       "type": "Granata fumogena"
+    },
+    {
+      "category": "Tools",
+      "cost": 10,
+      "description": "<p>Il personaggio può spendere <em class=\"stat\">1 PA</em> per effettuare un <em>Attacco</em> con il Gremlin contro un bersaglio robotico entro il suo punteggio di <em>Visione</em>. Se l'attacco ha successo, il Gremlin si aggancia al bersaglio.</p>     <p>Una volta agganciato, il Gremlin può infliggere automaticamente <em class=\"stat\">1 danno penetrante per turno</em>, oppure essere utilizzato per <em>hackare</em> il bersaglio a distanza dal personaggio.</p><p>Il Gremlin ha le seguenti caratteristiche: <em class=\"stat\">Resistenza: 2</em>, <em class=\"stat\">Robustezza: 1</em>, <em class=\"stat\">Riflessi: 20</em></p>",
+      "effects": [],
+      "id": "item-gremlin",
+      "type": "Gremlin (Drone)"
     },
     {
       "category": "Weapon Mods",
@@ -337,6 +353,14 @@
       ],
       "id": "item-fmjRounds",
       "type": "Munizioni FMJ"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "Se il personaggio è in <em>occultamento</em>, questo stato non viene rotto nel caso di un <em>Attacco</em> che effettua un <em>successo critico</em>.",
+      "effects": [],
+      "id": "item-silencer",
+      "type": "Silenziatore"
     },
     {
       "category": "Drugs",

@@ -1111,6 +1111,7 @@ const ITEM_ICONS = {
   "Drugs": "pill",
   "Bioware": "dna",
   "Grenades": "ornament",
+  "Tools": "wrench",
   "Weapon Mods": "pistol"
 }
 
