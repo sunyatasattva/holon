@@ -341,7 +341,7 @@
               </span>
               
               <p>
-                Un personaggio può coprire un’area semicircolare pari al suo punteggio di <em>Visione</em> o pari alla gittata della sua arma, quale che sia maggiore. Il personaggio eseguirà un’azione di <em>Reazione</em> con <em class="minus">una penalità di -20</em> verso il primo bersaglio ostile che si muove entro questo raggio e non usufruisce di <em>Copertura totale</em>. Questi attacchi non possono effettuare <em>successi critici</em>.
+                Un personaggio può coprire un’area semicircolare pari al suo punteggio di <em>Visione</em> o pari alla gittata della sua arma, quale che sia minore. Il personaggio eseguirà un’azione di <em>Reazione</em> con <em class="minus">una penalità di -20</em> verso il primo bersaglio ostile che si muove entro questo raggio e non usufruisce di <em>Copertura totale</em>. Questi attacchi non possono effettuare <em>successi critici</em>.
               </p>
               <p>
                 Tranne quando diversamente specificato, una <em>Reazione</em> consiste in un <em>Attacco</em>.
@@ -373,7 +373,7 @@
               </span>
               
               <p>
-                Un personaggio che esegue questa azione <em class="minus">dimezza il suo punteggio</em> di <em>Visibilità</em> e <em>Movimento</em>, subisce <em class="minus">una penalità di -20</em> alla <em>Mira</em>, ma <em class="plus">raddoppia il suo bonus</em> di <em>Copertura</em>. Dura fino all’inizio del prossimo <em>turno</em> del personaggio.
+                Un personaggio che esegue questa azione <em class="minus">dimezza il suo punteggio</em> di <em>Visione</em> e <em>Movimento</em>, subisce <em class="minus">una penalità di -20</em> alla <em>Mira</em>, ma <em class="plus">raddoppia il suo bonus</em> di <em>Copertura</em>. Dura fino all’inizio del prossimo <em>turno</em> del personaggio.
               </p>
             </card>
           </li>
@@ -468,6 +468,7 @@
         <p>Queste competenze determinano in che modo il personaggio può agire efficacemente nel mondo: se un personaggio non possiede alcuna competenza in un determinato campo, non può in genere tentare di interagire con quel campo (un personaggio che non possiede competenze di <em>Atletica</em> non può tentare di scalare una parete rocciosa).</p>
         <p>In caso contrario, il personaggio può effettuare una <em>Prova di Focus</em> per ottenere il risultato che desidera, con dei modificatori appropriati per la situazione (es. il personaggio non ha tempo per concentrarsi, è il suo primo tentativo in qualcosa di completamente nuovo, non ha attrezzi adatti etc.).</p>
         <p>Ogni <em>Talento</em> ha tre livelli di competenza: al <em class="stat">primo</em>, il personaggio è un professionista del settore; al <em class="stat">secondo</em>, il personaggio è un'autorità del settore (ed ottiene <em class="plus">un bonus di +15</em> alle <em>prove</em>); al <em class="stat">terzo</em>, è maestro assoluto in quel campo (ed ottiene <em class="plus">un bonus di +30</em> alle <em>prove</em>).</p>
+        <p>Ogni livello di competenza da accesso ad una <em>abilità</em> che il personaggio può ottenere spendendo <em>punti esperienza</em>. La prima <em>abilità</em> conta come una di <em class="stat">primo livello</em>, la seconda come una di <em class="stat">terzo livello</em>, la terza come una di <em class="stat">quinto livello</em>.</p>
         <p>Personaggi con competenze nel medesimo settore, possono collaborare e conferirsi vicendevolmente dei <em class="plus">bonus</em> alla <em>prova</em>.</p>
         <ul>
           <li v-for="talent in $options.talents">
