@@ -453,8 +453,25 @@
         <div 
           v-for="(group, i) in $options.groupedSkills"
           class="skill-group-compact"
+          :id="`skills-level-${(i++, i)}`">
+          <h2>
+            Livello {{ i }}
+            <md-chip>
+              {{2.5 * (i * i - i + 6) }}
+            </md-chip>
+          </h2>
+          <skill-card
+            v-for="skill in group"
+            :skill="skill"
+            :compact="compactAbilities"
+          />
+        </div>
+        <hr />
+        <div 
+          v-for="(group, i) in $options.skillsByTag"
+          class="skill-group-compact"
           :id="`skills-level-${i + 1}`">
-          <h2>Livello {{ i + 1 }}</h2>
+          <h2>{{ i }}</h2>
           <skill-card
             v-for="skill in group"
             :skill="skill"
