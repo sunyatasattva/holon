@@ -49,7 +49,7 @@ export const groupedSkills = skills.skills
       .reduce(parseRequirements, []).length,
         group = arr[requirementsLevel] || [];
     
-    group.push(skill);
+    group.push( { ...skill, level: requirementsLevel + 1} );
     arr[requirementsLevel] = group;
     
     return arr;

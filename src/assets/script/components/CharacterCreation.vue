@@ -154,12 +154,15 @@
          >
           <md-optgroup
            v-for="(group, i) in Skills"
-           :label="`Level ${i + 1}`">
+           :label="`Level ${(i++,i)}`">
             <md-option v-for="skill in group" :value="skill.id">
               {{ skill.name }}
             </md-option>
           </md-optgroup>
         </md-select>
+        <md-chip v-if="skillPoints">
+          {{ skillPoints }}
+        </md-chip>
       </md-field>
     </section>
     <md-button
@@ -180,6 +183,8 @@
 </template>
 
 <script>
+import groupBy from 'lodash.groupBy';
+  
 import AttributeInput from './AttributeInput.vue';
 import ItemSelectionMenu from './ItemSelectionMenu.vue';
 import Network from '../modules/networking';
@@ -201,11 +206,42 @@ export default {
       return Object.values(this.attributes)
         .reduce(
           (sum, curr) => sum + curr.totalCost,
-          0
+          this.skillPoints
         );
     },
     // @fixme this is due to a bug in vue-material
     // can't assign objects to select value
+    skillPoints() {
+      const skills = groupBy(
+        this.skills.map(
+          (skill) => {
+            return [].concat(...groupedSkills)
+              .find( _ => _.id === skill );
+          }
+        ),
+        'level'
+      );
+      
+      
+      return Object.values(skills).reduce(
+        (acc, curr) => {
+          const n = curr[0].level;
+          const pointsPerSkill = 2.5 * (n * n - n + 6);
+          
+          const pointsThisLevel = curr.reduce(
+            (points, skill, k) => {
+              k++;
+              
+              return points + pointsPerSkill * k; 
+            },
+            0
+          )
+          
+          return acc + pointsThisLevel;
+        },
+        0
+      )
+    },
     selectedArmor() {
       let armor = Equipment.armors.find(
         (item) => item.type === this.selectedArmorType
