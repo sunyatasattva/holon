@@ -156,7 +156,7 @@
         <h1>Meccaniche di combattimento</h1>
         
         <h2>Visione</h2>
-        <p>Ogni personaggio vede entro un numero di <em class="stat">metri</em> determinati dal <em class="stat">doppio del suo punteggio di</em> <em>Visione</em> in un semicerchio di fronte a sé.</p>
+        <p>Ogni personaggio vede entro un numero di <em class="stat">metri</em> determinati dal <em class="stat">triplo del suo punteggio di</em> <em>Visione</em> in un semicerchio di fronte a sé.</p>
         <p>Dove non altrimenti specificato, un personaggio può effettuare <em>Attacchi</em> solo contro bersagli entro il suo punteggio di <em>Visione</em>.</p>
         <p>La <em>linea visiva</em> è bloccata da una <em>copertura totale</em> fintanto che sia adiacente ad altre due <em>coperture totali</em>.</p>
         
