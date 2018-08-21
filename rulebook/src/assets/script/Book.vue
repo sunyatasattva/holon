@@ -715,13 +715,16 @@
       <section id="section-advanced-combat-mechanics">
         <h1>Meccaniche di combattimento avanzate</h1>
         
+        <section>
         <h2>Combattimento in mischia ed in corpo a corpo</h2>
+
         <p>Un personaggio armato con un <em>arma da mischia</em> può ingaggiare bersagli entro la portata dell'arma. Quando non diversamente specificato, la portata di un'arma da mischia è di <em class="stat">1 metro</em>.</p>
         <p>Gli attacchi in mischia non possono colpire bersagli in <em>copertura totale</em>, e non possono affacciarsi. Inoltre, non godono dei bonus alla <em>percentuale di successo critico</em> contro bersagli <em>esposti</em>.</p>
+
         <h3>Combattimento senz'armi</h3>
         <p>Personaggi dotati del talento <em>Atletica</em> possono ingaggiare gli avversari in combattimento senz'armi.</p>
         <p>Il personaggio può esprimere questa abilità utilizzando tre azioni aggiuntive:</p>
-        <ul class="unarmed-combat-list">
+          <ul class="advanced-combat-list">
           <li>
             <card>
               <span slot="header-main">
@@ -916,6 +919,28 @@
         <section>
         <h2>Furtività in combattimento</h2>
           <p>Un personaggio dotato del talento <em>Infiltrazione</em> è in grado di rimanere nascosto anche nelle situazioni più agitate.</p>
+          <p>Se il personaggio non è ancora stato identificato come ostile, può effettuare una <em>prova di Infiltrazione</em>. In caso di successo entra in stato di <em>Occultamento</em>.</p>
+          <p>Un personaggio in stato di <em>Occultamento</em> non può essere bersaglio diretto di <em>attacchi</em>, <em>oggetti</em> o <em>abilità</em>, ottiene un <em class="plus">bonus di +1</em> alla <em>probabilità di successo critico</em> e <em class="plus">non subisce penalità</em> sugli <em>Attacchi di reazione</em>.</p>
+          <p>Le <em>coperture parziali</em> bloccano la <em>linea visiva</em> contro un personaggio <em>Accovacciato</em> ed <em>occultato</em>.</p>
+          
+          <h3>Stati di attenzione</h3>
+          <p>Un personaggio può essere in uno tra tre stati di attenzione:</p>
+          <ol>
+            <li><em>Distratto</em>: il personaggio è in questo stato quando non percepisce alcun pericolo intorno a sé. Questo è lo stato normale della maggior parte dei personaggi.</li>
+            <li><em>Vigile</em>: il personaggio sta consapevolmente tenendo d'occhio la situazione in cerca di potenziali pericoli. Un personaggio è in questo stato quando, per esempio, è di guardia.</li>
+            <li><em>All'erta</em>: il personaggio è consapevole della presenza di un pericolo imminente intorno a sé. Per esempio quando già ingaggiato in uno scontro a fuoco, o quando ha udito degli spari.</li>
+          </ol>
+          <p>A seconda del suo stato di attenzione, un personaggio ha un <em>raggio di consapevolezza</em> intorno a sé pari al suo punteggio di <em>Visione</em> per ogni livello di attenzione.</p>
+          
+          <h3>Rottura dell'occultamento</h3>
+          <p>Quando un personaggio è in <em>occultamento</em>, rimane in questo stato fin quando:</p>
+          <ol>
+            <li>Effettua una <em>azione offensiva</em>.</li>
+            <li>Effettua un <em>Movimento</em> all'interno del <em>raggio di consapevolezza</em> ed in <em>linea visiva</em> di un personaggio neutrale o ostile.</li>
+            <li>È <em>esposto</em> ed entro il <em>raggio di consapevolezza</em> di un personaggio neutrale o ostile.</li>
+            <li>Produce rumori o effetti chiaramente individuabili (rompe una finestra, accende un lightstick, etc.</li>
+          </ol>
+          <p>Una volta rotto lo stato di <em>occultamento</em>, il personaggio è individuato da tutti i personaggi entro il raggio visivo (cioé tre volte il punteggio di <em>Visione</em>), e non può rientrare in quello stato fin quando che non passi almeno <em class="stat">un turno</em> al di fuori di questo raggio di ogni personaggio ostile o neutrale.</p>
         </section>
         <section>
         <h2>Hacking</h2>
@@ -1215,12 +1240,12 @@ export default {
   }
 
   .ability-list,
+  .advanced-combat-list,
   .armor-list,
   .immortality-services,
   .item-list,
   .skill-list,
-  .talent-list,
-  .unarmed-combat-list {
+  .talent-list {
     .card-header-main .attribute-modifiers {
       right: $padding;
     }
