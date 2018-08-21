@@ -4,7 +4,7 @@
       <nav class="table-of-contents">
         <img src="src/assets/images/logo.png" alt="Holon RPG" class="logo">
 
-        <span class="version-number">2.0.0-beta.3</span>
+        <span class="version-number">{{ $options._rulebookVersion }}</span>
         
         <ul>
           <li>
@@ -51,6 +51,9 @@
                 <a href="#section-immortality-protocol">Protocollo dell'Immortalità</a>
               </li>
             </ul>
+          </li>
+          <li>
+            <a href="#section-advanced-combat-mechanics">Combattimento avanzato</a>
           </li>
         </ul>
       </nav>
@@ -143,7 +146,7 @@
         
         <h2>Successi e fallimenti marginali</h2>
         <p>Una <em>prova</em> che ha successo o fallisce <em class="stat">entro ±10%</em> della <em>possibilità di successo</em> viene chiamata <em>successo</em> o <em>fallimento marginale</em>.</p>
-        <p>Le conseguenze di <em>successi</em> e <em>fallimenti critici</em> sono specificate nelle rispettive azioni.</p>
+        <p>Le conseguenze di <em>successi</em> e <em>fallimenti marginali</em> sono specificate nelle rispettive azioni.</p>
         
         <h2>Successi e fallimenti critici</h2>
         <p>Ogni azione ha una <em>possibilità di successo</em> e <em>fallimento critico</em> che va <em class="stat">da 0 a 10</em>. Dove non diversamente specificato, questi valori sono 0. Quando questi valori sono maggiori di 0, un risultato si considera <em>critico</em> quando il valore dell’unità dello stesso è minore o uguale al valore critico (od in ogni caso, se 10).</p>
@@ -153,7 +156,7 @@
         <h1>Meccaniche di combattimento</h1>
         
         <h2>Visione</h2>
-        <p>Ogni personaggio vede entro un numero di <em class="stat">metri</em> determinati dal <em class="stat">doppio del suo punteggio di</em> <em>Visione</em> in un semicerchio di fronte a sé.</p>
+        <p>Ogni personaggio vede entro un numero di <em class="stat">metri</em> determinati dal <em class="stat">triplo del suo punteggio di</em> <em>Visione</em> in un semicerchio di fronte a sé.</p>
         <p>Dove non altrimenti specificato, un personaggio può effettuare <em>Attacchi</em> solo contro bersagli entro il suo punteggio di <em>Visione</em>.</p>
         <p>La <em>linea visiva</em> è bloccata da una <em>copertura totale</em> fintanto che sia adiacente ad altre due <em>coperture totali</em>.</p>
         
@@ -165,18 +168,23 @@
         <h3>Danni penetranti</h3>
         <p>I <em>danni penetranti</em> ignorano la <em>Robustezza</em> del bersaglio.</p>
         <h3>Danni perforanti</h3>
-        <p>I <em>danni perforanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">3 turni</em>.</p>
+        <p>I <em>danni perforanti</em> danneggiano le <em>armature</em> permanentemente, diminuendone il bonus alla <em>Robustezza</em>. Nel caso di <em>Robustezza</em> naturale, la danneggiano per <em class="stat">10 turni</em>.</p>
+        <p>Se il bersaglio non ha nessuna <em>Robustezza</em>, vengono trattati come danni normali.</p>
         
         <h2>Schivata</h2>
         <p>Per ogni <em class="stat">10 punti</em> (arrotondati per difetto) in <em>Riflessi</em>, il personaggio ottiene <em class="stat">1 punto</em> in <em>Schivata</em>.</p>
         <p>Questi punti si sottraggono alla probabilità di <em>successo critico</em> di un avversario che ha come bersaglio il personaggio.</p>
-        <p>Se il punteggio di <em>Schivata</em> del bersaglio è maggiore della probabilità di <em>successo critico</em> dell'attaccante, la differenza rappresenta la <em>probabilità di schivare</em>; la meccanica è identica a quella dei <em>risultati critici</em>: se l'unità della prova è minore o uguale alla <em>probabilità di schivare</em>, l'attacco si considera <em>schivato</em>.</p>
+        <p>Se il punteggio di <em>Schivata</em> del bersaglio è maggiore della probabilità di <em>successo critico</em> dell'attaccante, la differenza rappresenta la <em>probabilità di schivare</em>.</p>
+        <p>La meccanica è identica a quella dei <em>risultati critici</em>: se l'unità della prova è minore o uguale alla <em>probabilità di schivare</em>, l'attacco si considera <em>schivato</em>.</p>
         <p>Un attacco <em>schivato</em> <em class="plus">riduce di 1 livello</em> il successo della prova: sarebbe a dire, un successo normale diviene un <em>successo marginale</em>, ed un <em>successo marginale</em> diviene un fallimento.</p>
         
         <h2>Coperture</h2>
         <p>Esistono due tipi di <em>coperture</em>: <em>copertura parziale</em> e <em>copertura totale</em>. La prima conferisce un <em class="plus">bonus di +20</em> alla <em>Difesa</em>, la seconda un <em class="plus">bonus di +40</em>.</p>
         <p>Un <em>difensore</em> si trova <em class="stat">in copertura</em> rispetto ad un determinato <em>attaccante</em>, se, al momento dell'<em>Attacco</em>, questi si trova subito dietro una <em>copertura</em> ed un piano proiettato da questa interseca la <em>linea visiva</em> dell'<em>Attaccante</em>.</p>
         <p>Un <em>Attacco</em> contro un bersaglio <em class="stat">esposto</em> (non in <em>copertura</em>), ottiene un <em class="plus">bonus di +3</em> alla <em>possibilità di successo critico</em>.</p>
+        
+        <h3>Affacciarsi</h3>
+        <p>Se l'attaccante è in <em>copertura</em> rispetto al bersaglio, ed una posizione adiacente alla posizione attuale dell'attaccante è libera, l'attaccante può <em>affacciarsi</em>, e la sua <em>linea visiva</em> viene calcolata a partire da quella posizione.</p>
         
         <h2>Ferite</h2>
         <p>Un personaggio può subire un numero di <em>ferite</em> pari al proprio valore di <em>Resistenza</em> prima di rischiare la vita. Ogni <em>ferita</em> subita, conferisce al personaggio una <em class="minus">penalità di 5 punti</em> a tutte le <em>prove</em>.</p>
@@ -196,6 +204,12 @@
         
         <h2>Turno</h2>
         <p>Un <em>turno</em> si conclude quando tutti i partecipanti alla scena hanno esaurito i propri <em>punti azione</em>. Tutti gli effetti collaterali si risolvono alla fine del turno.</p>
+        
+        <h2>Ordine di Azione</h2>
+        <p>I personaggi partecipanti alla scena agiscono in un turno in ordine decrescente di <em>Riflessi</em>.</p>
+        <p>Personaggi con un punteggio uguale di <em>Riflessi</em>, agiscono in ordine decrescente in base al loro punteggio di <em>Focus</em>.</p>
+        <p>Un personaggio può decidere di <em>ritardare</em> il dispendio di uno o più <em>punti azione</em> alla fine del turno. Se lo fa, la sua posizione nel turno rimane quella fintanto che non <em>ritarda</em> di nuovo.</p>
+        <p>Se più personaggi scelgono di <em>ritardare</em> alla fine del turno, l'ordine delle loro azioni è definito in maniera crescente in base ai <em>Riflessi</em>.</p>
       </section>
       <section id="section-status-conditions">
         <h1>Condizioni alterate</h1>
@@ -248,7 +262,10 @@
               </span>
               
               <p>
-                Un personaggio può <em>muoversi</em> per un numero di metri pari al suo <em>Movimento</em>. Un personaggio che spende almeno <em class="stat">2 PA</em> in un <em>turno</em> in questa azione, ottiene <em class="plus">un bonus di 20 punti</em> alla <em>Difesa</em> contro <em>Sorvegliare</em>.
+                Un personaggio può <em>muoversi</em> per un numero di metri pari al suo <em>Movimento</em>. Un personaggio che spende almeno <em class="stat">2 PA</em> in un <em>turno</em> in questa azione, ottiene <em class="plus">un bonus di 20 punti</em> alla <em>Difesa</em> contro <em>Attacchi di reazione</em>.
+              </p>
+              <p>
+                Un personaggio che intende terminare il proprio movimento <em>esposto</em>, subisce <em>Attacchi di reazione</em> da parte di tutti gli avversari che possono effettuarne (cioè, il personaggio deve essere entro un semicerchio determinato dal loro punteggio di <em>Visione</em>, e devono avere <em>Attacchi di reazione</em> disponibili).
               </p>
             </card>
           </li>
@@ -274,7 +291,7 @@
               </span>
               
               <p>
-                Un personaggio può utilizzare la proprio arma per eseguire un <em>attacco</em>. Per usare un’arma a distanza deve avere sufficienti munizioni ed il bersaglio deve trovarsi ad almeno <em class="stat">2 metri di distanza</em>. Armi in mischia possono attaccare entro <em class="stat">1 metro di distanza</em> (anche in diagonale).
+                Un personaggio può utilizzare la proprio arma per eseguire un <em>attacco</em>. Per usare un’arma a distanza deve avere sufficienti munizioni ed il bersaglio deve trovarsi ad almeno <em class="stat">3 metri di distanza</em>. Armi in mischia possono attaccare entro <em class="stat">1 metro di distanza</em> (anche in diagonale).
               </p>
               <p>
                 Le armi a distanza possono colpire fino ad un raggio massimo pari al punteggio di <em>Visione</em>, tranne dove diversamente specificato.
@@ -324,7 +341,7 @@
               </span>
               
               <p>
-                Un personaggio può coprire un’area semicircolare pari al suo punteggio di <em>Visione</em> o pari alla gittata della sua arma, quale che sia maggiore. Il personaggio eseguirà un’azione di <em>Reazione</em> con <em class="minus">una penalità di -20</em> verso il primo bersaglio ostile che si muove entro questo raggio e non usufruisce di <em>Copertura totale</em>. Questi attacchi non possono effettuare <em>successi critici</em>.
+                Un personaggio può coprire un’area semicircolare pari al suo punteggio di <em>Visione</em> o pari alla gittata della sua arma, quale che sia minore. Il personaggio eseguirà un’azione di <em>Reazione</em> con <em class="minus">una penalità di -20</em> verso il primo bersaglio ostile che si muove entro questo raggio e non usufruisce di <em>Copertura totale</em>. Questi attacchi non possono effettuare <em>successi critici</em>.
               </p>
               <p>
                 Tranne quando diversamente specificato, una <em>Reazione</em> consiste in un <em>Attacco</em>.
@@ -356,7 +373,7 @@
               </span>
               
               <p>
-                Un personaggio che esegue questa azione <em class="minus">dimezza il suo punteggio</em> di <em>Visibilità</em> e <em>Movimento</em>, subisce <em class="minus">una penalità di -20</em> alla <em>Mira</em>, ma <em class="plus">raddoppia il suo bonus</em> di <em>Copertura</em>. Dura fino all’inizio del prossimo <em>turno</em> del personaggio.
+                Un personaggio che esegue questa azione <em class="minus">dimezza il suo punteggio</em> di <em>Visione</em> e <em>Movimento</em>, subisce <em class="minus">una penalità di -20</em> alla <em>Mira</em>, ma <em class="plus">raddoppia il suo bonus</em> di <em>Copertura</em>. Dura fino all’inizio del prossimo <em>turno</em> del personaggio.
               </p>
             </card>
           </li>
@@ -436,8 +453,25 @@
         <div 
           v-for="(group, i) in $options.groupedSkills"
           class="skill-group-compact"
+          :id="`skills-level-${(i++, i)}`">
+          <h2>
+            Livello {{ i }}
+            <md-chip>
+              {{2.5 * (i * i - i + 6) }}
+            </md-chip>
+          </h2>
+          <skill-card
+            v-for="skill in group"
+            :skill="skill"
+            :compact="compactAbilities"
+          />
+        </div>
+        <hr />
+        <div 
+          v-for="(group, i) in $options.skillsByTag"
+          class="skill-group-compact"
           :id="`skills-level-${i + 1}`">
-          <h2>Livello {{ i + 1 }}</h2>
+          <h2>{{ i }}</h2>
           <skill-card
             v-for="skill in group"
             :skill="skill"
@@ -451,6 +485,7 @@
         <p>Queste competenze determinano in che modo il personaggio può agire efficacemente nel mondo: se un personaggio non possiede alcuna competenza in un determinato campo, non può in genere tentare di interagire con quel campo (un personaggio che non possiede competenze di <em>Atletica</em> non può tentare di scalare una parete rocciosa).</p>
         <p>In caso contrario, il personaggio può effettuare una <em>Prova di Focus</em> per ottenere il risultato che desidera, con dei modificatori appropriati per la situazione (es. il personaggio non ha tempo per concentrarsi, è il suo primo tentativo in qualcosa di completamente nuovo, non ha attrezzi adatti etc.).</p>
         <p>Ogni <em>Talento</em> ha tre livelli di competenza: al <em class="stat">primo</em>, il personaggio è un professionista del settore; al <em class="stat">secondo</em>, il personaggio è un'autorità del settore (ed ottiene <em class="plus">un bonus di +15</em> alle <em>prove</em>); al <em class="stat">terzo</em>, è maestro assoluto in quel campo (ed ottiene <em class="plus">un bonus di +30</em> alle <em>prove</em>).</p>
+        <p>Ogni livello di competenza da accesso ad una <em>abilità</em> che il personaggio può ottenere spendendo <em>punti esperienza</em>. La prima <em>abilità</em> conta come una di <em class="stat">primo livello</em>, la seconda come una di <em class="stat">terzo livello</em>, la terza come una di <em class="stat">quinto livello</em>.</p>
         <p>Personaggi con competenze nel medesimo settore, possono collaborare e conferirsi vicendevolmente dei <em class="plus">bonus</em> alla <em>prova</em>.</p>
         <ul>
           <li v-for="talent in $options.talents">
@@ -694,6 +729,378 @@
           </ul>
         </section>
       </section>
+      <section id="section-advanced-combat-mechanics">
+        <h1>Meccaniche di combattimento avanzate</h1>
+        
+        <section>
+          <h2>Combattimento in mischia ed in corpo a corpo</h2>
+
+          <p>Un personaggio armato con un <em>arma da mischia</em> può ingaggiare bersagli entro la portata dell'arma. Quando non diversamente specificato, la portata di un'arma da mischia è di <em class="stat">1 metro</em>.</p>
+          <p>Gli attacchi in mischia non possono colpire bersagli in <em>copertura totale</em>, e non possono affacciarsi. Inoltre, non godono dei bonus alla <em>percentuale di successo critico</em> contro bersagli <em>esposti</em>.</p>
+
+          <h3>Combattimento senz'armi</h3>
+          <p>Personaggi dotati del talento <em>Atletica</em> possono ingaggiare gli avversari in combattimento senz'armi.</p>
+          <p>Il personaggio può esprimere questa abilità utilizzando tre azioni aggiuntive:</p>
+          <ul class="advanced-combat-list">
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-athletics-melee.png" />
+                  </div>
+
+                  Attacco senz'armi
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Danni">
+                        <i class="material-icons">gps_fixed</i>
+                        <span class="modifier-value">1</span>
+                    </li>
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">1</span>
+                    </li>
+                    <li
+                      class="modifier tooltip"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      1    
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Contro bersagli biologici, il danno si intende <em>penetrante</em>.
+                </p>
+
+                <div slot="footer">
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il bersaglio viene <em>Confuso</em> per <em class="stat">1 turno</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>L'attacco infligge il medesimo danno.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-athletics-immobilize.png" />
+                  </div>
+
+                  Immobilizzare
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip ends-turn"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Atletica</em>, modificata dai <em>Riflessi</em> del bersaglio ed una <em class="minus">penalità di -20</em>. Se il bersaglio è armato di un'arma capace di colpire bersagli adiacenti, la <em class="minus">penalità aumenta a -40</em>.
+                </p>
+                <p>
+                  In caso di successo, entrambi i contendenti sono considerati <em class="stat">immobilizzati</em>.
+                </p>
+                <p>
+                  Personaggi con <em>Atletica</em> possono usare questa azione per tentare di liberarsi dalla presa, o tentare di liberare qualcun'altro.
+                </p>
+                <p>
+                  Attacchi a distanza contro personaggi ingaggiati in lotta, colpiscono il bersaglio non prefissato in caso di <em>fallimento critico</em>, ed infliggono <em class="stat">metà dei danni</em> ad entrambi i contendenti, in casi di <em>successo o fallimento marginale</em>.
+                </p>
+
+                <div slot="footer">
+                  <p>
+                    <i class="material-icons">announcement</i>
+                    Tentativi di <em>Immobilizzare</em> bersagli a loro volta dotati del talento <em>Atletica</em> subiscono una <em class="minus">ulteriore penalità di -15</em> per ogni livello di differenza con il talento dell'avversario.
+                  </p>
+                  <p>
+                    <i class="material-icons">announcement</i>
+                    Queste regole si intendono per bersagli di pressappoco la medesima taglia (due esseri umani); in caso di grosse differenze di taglia, i modificatori alla prova variano.
+                  </p>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il personaggio non è considerato <em>Esposto</em> e non perde il bonus di <em>Riflessi</em> alla <em>Difesa</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>L'attacco immobilizza il bersaglio per <em class="stat">1 turno</em>.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-athletics-disarm.png" />
+                  </div>
+
+                  Disarmare
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Atletica</em>, modificata dai <em>Riflessi</em> del bersaglio ed una <em class="minus">penalità di -20</em>.
+                </p>
+                <p>
+                  In caso di successo, il bersaglio perde la propria arma che finisce al suolo in una direzione casuale.
+                </p>
+
+                <div slot="footer">
+                  <p>
+                    <i class="material-icons">announcement</i>
+                    Tentativi di <em>Disarmare</em> bersagli a loro volta dotati del talento <em>Atletica</em> subiscono una <em class="minus">ulteriore penalità di -15</em> per ogni livello di differenza con il talento dell'avversario.
+                  </p>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>L'attaccante può decidere di tenere in mano l'arma così disarmata.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>L'arma viene disabilitata/resa scomoda da utilizzare, pur rimanendo nelle mani del bersaglio: il bersaglio dovrà effettuare una azione di <em>Utilizzare oggetti (Estrarre/Ricaricare)</em> per utilizzarla.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Furtività in combattimento</h2>
+          <p>Un personaggio dotato del talento <em>Infiltrazione</em> è in grado di rimanere nascosto anche nelle situazioni più agitate.</p>
+          <p>Se il personaggio non è ancora stato identificato come ostile, può effettuare una <em>prova di Infiltrazione</em>. In caso di successo entra in stato di <em>Occultamento</em>.</p>
+          <p>Un personaggio in stato di <em>Occultamento</em> non può essere bersaglio diretto di <em>attacchi</em>, <em>oggetti</em> o <em>abilità</em>, ottiene un <em class="plus">bonus di +1</em> alla <em>probabilità di successo critico</em> e <em class="plus">non subisce penalità</em> sugli <em>Attacchi di reazione</em>.</p>
+          <p>Le <em>coperture parziali</em> bloccano la <em>linea visiva</em> contro un personaggio <em>Accovacciato</em> ed <em>occultato</em>.</p>
+          
+          <h3>Stati di attenzione</h3>
+          <p>Un personaggio può essere in uno tra tre stati di attenzione:</p>
+          <ol>
+            <li><em>Distratto</em>: il personaggio è in questo stato quando non percepisce alcun pericolo intorno a sé. Questo è lo stato normale della maggior parte dei personaggi.</li>
+            <li><em>Vigile</em>: il personaggio sta consapevolmente tenendo d'occhio la situazione in cerca di potenziali pericoli. Un personaggio è in questo stato quando, per esempio, è di guardia.</li>
+            <li><em>All'erta</em>: il personaggio è consapevole della presenza di un pericolo imminente intorno a sé. Per esempio quando già ingaggiato in uno scontro a fuoco, o quando ha udito degli spari.</li>
+          </ol>
+          <p>A seconda del suo stato di attenzione, un personaggio ha un <em>raggio di consapevolezza</em> intorno a sé pari al suo punteggio di <em>Visione</em> per ogni livello di attenzione.</p>
+          
+          <h3>Rottura dell'occultamento</h3>
+          <p>Quando un personaggio è in <em>occultamento</em>, rimane in questo stato fin quando:</p>
+          <ol>
+            <li>Effettua una <em>azione offensiva</em>.</li>
+            <li>Effettua un <em>Movimento</em> all'interno del <em>raggio di consapevolezza</em> ed in <em>linea visiva</em> di un personaggio neutrale o ostile.</li>
+            <li>È <em>esposto</em> ed entro il <em>raggio di consapevolezza</em> di un personaggio neutrale o ostile.</li>
+            <li>Produce rumori o effetti chiaramente individuabili (rompe una finestra, accende un lightstick, etc.</li>
+          </ol>
+          <p>Una volta rotto lo stato di <em>occultamento</em>, il personaggio è individuato da tutti i personaggi entro il raggio visivo (cioé tre volte il punteggio di <em>Visione</em>), e non può rientrare in quello stato fin quando che non passi almeno <em class="stat">un turno</em> al di fuori di questo raggio di ogni personaggio ostile o neutrale.</p>
+        </section>
+        <section>
+          <h2>Hacking</h2>
+          <p>Un personaggio dotato del talento <em>Interfacing</em> può tentare di hackare bersagli robotici in combattimento; per farlo, il personaggio deve averne l'accesso fisico o essere connesso al medesimo network.</p>
+          <p>In tal caso ha due scelte:</p>
+          
+          <ul class="advanced-combat-list">
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-interfacing-hack-disable.png" />
+                  </div>
+
+                  Hack (Disabilitare)
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip ends-turn"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                    <li
+                      class="modifier tooltip" 
+                      data-tooltip="Cooldown">
+                      <i class="material-icons">settings_backup_restore</i>
+                      <span class="modifier-value">2</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Interfacing</em> modificata dalla <em>Sicurezza</em> del bersaglio.
+                </p>
+                <p>
+                  In caso di successo, il bersaglio è <em>Immobilizzato</em> per <em class="stat">1 turno + 1 turno per ogni livello di competenza</em> del personaggio in <em>Interfacing</em>.
+                </p>
+                <p>
+                  Un personaggio può usare questa azione per riabilitare un bersaglio robotico <em>Immobilizzato</em>.
+                </p>
+
+                <div slot="footer">
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il bersaglio ottiene un <em class="plus">bonus di +20</em> alla <em>Sicurezza</em> ed un <em class="plus">bonus di +5</em> a <em>Mobilità</em> e <em>Riflessi</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il bersaglio rimane <em>Immobilizzato</em> per <em class="stat">1 turno + 2 turni per ogni livello di competenza del personaggio</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>Il bersaglio rimane <em>Immobilizzato</em> per <em class="stat">1 turno</em>.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-interfacing-hack-control.png" />
+                  </div>
+
+                  Hack (Controllare)
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip ends-turn"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                    <li
+                      class="modifier tooltip" 
+                      data-tooltip="Cooldown">
+                      <i class="material-icons">settings_backup_restore</i>
+                      <span class="modifier-value">2</span>
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Interfacing</em> modificata dalla <em>Sicurezza</em> del bersaglio e con un'ulteriore <em class="minus">penalità di -30</em>.
+                </p>
+                <p>
+                  In caso di successo, il bersaglio può essere controllato dal personaggio per <em class="stat">1 turno per ogni livello di competenza</em> di questi in <em>Interfacing</em>.
+                </p>
+                <p>
+                  Controllare un bersaglio robotico per 1 turno costa <em class="stat">1 punto azione</em> del personaggio, indipendentemente dal numero di punti azione del bersaglio (il primo turno questo punto azione viene speso automaticamente, se possibile). Se il personaggio non intende controllare il bersaglio, per quel turno questi ripeterà l'ultimo comando del personaggio se possibile, altrimenti rimarrà immobile.
+                </p>
+                <p>
+                  Un personaggio può usare questa azione per riabilitare un bersaglio robotico <em>Immobilizzato</em>.
+                </p>
+
+                <div slot="footer">
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il bersaglio ottiene un <em class="plus">bonus di +20</em> alla <em>Sicurezza</em> ed un <em class="plus">bonus di +5</em> a <em>Mira</em>, <em>Mobilità</em> e <em>Riflessi</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il bersaglio rimane <em>Controllato</em> per <em class="stat">2 turni per ogni livello di competenza del personaggio</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>Il bersaglio viene <em>Confuso</em> per <em class="stat">1 turno</em>.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+          </ul>
+        </section>
+      </section>
     </div>
   </div>
 </template>
@@ -713,7 +1120,7 @@ import AttributeInput from "../../../../src/assets/script/components/AttributeIn
 import equipment from "_equipment";
 import mechanics from "_mechanics";
 import skills from "_skills";
-
+import { rulebookVersion } from '../../../../package.json';
   
 const ITEM_ICONS = {
   "Ammo": "ammo",
@@ -721,10 +1128,24 @@ const ITEM_ICONS = {
   "Drugs": "pill",
   "Bioware": "dna",
   "Grenades": "ornament",
+  "Tools": "wrench",
   "Weapon Mods": "pistol"
 }
 
 const STARTING_CHARACTER_POINTS = 200;
+  
+const skillsByTag = skills.skills
+.filter(x => x.requirements.indexOf("*9") !== -1)
+.reduce((acc, skill) => {
+  skill.tags.forEach((tag) => {
+      if(acc[tag])
+          acc[tag].push(skill);
+      else
+          acc[tag] = [skill];
+  });
+
+  return acc;
+}, {});
   
 export default {
   name: "book",
@@ -776,8 +1197,10 @@ export default {
   itemIcons: ITEM_ICONS,
   mechanics: mechanics,
   groupedSkills: groupedSkills,
+  skillsByTag: skillsByTag,
   skills: skills.skills,
-  talents: skills.talents
+  talents: skills.talents,
+  _rulebookVersion: rulebookVersion
 }
 </script>
 
@@ -830,6 +1253,13 @@ export default {
     margin: $line-height * 2 0;
   }
   
+  section {
+    > h1 {
+      border-bottom:  1px solid rgba($blue-color, 0.25);
+      padding-bottom: 0.5em;
+    }
+  }
+  
   ul {
     padding: 0;
     margin: $line-height * 2 0;
@@ -842,6 +1272,7 @@ export default {
   }
 
   .ability-list,
+  .advanced-combat-list,
   .armor-list,
   .immortality-services,
   .item-list,

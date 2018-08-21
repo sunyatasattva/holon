@@ -153,6 +153,14 @@
       "name": "Disorientamento"
     },
     {
+      "description": "<p>Un personaggio <em>Immobilizzato</em> non può effettuare nessuna <em>Azione</em>, non può usufruire di <em>Coperture</em> e viene pertanto sempre considerato <em>Esposto</em>. Inoltre, <em class=\"minus\">perde il bonus alla Difesa</em> conferito dai <em>Riflessi</em>.</p>",
+      "icon": "accessibility",
+      "id": "immobilization",
+      "modifiers": {
+      },
+      "name": "Immobilità"
+    },
+    {
       "description": "<p>Un personaggio <em>Intossicato</em> subisce <em class=\"minus\">1 ferita</em> alla fine di ogni <em>turno</em>.</p>",
       "icon": "bubble_chart",
       "id": "intoxication",

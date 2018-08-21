@@ -8,16 +8,9 @@ export function parseRequirements(requirements, curr) {
   requirements.push(curr);
 
   if(
-    typeof curr === "string" 
-    && curr.includes("*")
+    typeof curr === "string"
+    && !curr.includes("*")
   ) {
-    requirementLevel = curr[1] - 1;
-
-    for(requirementLevel; requirementLevel > 0; requirementLevel--) {
-      requirements.push(`*${requirementLevel}`)
-    }
-  }
-  else if(typeof curr === "string") {
     skill = skills.skills.find(skill => skill.id === curr);
     
     try {

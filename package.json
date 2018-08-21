@@ -1,7 +1,7 @@
 {
   "name": "holon",
   "version": "1.0.0-beta.1",
-  "rulebookVersion": "2.0.0-beta.3",
+  "rulebookVersion": "2.0.0-beta.4",
   "description": "Repository for interactive Holon-related everything.",
   "main": "index.js",
   "scripts": {
