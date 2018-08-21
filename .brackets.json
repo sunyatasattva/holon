@@ -1,0 +1,9 @@
+{
+  "jwolfe.file-tree-exclude.list": [
+    "node_modules",
+    ".git",
+    "dist",
+    "tmp",
+    "wiki"
+  ]
+}

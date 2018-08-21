@@ -3,8 +3,8 @@
     <md-field>
       <label for="team">Team</label>
       <md-select name="team" id="team" v-model="team">
-        <md-option value="0">Allies</md-option>
-        <md-option value="1">Enemies</md-option>
+        <md-option :value="0">Allies</md-option>
+        <md-option :value="1">Enemies</md-option>
       </md-select>
     </md-field>
     <md-field>
@@ -16,7 +16,7 @@
         <md-option 
           v-for="character of characters"
           :value="character['.key']">
-          {{ character.name }}
+          {{ character.attributes.name }}
         </md-option>
       </md-select>
     </md-field>
@@ -99,6 +99,69 @@
           :model.sync='attributes.toughness' />
       </section>
     </section>
+    <section class="equipment">
+      <section class="weapons">
+        <md-field>
+          <label for="weapons">Weapons</label>
+          <md-select
+           id="weapons"
+           multiple
+           v-model="selectedWeaponsTypes">
+            <md-option 
+              v-for="weapon in Equipment.weapons"
+              :value="weapon.type">
+              {{ weapon.type }}
+            </md-option>
+          </md-select>
+          <md-chip v-if="selectedWeapons.length">
+            {{ selectedWeapons.reduce((sum, i) => sum + i.cost, 0) }}
+          </md-chip>
+        </md-field>
+      </section>
+      <section class="armors">
+        <md-field>
+          <label for="armors">Armor</label>
+          <md-select
+           id="armors"
+           v-model="selectedArmorType"
+           >
+            <md-option
+             v-for="armor in Equipment.armors"
+             :value="armor.type"
+             >
+              {{ armor.type }}
+            </md-option>
+          </md-select>
+          <md-chip v-if="selectedArmor">
+            {{ selectedArmor.cost }}
+          </md-chip>
+        </md-field>
+      </section>
+      <section class="items">
+        <item-selection-menu
+        :items="equipment.items" 
+        :showAllItems="true"
+        @update="updateInventory" />
+      </section>
+    </section>
+    <section class="skills">
+      <md-field>
+        <label for="skills-select">Skills</label>
+        <md-select
+         id="skills-select"
+         v-model="skills"
+         multiple
+         >
+          <md-optgroup
+           v-for="(group, i) in Skills"
+           :label="`Level ${i + 1}`">
+            <md-option v-for="skill in group" :value="skill.id">
+              {{ skill.name }}
+            </md-option>
+          </md-optgroup>
+        </md-select>
+      </md-field>
+    </section>
     <md-button
       v-if='!isAddingObject'
       class='md-raised md-primary'
@@ -118,64 +181,114 @@
 
 <script>
 import AttributeInput from './AttributeInput.vue';
+import ItemSelectionMenu from './ItemSelectionMenu.vue';
 import Network from '../modules/networking';
+
+import { groupedSkills } from '../../../../rulebook/src/assets/script/lib/utils';
+
+import Equipment from '_equipment';
   
 const db = Network.database();
 
 export default {
   name: 'character-creation',
   components: {
-    AttributeInput
+    AttributeInput,
+    ItemSelectionMenu
   },
   computed: {
     characterPoints() {
       return Object.values(this.attributes)
         .reduce(
-          (sum, curr) => sum + curr.cost,
+          (sum, curr) => sum + curr.totalCost,
           0
         );
+    },
+    // @fixme this is due to a bug in vue-material
+    // can't assign objects to select value
+    selectedArmor() {
+      let armor = Equipment.armors.find(
+        (item) => item.type === this.selectedArmorType
+      );
+      
+      if(armor) {
+        this.equipment.armor = armor;
+      }
+      
+      return armor; 
+    },
+    selectedWeapons() {
+      let weapons = Equipment.weapons.filter(
+        (item) => this.selectedWeaponsTypes.includes(item.type)
+      );
+      
+      if(weapons.length) {
+        weapons = weapons.map((weapon) => {
+          return {
+            ...weapon,
+            currentAmmo: weapon.ammo
+          }
+        });
+        
+        this.equipment.weapons = weapons;
+        this.equipment.activeWeapon = weapons[0];
+      }
+      
+      return weapons;
     }
   },
   data() {
     return {
+      Equipment: Equipment,
+      Skills: groupedSkills,
+      
       attributes: {
         action: {
-          cost: 0,
+          totalCost: 0,
           value: 2
         },
         aim: {
-          cost: 0,
+          totalCost: 0,
           value: 10
         },
         movement: {
-          cost: 0,
+          totalCost: 0,
           value: 6
         },
         reflexes: {
-          cost: 0,
+          totalCost: 0,
           value: 0
         },
         resistance: {
-          cost: 0,
+          totalCost: 0,
           value: 3
         },
         toughness: {
-          cost: 0,
+          totalCost: 0,
           value: 0
         },
         vision: {
-          cost: 0,
+          totalCost: 0,
           value: 12
         },
         will: {
-          cost: 0,
+          totalCost: 0,
           value: 20
         }
       },
+      equipment: {
+        armor: null,
+        items: [],
+        weapons: []
+      },
+      skills: [],
       
       loadedCharacterId: null,
       name: '',
-      team: 0
+      team: 0,
+      
+      selectedArmorType: '',
+      selectedWeaponsTypes: []
     }
   },
   firebase: {
@@ -193,18 +306,30 @@ export default {
         (char) => char['.key'] === id
       );
       
+      if(!character)
+        return;
+      
       console.log('Loaded character: ', character);
       
-      // @fixme !! Bleagh!
-      this.attributes.action.value = character.action;
-      this.attributes.aim.value = character.aim;
-      this.attributes.movement.value = character.movement;
-      this.attributes.reflexes.value = character.reflexes;
-      this.attributes.resistance.value = character.resistance;
-      this.attributes.toughness.value = character.toughness;
-      this.attributes.vision.value = character.vision;
-      this.attributes.will.value = character.will;
-      this.name = character.name;
+      Object.keys(character.baseAttributes)
+        .forEach((attr) => {
+          this.attributes[attr].value = character.baseAttributes[attr];
+        });
+      
+      this.selectedArmorType = character.equipment.armor.type;
+      this.selectedWeaponsTypes = character.equipment.weapons
+        .map(weapon => weapon.type);
+      this.name = character.attributes.name;
+
+      if(character.equipment.items)
+        this.updateInventory(character.equipment.items);
+      
+      if(character.attributes.skills)
+        this.skills = character.attributes.skills.map(skill => skill.id);
+    },
+    updateInventory(inventory) {
+      this.equipment.items = Object.values(inventory)
+        .filter(item => item.value > 0);
     }
   },
   props: ['isAddingObject']

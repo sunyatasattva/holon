@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { skills } from "../../../../rules/skills.json";
+import { skills } from "_skills";
 
 export default {
   name: "skill",

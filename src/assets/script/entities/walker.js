@@ -1,10 +1,11 @@
 const fabric = require('fabric').fabric;
 const extend = fabric.util.object.extend;
 const Entity = require('./entity');
+const Label  = require('./label');
 
-// I think I will regret this
-import Vue from 'vue';
+import xorBy from 'lodash.xorby';
 
+import Mechanics from '_mechanics';
 import Rules from '../modules/rules';
 import { prototype as Cover } from './cover'; 
 
@@ -15,7 +16,16 @@ import { prototype as Cover } from './cover';
  * @mixes fabric.Circle.prototype
  */
 const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
-  attributes: {},
+  attributes: {
+    skills: [],
+    status: []
+  },
+  equipment: {
+    activeWeapon: {},
+    armor: {},
+    items: [],
+    weapons: []
+  },
   
   coveredSides: {},
   fullyCoveredColor: Cover._coverOpts.fullFill,
@@ -50,12 +60,24 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   initialize(options = {}) {
     this.callSuper('initialize', options);
 
+    this.attributes.skills = this.attributes.skills || [];
+    this.attributes.status = this.attributes.status || [];
     this.attributes.wounds = this.attributes.wounds || 0;
+    this.calculateModifiedAttributes();
     this.set('defaultFill', this.teamFills[this.team]);
     this.set('fill', this.defaultFill);
     this._allowRotationOnly();
     this.set('allowedLeft', this.left);
     this.set('allowedTop', this.top);
+    
+    if(this.attributes.skills.length)
+      this.attributes.skills = this.attributes.skills
+        .map((skill) => {
+          if(skill.cooldown && !skill.currentCooldown)
+            return { ...skill, currentCooldown: false }
+          else
+            return skill;
+        });
     
     if(this.showRangeOnSelected) {
       this.on('selected', () => {
@@ -75,12 +97,38 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.on('modified', () => {
       // @todo implement "moved" event
       this._updateCoverStatus();
+      // @todo labels should be grouped
+      this.displayStatus();
     });
   },
   
   // @todo refactor this in a mixin
   calculateChanceToHit(target) {
     return Rules.calculateChanceToHit(this, target);
+  },
+  
+  calculateModifiedAttributes() {
+    let equipment = [
+      this.equipment.armor,
+      this.equipment.activeWeapon
+    ];
+    
+    this.resetBaseAttributes();
+
+    equipment
+      .filter(x => x)
+      .forEach((item) => {
+        let modifiers = item.modifiers;
+
+        if(modifiers) {
+          for(
+            let [attr, mod] of 
+            Object.entries(modifiers)
+          ) {
+            this.attributes[attr] += mod;
+          }
+        }
+      });
   },
   
   calculateMovementRange() {
@@ -137,9 +185,82 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     });
   },
   
+  displayStatus() {
+    let statii = this.attributes.status,
+        icons;
+    
+    if(this.statusLabel)
+      this.canvas.remove(this.statusLabel);
+    
+    if(!statii || !statii.length)
+      return;
+    
+    icons = statii.map((status) => {
+      let icon;
+
+      try {
+        icon = Mechanics.statii
+          .find( _ => _.id === status.id )
+          .icon;
+        
+        return icon;
+      } catch (e) {
+        console.error(`Status ${status} is invalid.`);
+      }
+    });
+
+    this.statusLabel = new Label('', {
+      icon: { icon: icons.join(' ') },
+      left: this.left - this.width / 2,
+      top: this.top - this.height / 2
+    });
+    
+    this.canvas.add(this.statusLabel);
+    
+    return this;
+  },
+  
+  executeCommand(command) {
+    console.log(`${this.attributes.name} is executing ${command.name}.`);
+    
+    try {
+      command.effects.forEach((effect) => {
+        this[effect.type](...effect.arguments);
+      });
+    } catch(e) {
+      console.warn(`Couldn't execute effects for ${command.name}`);
+    }
+  },
+  
+  getDistanceFrom(target) {
+    let thisCenter = this._calculateCenterCoordinates(),
+        targetCenter;
+    
+    if(target.gridPosition) {
+      targetCenter = target._calculateCenterCoordinates();
+    }
+    else if(target.x && target.y) {
+      targetCenter = target;
+    }
+    else {
+      console.error("Invalid target:", target);
+      
+      return false;
+    }
+    
+    return this.canvas
+        .calculateOctileDistance(thisCenter, targetCenter);
+  },
+  
   getValidTargets() {
     return this.canvas.getActiveObjects('walker')
       .filter(this.isValidTarget.bind(this));
+  },
+  
+  hasStatus(statusId) {
+    return this.attributes.status && this.attributes.status.some(
+      (status) => status.id === statusId
+    )
   },
   
   highlightAllHitChances() {
@@ -166,32 +287,45 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   isWithinVisionRange(target) {
-    let thisCenter = this._calculateCenterCoordinates(),
-        targetCenter;
+    return this.getDistanceFrom(target) <= this.attributes.vision;
+  },
+  
+  reduceCountdowns() {
+    this.attributes.skills
+      .forEach(skill => skill.currentCooldown && skill.currentCooldown--);
     
-    if(target.gridPosition) {
-      targetCenter = target._calculateCenterCoordinates();
-    }
-    else if(target.x && target.y) {
-      targetCenter = target;
-    }
-    else {
-      console.error("Invalid target:", target);
-      
-      return false;
-    }
+    this.attributes.status
+      .forEach((status) => {
+        if(status.duration > 0) {
+          status.duration--;
+          
+          if(status.duration === 0)
+            this.toggleStatus(status);
+        }
+      });
     
-    return this.canvas
-        .calculateOctileDistance(thisCenter, targetCenter) 
-        <= this.attributes.vision;
+    
+    this._update();
+    
+    return this;
+  },
+  
+  resetBaseAttributes() {
+    this.attributes = {
+      ...this.attributes,
+      ...this.baseAttributes
+    };
   },
   
   resetVisualStatus() {
-    this
-      .removeCurrentLabel()
-      ._resetDefaultColor();
-    
-    this.canvas.renderAll();
+    try {
+      this
+        .removeCurrentLabel()
+        ._resetDefaultColor();
+      
+      this.canvas.renderAll();
+    }
+    catch(ok) {}
     
     return this;
   },
@@ -199,15 +333,17 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   setAttribute(attr, val) {
     this.attributes[attr] = val;
     
-    this.fire('modified');
-    this.canvas.fire('object:modified');
+    this._update();
+    
+    return this;
   },
   
   setProp(prop, val) {
     this[prop] = val;
     
-    this.fire('modified');
-    this.canvas.fire('object:modified');
+    this._update();
+    
+    return this;
   },
   
   showMovementRange(showDashing = true) {
@@ -248,9 +384,18 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.highlightedTiles;
   },
   
+  toggleStatus(status) {
+    return this.setAttribute(
+      'status',
+      xorBy( this.attributes.status, [{...status}], 'id' )
+    );
+  },
+  
   toObject: function(props = []) {
     props = props.concat([
       'attributes',
+      'baseAttributes',
+      'equipment',
       'hasActed',
       'isDelaying',
       'showRangeOnSelected',
@@ -288,6 +433,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.on('deselected', () => {
       this.maxMovementRange = this.calculateMovementRange();
     });
+    
+    this.displayStatus();
   },
   
   _resetDefaultColor() {
@@ -323,6 +470,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         left: this.allowedLeft,
         top: this.allowedTop
       });
+  },
+  
+  _update() {
+    this.fire('modified');
+    this.canvas.fire('object:modified');
   },
   
   _updateCoverStatus() {

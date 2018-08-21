@@ -2,6 +2,7 @@
   "armors": [
     {
       "cost": 12,
+      "id": "armor-carapace",
       "modifiers": {
         "movement": -3,
         "resistance": 2,
@@ -11,6 +12,7 @@
     },
     {
       "cost": 4,
+      "id": "armor-kevlarJacket",
       "modifiers": {
         "resistance": 1
       },
@@ -18,6 +20,7 @@
     },
     {
       "cost": 10,
+      "id": "armor-phalanx",
       "modifiers": {
         "movement": -2,
         "resistance": 1,
@@ -27,6 +30,7 @@
     },
     {
       "cost": 8,
+      "id": "armor-tacticalArmor",
       "modifiers": {
         "movement": -3,
         "resistance": 3
@@ -35,6 +39,7 @@
     },
     {
       "cost": 6,
+      "id": "armor-tacticalVest",
       "modifiers": {
         "movement": -1,
         "resistance": 2
@@ -105,6 +110,7 @@
       "cost": 8,
       "description": "Resetta il <em>Cooldown</em> di tutte le <em>abilità</em>.",
       "effects": [],
+      "id": "item-amphetamines",
       "type": "Anfetamine"
     },
     {
@@ -112,6 +118,7 @@
       "cost": 10,
       "description": "L'arma può contenere 2 cartucce di munizioni alla volta (ognuna deve essere <em>Ricaricata</em> separatamente): quando l'arma termina le munizioni, si <em>Ricarica</em> automaticamente.",
       "effects": [],
+      "id": "item-autoLoader",
       "type": "Auto-caricatore"
     },
     {
@@ -119,16 +126,26 @@
       "cost": 6,
       "description": "Conferisce un <em class='plus'>bonus di +10</em> alla <em>Mira</em> quando <em>stabilizza l'arma</em>.",
       "effects": [],
+      "id": "item-bipod",
       "modifiers": {
         "aim": 10
       },
       "type": "Bipiede"
     },
     {
+      "category": "Ammo",
+      "cost": 1,
+      "description": "Permette di ricaricare completamente la propria arma.",
+      "effects": [ "reloadWeapon" ],
+      "id": "item-regularAmmo",
+      "type": "Cartuccia munizioni"
+    },
+    {
       "category": "Weapon Mods",
       "cost": 10,
       "description": "Conferisce un <em class='plus'>bonus di +5</em> alla <em>Visione</em> quando <em>stabilizza l'arma</em>.",
       "effects": [],
+      "id": "item-scope",
       "modifiers": {
         "vision": 5
       },
@@ -139,20 +156,23 @@
       "cost": 10,
       "description": "L'arma può contenere <em class='plus'>2 munizioni in più</em>.",
       "effects": [],
+      "id": "item-highCapacityCartridge",
       "type": "Cartuccia ad alta capacità"
     },
     {
       "category": "Ammo",
       "cost": 1,
-      "description": "Permette di ricaricare completamente la propria arma.",
+      "description": "Permette di ricaricare completamente la propria arma con munizioni che infliggono <em class=\"minus\">1 danno in meno</em>, ma una <em class=\"minus\">penalità cumulativa di -5</em> alla <em>Sicurezza</em> di un bersaglio robotico per <em class=\"stat\">3 turni</em>.",
       "effects": [ "reloadWeapon" ],
-      "type": "Cartuccia munizioni"
+      "id": "item-regularAmmo",
+      "type": "Munizioni Bluescreen"
     },
     {
       "category": "Grenades",
       "cost": 6,
       "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), infligge <em class='stat'>disorientamento</em> a tutti i soggetti entro un <em class='stat'>raggio di 2mt</em> che non siano in <em>copertura totale</em> rispetto al centro dell'esplosione.",
       "effects": [],
+      "id": "item-flashbang",
       "type": "Flashbang"
     },
     {
@@ -161,6 +181,7 @@
       "description": "Può essere lanciata a <em class='stat'>gittata 10 mt</em> o entro <em>Visione</em> (la minore), emette una nuvola di gas entro un <em class='stat'>raggio di 3mt</em> che dura <em class='stat'>3 turni</em>. Questo gas infligge <em class='stat'>2 danni penetrante</em> e <em>Confusione</em> a tutti i bersagli <em>biologici</em> entro l'area d'effetto.",
       "effects": [
       ],
+      "id": "item-nerveGas",
       "type": "Gas nervino"
     },
     {
@@ -184,6 +205,7 @@
           }
         }
       ],
+      "id": "item-fragGrenade",
       "type": "Granata a frammentazione"
     },
     {
@@ -210,13 +232,23 @@
           ]
         }
       ],
+      "id": "item-smokeGrenade",
       "type": "Granata fumogena"
+    },
+    {
+      "category": "Tools",
+      "cost": 10,
+      "description": "<p>Il personaggio può spendere <em class=\"stat\">1 PA</em> per effettuare un <em>Attacco</em> con il Gremlin contro un bersaglio robotico entro il suo punteggio di <em>Visione</em>. Se l'attacco ha successo, il Gremlin si aggancia al bersaglio.</p>     <p>Una volta agganciato, il Gremlin può infliggere automaticamente <em class=\"stat\">1 danno penetrante per turno</em>, oppure essere utilizzato per <em>hackare</em> il bersaglio a distanza dal personaggio.</p><p>Il Gremlin ha le seguenti caratteristiche: <em class=\"stat\">Resistenza: 2</em>, <em class=\"stat\">Robustezza: 1</em>, <em class=\"stat\">Riflessi: 20</em></p>",
+      "effects": [],
+      "id": "item-gremlin",
+      "type": "Gremlin (Drone)"
     },
     {
       "category": "Weapon Mods",
       "cost": 10,
       "description": "Quando <em>attacca</em> un bersaglio, indipendentemente dall'esito, conferisce un <em class='plus'>bonus di +10</em> alla <em>Mira</em> contro questi per <em class='stat'>1 turno</em>.",
       "effects": [],
+      "id": "item-holoScope",
       "type": "Holo-mirino"
     },
     {
@@ -224,6 +256,7 @@
       "cost": 8,
       "description": "Conferisce un <em class='plus'>bonus di +5</em> alla <em>Mira</em> e permette di conoscere la <em>percentuale di successo</em> dei propri attacchi.",
       "effects": [],
+      "id": "item-holoVisor",
       "modifiers": {
         "aim": 5
       },
@@ -234,6 +267,7 @@
       "cost": 4,
       "description": "<em class='plus'>Cura 4</em> <em>Ferite</em> e ferma il <em>dissanguamento</em> di un personaggio privo di sensi.",
       "effects": [],
+      "id": "item-medkit",
       "type": "Medkit"
     },
     {
@@ -241,6 +275,7 @@
       "cost": 10,
       "description": "Conferisce un <em class='plus'>bonus di +10</em> alla <em>Mira</em>.",
       "effects": [],
+      "id": "item-gunsight",
       "modifiers": {
         "aim": 10
       },
@@ -251,6 +286,7 @@
       "cost": 8,
       "description": "Conferisce un <em class='plus'>bonus di +1</em> alla <em>probabilità di successo critico</em>.",
       "effects": [],
+      "id": "item-precisionModule",
       "modifiers": {
         "criticalHitChance": 1
       },
@@ -280,6 +316,7 @@
           }
         }
       ],
+      "id": "item-molotov",
       "type": "Molotov"
     },
     {
@@ -287,6 +324,7 @@
       "cost": 2,
       "description": "Ricarica completamente l’arma con munizioni che infliggono <em class='plus'>×2 danni</em> in caso di <em>successo critico</em>.",
       "effects": [],
+      "id": "item-hollowPointRounds",
       "type": "Munizioni a punta cava"
     },
     {
@@ -294,6 +332,7 @@
       "cost": 2,
       "description": "Ricarica completamente l’arma con munizioni che infliggono <em class='plus'>2 danni addizionali</em> entro <em class='stat'>5 metri</em>, ma <em class='minus'>2 danni in meno</em> oltre i <em class='stat'>10 metri</em>.",
       "effects": [],
+      "id": "item-flechetteRounds",
       "type": "Munizioni fléchette"
     },
     {
@@ -312,13 +351,23 @@
           }
         }
       ],
+      "id": "item-fmjRounds",
       "type": "Munizioni FMJ"
+    },
+    {
+      "category": "Weapon Mods",
+      "cost": 10,
+      "description": "Se il personaggio è in <em>occultamento</em>, questo stato non viene rotto nel caso di un <em>Attacco</em> che effettua un <em>successo critico</em>.",
+      "effects": [],
+      "id": "item-silencer",
+      "type": "Silenziatore"
     },
     {
       "category": "Drugs",
       "cost": 4,
       "description": "Conferisce un <em class='plus'>bonus di +1</em> alla <em>probabilità di successo critico</em>, <em class='plus'>×1.5</em> al <em>Movimento</em>, <em class='plus'>immunità ai colpi critici</em> quando si è in <em>copertura</em>, e la capacità di <em class='plus'>ignorare la penalità</em> alla <em>Mira</em> dovuta alle <em>ferite</em>. Dura <em class='stat'>3 turni</em>.",
       "effects": [],
+      "id": "item-stimpack",
       "modifiers": {
         "criticalHitChance": 1,
         "movement": "×1.5"
@@ -333,6 +382,7 @@
       "cost": 4,
       "criticalHitChance": 1,
       "damage": "1d4+1",
+      "id": "weapon-bullpop",
       "range": "medium",
       "type": "Bullpop"
     },
@@ -342,6 +392,7 @@
       "cost": 4,
       "criticalHitChance": 1,
       "damage": "1d4+2",
+      "id": "weapon-assaultRifle",
       "modifiers": {
         "movement": -1
       },
@@ -354,6 +405,7 @@
       "cost": 6,
       "criticalHitChance": 2,
       "damage": "2d4",
+      "id": "weapon-heavyAssaultRifle",
       "modifiers": {
         "movement": -2  
       },
@@ -367,6 +419,7 @@
       "criticalHitChance": 0,
       "damage": "1d4",
       "description": "Il <em>Revolver</em> subisce una penalità alla <em>Mira</em> di 10 punti per ogni metro di distanza dal bersaglio dopo il decimo, fino ad un minimo di -50. Il <em>Revolver</em> può colpire bersagli adiacenti all’attaccante. <em>Ricaricare</em> un <em>Revolver</em> richiede <em class='stat'>2 azioni</em>.",
+      "id": "weapon-revolver",
       "falloffPoint": 10,
       "range": "short",
       "type": "Revolver"
@@ -379,6 +432,7 @@
       "damage": "1d6+2",
       "description": "Lo <em>Shotgun</em> conferisce un bonus alla <em>Mira</em> di +50, che diminuisce di 10 punti per ogni metro di distanza dal bersaglio, fino ad un minimo di -50. Lo <em>Shotgun</em> può colpire bersagli adiacenti all’attaccante.",
       "hitChanceModifier": 50,
+      "id": "weapon-shotgun",
       "range": "short",
       "type": "Shotgun"
     },
@@ -391,6 +445,7 @@
       "description": "Il <em>Fucile da cecchino</em> subisce una penalità alla <em>Mira</em> di -50, che diminuisce di 5 punti per ogni metro di distanza dal bersaglio dopo il quarto, fino ad un massimo di +50. Un <em>attacco</em> o <em>sorvegliare</em> con il <em>Fucile da cecchino</em> costa 2 <em>Punti Azione</em>",
       "falloffPoint": 4,
       "hitChanceModifier": -50,
+      "id": "weapon-sniperRifle",
       "modifiers": {
         "movement": -1,
         "vision": 4
@@ -404,6 +459,7 @@
       "cost": 2,
       "criticalHitChance": 0,
       "damage": "1d4+1",
+      "id": "weapon-smg",
       "modifiers": {
         "aim": 5
       },

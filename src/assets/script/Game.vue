@@ -24,12 +24,19 @@
         <md-tab md-label="Details" md-icon="gps_fixed">
           <object-details
             :object='selectedObject'
-            v-on:wound='addWound'
-            v-on:heal='removeWound'
           />
         </md-tab>
         
         <md-tab md-label="Options" md-icon="settings">
+          <section class="vision-options">
+            <h2>Vision options</h2>
+            <md-switch
+               class="md-primary"
+               v-model="options.showHitChance"
+             >
+              Show hit chance
+            </md-switch>
+          </section>
           <section class="turn-options">
             <h2>Turn control options</h2>
             <md-switch
@@ -39,13 +46,39 @@
               Automatically center current character
             </md-switch>
           </section>
-          <md-button
-           class="md-primary md-raised"
-           @click="exportCurrentState"
-           >
-            <md-icon>file_download</md-icon>
-            Export current state
-          </md-button>
+          <section class="save-options">
+            <h2>Save options</h2>
+            <md-switch
+               class="md-primary"
+               v-model="options.autoSync"
+             >
+              Automatically syncronize the state
+            </md-switch>
+            <md-button
+             class="md-primary md-raised"
+             @click="exportCurrentState"
+             >
+              <md-icon>file_download</md-icon>
+              Export current state
+            </md-button>
+            <md-field class="state-upload">
+              <label>
+                Import state
+              </label>
+              <md-file 
+                v-model="options.uploadedState"
+                accept="application/json"
+                @md-change="importStateFromJSON"
+              />
+            </md-field>
+          </section>
+          <section class="version-details">
+            <h2>Version</h2>
+            <div>
+              <strong>App:</strong> <span class="version-tag">{{ $options._appVersion }}</span>
+              <strong>Rules:</strong> <span class="version-tag">{{ $options._rulebookVersion }}</span>
+            </div>
+          </section>
         </md-tab>
       </md-tabs>
     </md-drawer>
@@ -61,16 +94,23 @@
       ref="turnControls"
       :autoPan="options.autoPan"
       :characters="activeObjects.filter(x => x.attributes)"
-      @play="toggleActedState"
+      :currentTurn="currentTurn"
+      @endTurn="endTurn"
+      @play="endCharacterTurn"
+      @resetTurnCounter="resetTurnCounter"
       @select="panToObject" />
+      
+    <command-card v-if="selectedObject.attributes" :character="selectedObject" />
   </div>
 </template>
 
 <script>
 import { fabric } from 'fabric';
+import { version, rulebookVersion } from '../../../package.json';
 import Vue from 'vue';
 import World from './components/World.vue';
 import ObjectDetails from './components/ObjectDetails.vue';
+import CommandCard from './components/CommandCard.vue';
 import CreateObject from './components/CreateObject.vue';
 import TurnControls from './components/TurnControls.vue';
 import Network from './modules/networking';
@@ -82,17 +122,22 @@ export default {
   components: {
     'game-world': World,
     ObjectDetails,
+    CommandCard,
     CreateObject,
     TurnControls
   },
   data() {
     return {
       activeObjects: [],
+      currentTurn: 0,
       editMode: false,
       selectedObject: false,
       options: {
         autoPan: false,
-        isAddingObject: false
+        autoSync: true,
+        isAddingObject: false,
+        showHitChance: true,
+        uploadedState: null
       },
       // @todo maybe generate a better unique ID, 
       // doesn't matter so much
@@ -109,11 +154,17 @@ export default {
     addEntities(entities, save = true) {
       this.activeObjects.push.apply(this.activeObjects, entities);
       
-      if(save)
+      if(save && this.options.autoSync)
         this.saveGame();
     },
-    addWound(target) {
-      target.setAttribute('wounds', target.attributes.wounds + 1);
+    endCharacterTurn(character) {
+      character.setProp('hasActed', !character.hasActed);
+      character.reduceCountdowns();
+    },
+    endTurn() {
+      console.log(`Ending turn ${this.currentTurn}`);
+      
+      this.currentTurn++;
     },
     exportCurrentState() {
       let currentState = this.activeObjects
@@ -125,11 +176,23 @@ export default {
       linkElement.setAttribute('download', `holon-${this.$data._clientID}`);
       linkElement.click();
     },
+    importStateFromJSON(fileList) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => this.loadGame({
+        gameObjects: JSON.parse(e.target.result)
+      });
+      
+      reader.readAsText( fileList.item(0) );
+    },
     loadGame(state) {
       const world = this.$refs.World.canvas;
       this.removeAllActiveObjects();
       
       try {
+        if(!state.gameObjects || !state.gameObjects.length)
+          throw "Invalid state object or state object empty";
+        
         fabric.util.enlivenObjects(
           state.gameObjects, 
           (objs) => {
@@ -139,29 +202,33 @@ export default {
             );
           }
         );
+        
+        this.currentTurn = state.currentTurn;
+        
+        console.log("Saved state loaded:", state);
       }
       catch(e) {
         console.error(
-          "There was an error loading the game", 
+          "There was an error loading the game:", 
           e, 
           state
         );
       }
-      
-      console.log("Saved state loaded:", state);
       
       return this;
     },
     panToObject(object) {
       let canvas = this.$refs.World.canvas,
           zoom = canvas.getZoom(),
-          canvasHeight = canvas.height / zoom,
-          canvasWidth = canvas.width / zoom;
+          canvasHeight = canvas.height,
+          canvasWidth = canvas.width;
       
       canvas.absolutePan({
         x: object.left * zoom - canvasWidth / 2,
         y: object.top * zoom - canvasHeight / 2
       });
+      
+      object.blink();
     },
     removeAllActiveObjects() {
       if(this.activeObjects.length) {
@@ -183,10 +250,13 @@ export default {
 
       console.log('Object removed:', obj);
       
-      return this.saveGame();
+      if(this.options.autoSync)
+        return this.saveGame();
     },
-    removeWound(target) {
-      target.setAttribute('wounds', target.attributes.wounds - 1);
+    resetTurnCounter() {
+      this.currentTurn = 0;
+      
+      return this.saveGame();
     },
     saveGame() {
       let savedState = this.$firebaseRefs.savedState,
@@ -194,6 +264,7 @@ export default {
       
       savedState.update({ 
         clientID: this.$data._clientID,
+        currentTurn: this.currentTurn,
         gameObjects: objs
       });
       
@@ -203,9 +274,6 @@ export default {
     },
     select(object) {
       this.selectedObject = object;
-    },
-    toggleActedState(character) {
-      character.setProp('hasActed', !character.hasActed);
     },
     toggleEditMode() {
       this.$refs.World.toggleEditMode();
@@ -227,11 +295,18 @@ export default {
       else
         this.loadGame(state);
     }
-  }
+  },
+  _appVersion: version,
+  _rulebookVersion: rulebookVersion
 }
 </script>
 
 <style>
+  .md-tabs,
+  .md-tabs-container {
+    height: 100%;
+  }
+  
   #Game {
     overflow: hidden;
     position: relative;
@@ -242,8 +317,14 @@ export default {
     pointer-events: none;
   }
   
+  .md-tab {
+    position: relative;
+    min-height: 100%;
+  }
+  
   .md-tabs-content {
-    overflow: visible;
+    overflow:   visible;
+    min-height: calc(100% - 72px);
   }
   
   .md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
@@ -253,6 +334,32 @@ export default {
   .turn-controls {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 20px;
+  }
+  
+  .version-details {
+    display:  flex;
+    position: absolute;
+    bottom:   0;
+    left:     16px;
+    right:    16px;
+  }
+  
+  .version-details h2,
+  .version-details div {
+    display:   inline-block;
+    flex:      1;
+    font-size: 12px;
+    margin:    0.83em 0;
+  }
+  
+  .version-details div {
+    color:      #959595;
+    flex:       2;
+    text-align: right;
+  }
+  
+  .version-details strong {
+    margin-left: 1em;
   }
 </style>
