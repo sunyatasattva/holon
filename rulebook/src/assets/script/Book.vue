@@ -733,208 +733,208 @@
         <h1>Meccaniche di combattimento avanzate</h1>
         
         <section>
-        <h2>Combattimento in mischia ed in corpo a corpo</h2>
+          <h2>Combattimento in mischia ed in corpo a corpo</h2>
 
-        <p>Un personaggio armato con un <em>arma da mischia</em> può ingaggiare bersagli entro la portata dell'arma. Quando non diversamente specificato, la portata di un'arma da mischia è di <em class="stat">1 metro</em>.</p>
-        <p>Gli attacchi in mischia non possono colpire bersagli in <em>copertura totale</em>, e non possono affacciarsi. Inoltre, non godono dei bonus alla <em>percentuale di successo critico</em> contro bersagli <em>esposti</em>.</p>
+          <p>Un personaggio armato con un <em>arma da mischia</em> può ingaggiare bersagli entro la portata dell'arma. Quando non diversamente specificato, la portata di un'arma da mischia è di <em class="stat">1 metro</em>.</p>
+          <p>Gli attacchi in mischia non possono colpire bersagli in <em>copertura totale</em>, e non possono affacciarsi. Inoltre, non godono dei bonus alla <em>percentuale di successo critico</em> contro bersagli <em>esposti</em>.</p>
 
-        <h3>Combattimento senz'armi</h3>
-        <p>Personaggi dotati del talento <em>Atletica</em> possono ingaggiare gli avversari in combattimento senz'armi.</p>
-        <p>Il personaggio può esprimere questa abilità utilizzando tre azioni aggiuntive:</p>
+          <h3>Combattimento senz'armi</h3>
+          <p>Personaggi dotati del talento <em>Atletica</em> possono ingaggiare gli avversari in combattimento senz'armi.</p>
+          <p>Il personaggio può esprimere questa abilità utilizzando tre azioni aggiuntive:</p>
           <ul class="advanced-combat-list">
-          <li>
-            <card>
-              <span slot="header-main">
-                <div class="icon-container-inner">
-                  <img 
-                    class="skill-icon"
-                    src="src/assets/images/skills-icons/ico-athletics-melee.png" />
-                </div>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-athletics-melee.png" />
+                  </div>
 
-                Attacco senz'armi
+                  Attacco senz'armi
 
-                <ul class="attribute-modifiers">
-                  <li 
-                    class="modifier tooltip" 
-                    data-tooltip="Danni">
-                      <i class="material-icons">gps_fixed</i>
-                      <span class="modifier-value">1</span>
-                  </li>
-                  <li 
-                    class="modifier tooltip" 
-                    data-tooltip="Critico">
-                      <i class="material-icons">new_releases</i>
-                      <span class="modifier-value">1</span>
-                  </li>
-                  <li
-                    class="modifier tooltip"
-                    data-tooltip="Punti azione">
-                    <i class="material-icons">reply_all</i>
-                    1    
-                  </li>
-                </ul>
-              </span>
-              
-              <p>
-                Contro bersagli biologici, il danno si intende <em>penetrante</em>.
-              </p>
-              
-              <div slot="footer">
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Fallimento critico">
-                  <i class="material-icons minus">new_releases</i>
-                  <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Danni">
+                        <i class="material-icons">gps_fixed</i>
+                        <span class="modifier-value">1</span>
+                    </li>
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">1</span>
+                    </li>
+                    <li
+                      class="modifier tooltip"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      1    
+                    </li>
+                  </ul>
                 </span>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Successo critico">
-                  <i class="material-icons plus">new_releases</i>
-                  <span>Il bersaglio viene <em>Confuso</em> per <em class="stat">1 turno</em>.</span>
-                </span>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Fallimento/Successo marginale">
-                  <i class="material-icons">error_outline</i>
-                  <span>L'attacco infligge il medesimo danno.</span>
-                </span>
-              </div>
-            </card>
-          </li>
-          <li>
-            <card>
-              <span slot="header-main">
-                <div class="icon-container-inner">
-                  <img 
-                    class="skill-icon"
-                    src="src/assets/images/skills-icons/ico-athletics-immobilize.png" />
-                </div>
 
-                Immobilizzare
-
-                <ul class="attribute-modifiers">
-                  <li 
-                    class="modifier tooltip" 
-                    data-tooltip="Critico">
-                      <i class="material-icons">new_releases</i>
-                      <span class="modifier-value">2</span>
-                  </li>
-                  <li
-                    class="modifier tooltip ends-turn"
-                    data-tooltip="Punti azione">
-                    <i class="material-icons">reply_all</i>
-                    2    
-                  </li>
-                </ul>
-              </span>
-
-              <p>
-                Il personaggio effettua una <em>prova di Atletica</em>, modificata dai <em>Riflessi</em> del bersaglio ed una <em class="minus">penalità di -20</em>. Se il bersaglio è armato di un'arma capace di colpire bersagli adiacenti, la <em class="minus">penalità aumenta a -40</em>.
-              </p>
-              <p>
-                In caso di successo, entrambi i contendenti sono considerati <em class="stat">immobilizzati</em>.
-              </p>
-              <p>
-                Personaggi con <em>Atletica</em> possono usare questa azione per tentare di liberarsi dalla presa, o tentare di liberare qualcun'altro.
-              </p>
-              <p>
-                Attacchi a distanza contro personaggi ingaggiati in lotta, colpiscono il bersaglio non prefissato in caso di <em>fallimento critico</em>, ed infliggono <em class="stat">metà dei danni</em> ad entrambi i contendenti, in casi di <em>successo o fallimento marginale</em>.
-              </p>
-              
-              <div slot="footer">
                 <p>
-                  <i class="material-icons">announcement</i>
-                  Tentativi di <em>Immobilizzare</em> bersagli a loro volta dotati del talento <em>Atletica</em> subiscono una <em class="minus">ulteriore penalità di -15</em> per ogni livello di differenza con il talento dell'avversario.
+                  Contro bersagli biologici, il danno si intende <em>penetrante</em>.
+                </p>
+
+                <div slot="footer">
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il bersaglio viene <em>Confuso</em> per <em class="stat">1 turno</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>L'attacco infligge il medesimo danno.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-athletics-immobilize.png" />
+                  </div>
+
+                  Immobilizzare
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip ends-turn"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                  </ul>
+                </span>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Atletica</em>, modificata dai <em>Riflessi</em> del bersaglio ed una <em class="minus">penalità di -20</em>. Se il bersaglio è armato di un'arma capace di colpire bersagli adiacenti, la <em class="minus">penalità aumenta a -40</em>.
                 </p>
                 <p>
-                  <i class="material-icons">announcement</i>
-                  Queste regole si intendono per bersagli di pressappoco la medesima taglia (due esseri umani); in caso di grosse differenze di taglia, i modificatori alla prova variano.
+                  In caso di successo, entrambi i contendenti sono considerati <em class="stat">immobilizzati</em>.
                 </p>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Fallimento critico">
-                  <i class="material-icons minus">new_releases</i>
-                  <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
-                </span>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Successo critico">
-                  <i class="material-icons plus">new_releases</i>
-                  <span>Il personaggio non è considerato <em>Esposto</em> e non perde il bonus di <em>Riflessi</em> alla <em>Difesa</em>.</span>
-                </span>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Fallimento/Successo marginale">
-                  <i class="material-icons">error_outline</i>
-                  <span>L'attacco immobilizza il bersaglio per <em class="stat">1 turno</em>.</span>
-                </span>
-              </div>
-            </card>
-          </li>
-          <li>
-            <card>
-              <span slot="header-main">
-                <div class="icon-container-inner">
-                  <img 
-                    class="skill-icon"
-                    src="src/assets/images/skills-icons/ico-athletics-disarm.png" />
-                </div>
-
-                Disarmare
-
-                <ul class="attribute-modifiers">
-                  <li 
-                    class="modifier tooltip" 
-                    data-tooltip="Critico">
-                      <i class="material-icons">new_releases</i>
-                      <span class="modifier-value">2</span>
-                  </li>
-                  <li
-                    class="modifier tooltip"
-                    data-tooltip="Punti azione">
-                    <i class="material-icons">reply_all</i>
-                    2    
-                  </li>
-                </ul>
-              </span>
-
-              <p>
-                Il personaggio effettua una <em>prova di Atletica</em>, modificata dai <em>Riflessi</em> del bersaglio ed una <em class="minus">penalità di -20</em>.
-              </p>
-              <p>
-                In caso di successo, il bersaglio perde la propria arma che finisce al suolo in una direzione casuale.
-              </p>
-              
-              <div slot="footer">
                 <p>
-                  <i class="material-icons">announcement</i>
-                  Tentativi di <em>Disarmare</em> bersagli a loro volta dotati del talento <em>Atletica</em> subiscono una <em class="minus">ulteriore penalità di -15</em> per ogni livello di differenza con il talento dell'avversario.
+                  Personaggi con <em>Atletica</em> possono usare questa azione per tentare di liberarsi dalla presa, o tentare di liberare qualcun'altro.
                 </p>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Fallimento critico">
-                  <i class="material-icons minus">new_releases</i>
-                  <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                <p>
+                  Attacchi a distanza contro personaggi ingaggiati in lotta, colpiscono il bersaglio non prefissato in caso di <em>fallimento critico</em>, ed infliggono <em class="stat">metà dei danni</em> ad entrambi i contendenti, in casi di <em>successo o fallimento marginale</em>.
+                </p>
+
+                <div slot="footer">
+                  <p>
+                    <i class="material-icons">announcement</i>
+                    Tentativi di <em>Immobilizzare</em> bersagli a loro volta dotati del talento <em>Atletica</em> subiscono una <em class="minus">ulteriore penalità di -15</em> per ogni livello di differenza con il talento dell'avversario.
+                  </p>
+                  <p>
+                    <i class="material-icons">announcement</i>
+                    Queste regole si intendono per bersagli di pressappoco la medesima taglia (due esseri umani); in caso di grosse differenze di taglia, i modificatori alla prova variano.
+                  </p>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>Il personaggio non è considerato <em>Esposto</em> e non perde il bonus di <em>Riflessi</em> alla <em>Difesa</em>.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>L'attacco immobilizza il bersaglio per <em class="stat">1 turno</em>.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+            <li>
+              <card>
+                <span slot="header-main">
+                  <div class="icon-container-inner">
+                    <img 
+                      class="skill-icon"
+                      src="src/assets/images/skills-icons/ico-athletics-disarm.png" />
+                  </div>
+
+                  Disarmare
+
+                  <ul class="attribute-modifiers">
+                    <li 
+                      class="modifier tooltip" 
+                      data-tooltip="Critico">
+                        <i class="material-icons">new_releases</i>
+                        <span class="modifier-value">2</span>
+                    </li>
+                    <li
+                      class="modifier tooltip"
+                      data-tooltip="Punti azione">
+                      <i class="material-icons">reply_all</i>
+                      2    
+                    </li>
+                  </ul>
                 </span>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Successo critico">
-                  <i class="material-icons plus">new_releases</i>
-                  <span>L'attaccante può decidere di tenere in mano l'arma così disarmata.</span>
-                </span>
-                <span 
-                   class="side-effect tooltip tooltip-left"
-                   data-tooltip="Fallimento/Successo marginale">
-                  <i class="material-icons">error_outline</i>
-                  <span>L'arma viene disabilitata/resa scomoda da utilizzare, pur rimanendo nelle mani del bersaglio: il bersaglio dovrà effettuare una azione di <em>Utilizzare oggetti (Estrarre/Ricaricare)</em> per utilizzarla.</span>
-                </span>
-              </div>
-            </card>
-          </li>
-        </ul>
+
+                <p>
+                  Il personaggio effettua una <em>prova di Atletica</em>, modificata dai <em>Riflessi</em> del bersaglio ed una <em class="minus">penalità di -20</em>.
+                </p>
+                <p>
+                  In caso di successo, il bersaglio perde la propria arma che finisce al suolo in una direzione casuale.
+                </p>
+
+                <div slot="footer">
+                  <p>
+                    <i class="material-icons">announcement</i>
+                    Tentativi di <em>Disarmare</em> bersagli a loro volta dotati del talento <em>Atletica</em> subiscono una <em class="minus">ulteriore penalità di -15</em> per ogni livello di differenza con il talento dell'avversario.
+                  </p>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento critico">
+                    <i class="material-icons minus">new_releases</i>
+                    <span>Il personaggio subisce un <em>Attacco di reazione</em> da parte del bersaglio (se possibile).</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Successo critico">
+                    <i class="material-icons plus">new_releases</i>
+                    <span>L'attaccante può decidere di tenere in mano l'arma così disarmata.</span>
+                  </span>
+                  <span 
+                     class="side-effect tooltip tooltip-left"
+                     data-tooltip="Fallimento/Successo marginale">
+                    <i class="material-icons">error_outline</i>
+                    <span>L'arma viene disabilitata/resa scomoda da utilizzare, pur rimanendo nelle mani del bersaglio: il bersaglio dovrà effettuare una azione di <em>Utilizzare oggetti (Estrarre/Ricaricare)</em> per utilizzarla.</span>
+                  </span>
+                </div>
+              </card>
+            </li>
+          </ul>
         </section>
         <section>
-        <h2>Furtività in combattimento</h2>
+          <h2>Furtività in combattimento</h2>
           <p>Un personaggio dotato del talento <em>Infiltrazione</em> è in grado di rimanere nascosto anche nelle situazioni più agitate.</p>
           <p>Se il personaggio non è ancora stato identificato come ostile, può effettuare una <em>prova di Infiltrazione</em>. In caso di successo entra in stato di <em>Occultamento</em>.</p>
           <p>Un personaggio in stato di <em>Occultamento</em> non può essere bersaglio diretto di <em>attacchi</em>, <em>oggetti</em> o <em>abilità</em>, ottiene un <em class="plus">bonus di +1</em> alla <em>probabilità di successo critico</em> e <em class="plus">non subisce penalità</em> sugli <em>Attacchi di reazione</em>.</p>
@@ -960,7 +960,7 @@
           <p>Una volta rotto lo stato di <em>occultamento</em>, il personaggio è individuato da tutti i personaggi entro il raggio visivo (cioé tre volte il punteggio di <em>Visione</em>), e non può rientrare in quello stato fin quando che non passi almeno <em class="stat">un turno</em> al di fuori di questo raggio di ogni personaggio ostile o neutrale.</p>
         </section>
         <section>
-        <h2>Hacking</h2>
+          <h2>Hacking</h2>
           <p>Un personaggio dotato del talento <em>Interfacing</em> può tentare di hackare bersagli robotici in combattimento; per farlo, il personaggio deve averne l'accesso fisico o essere connesso al medesimo network.</p>
           <p>In tal caso ha due scelte:</p>
           
@@ -1134,6 +1134,19 @@ const ITEM_ICONS = {
 
 const STARTING_CHARACTER_POINTS = 200;
   
+const skillsByTag = skills.skills
+.filter(x => x.requirements.indexOf("*9") !== -1)
+.reduce((acc, skill) => {
+  skill.tags.forEach((tag) => {
+      if(acc[tag])
+          acc[tag].push(skill);
+      else
+          acc[tag] = [skill];
+  });
+
+  return acc;
+}, {});
+  
 export default {
   name: "book",
   components: {
@@ -1184,6 +1197,7 @@ export default {
   itemIcons: ITEM_ICONS,
   mechanics: mechanics,
   groupedSkills: groupedSkills,
+  skillsByTag: skillsByTag,
   skills: skills.skills,
   talents: skills.talents,
   _rulebookVersion: rulebookVersion
