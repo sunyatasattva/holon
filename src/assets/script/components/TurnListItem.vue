@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     delayAction() {
-      this.character.setProp('isDelaying', true);
+      this.character.setProp('isDelaying', !this.isDelaying);
     }
   }
 }

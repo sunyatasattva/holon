@@ -48,9 +48,11 @@ export default {
             else if(a.isDelaying && !b.isDelaying)
               return 1;
             else if(a.isDelaying && b.isDelaying)
-              return a.attributes.reflexes - b.attributes.reflexes;
+              return a.attributes.reflexes - b.attributes.reflexes
+              || a.attributes.will - b.attributes.will;
             else
               return b.attributes.reflexes - a.attributes.reflexes
+              || b.attributes.will - a.attributes.will
           }
         );
     }
@@ -70,7 +72,6 @@ export default {
         this.sortedCharacters
           .forEach((character) => {
             character.hasActed = false;
-            character.isDelaying = false;
           });
         
         // @fixme ? maybe? Should this be here or in Game.vue. Maybe this should emit a simple update event.
