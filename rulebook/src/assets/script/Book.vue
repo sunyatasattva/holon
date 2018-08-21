@@ -291,7 +291,7 @@
               </span>
               
               <p>
-                Un personaggio può utilizzare la proprio arma per eseguire un <em>attacco</em>. Per usare un’arma a distanza deve avere sufficienti munizioni ed il bersaglio deve trovarsi ad almeno <em class="stat">2 metri di distanza</em>. Armi in mischia possono attaccare entro <em class="stat">1 metro di distanza</em> (anche in diagonale).
+                Un personaggio può utilizzare la proprio arma per eseguire un <em>attacco</em>. Per usare un’arma a distanza deve avere sufficienti munizioni ed il bersaglio deve trovarsi ad almeno <em class="stat">3 metri di distanza</em>. Armi in mischia possono attaccare entro <em class="stat">1 metro di distanza</em> (anche in diagonale).
               </p>
               <p>
                 Le armi a distanza possono colpire fino ad un raggio massimo pari al punteggio di <em>Visione</em>, tranne dove diversamente specificato.
