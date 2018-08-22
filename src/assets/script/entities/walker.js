@@ -132,6 +132,57 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   calculateMovementRange() {
+    function addCostToTile(tile, parent) {
+      return {
+        ...tile,
+        cost: parent.cost + 1
+      }  
+    }
+    
+    let originalTile = this.gridPosition[0],
+        frontier = [
+          originalTile, 
+          ...this.getAdjacentTiles()
+            .map( tile => addCostToTile(tile, { cost: 0 }) )
+        ],
+        visitedTiles = [],
+        currentTile;
+    
+    while(frontier.length) {
+      currentTile = frontier.shift();
+      
+      if(!currentTile)
+        break;
+      
+      if(frontier.length > 100) {
+        console.warn('Something is fishy', frontier);
+        break;
+      }
+      
+      if(
+        currentTile.cost <= this.attributes.movement
+        && this.canvas.isPathable(currentTile)
+        && !visitedTiles.some(
+          (tile) => tile.x === currentTile.x && tile.y === currentTile.y 
+        )
+      ) {
+        visitedTiles.push(currentTile);
+        
+        frontier = frontier.concat( 
+          this.canvas.getTilesAdjacentTo(currentTile)
+            .map( tile => addCostToTile(tile, currentTile) )
+        );
+      }
+    }
+    
+    return {
+      movementRange: visitedTiles,
+      dashingRange: visitedTiles,
+      totalRange: visitedTiles
+    };
+  },
+  
+  calculateMovementRangeOld() {
     let movementRange,
         dashingRange,
         totalRange;
@@ -346,25 +397,23 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this;
   },
   
-  showMovementRange(showDashing = true) {
+  showMovementRange() {
+    console.time(`Calculating movement range for ${this.attributes.name}`);
     let range = this.calculateMovementRange(),
         movementTiles,
         dashingTiles;
     
+    console.timeEnd(`Calculating movement range for ${this.attributes.name}`);
+    
+    console.time(`Visualizing movement range for ${this.attributes.name}`);
     movementTiles = this.canvas.highlightTiles(range.movementRange, {
       highlightType: 'pathableOnly'
     });
     
-    if(showDashing) {
-      dashingTiles = this.canvas.highlightTiles(range.dashingRange, {
-        // @todo colors shouldn't be hardcoded
-        color: '#ffff00',
-        highlightType: 'pathableOnly'
-      });
-    };
-    
     this.destroyTilesHighlightedByThis();
-    this.highlightedTiles = [movementTiles, dashingTiles];
+    this.highlightedTiles = [movementTiles];
+    
+    console.timeEnd(`Visualizing movement range for ${this.attributes.name}`);
     
     return this.highlightedTiles;
   },

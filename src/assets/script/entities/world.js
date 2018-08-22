@@ -111,7 +111,10 @@ const World = fabric.util.createClass(fabric.Canvas, {
     return round ? Math[round](octileDistance) : octileDistance;
   },
   
+  // @todo Refactor this using BFS and a generator function
   calculateRange(from, range, min = 0) {
+    console.time(`Calculating ${range} range from ${JSON.stringify(from)}`);
+    
     let tiles = [];
     
     for (let row = 0; row < this.size.y; row++) {
@@ -123,6 +126,8 @@ const World = fabric.util.createClass(fabric.Canvas, {
           tiles.push(to);
       }
     }
+    
+    console.timeEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
     
     return tiles;
   },
@@ -176,6 +181,10 @@ const World = fabric.util.createClass(fabric.Canvas, {
       x: Math.floor( x / this.tileSize ),
       y: Math.floor( y / this.tileSize )
     }
+  },
+  
+  getTilesAdjacentTo(tile) {
+    return this.calculateRange(tile, 1, 1);
   },
   
   highlightTiles(tiles, {

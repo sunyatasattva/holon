@@ -80,6 +80,14 @@ const Entity = fabric.util.createClass(fabric.Object, {
     return this;
   },
   
+  getAdjacentTiles() {
+    // @todo implement adjacent tiles for bigger entities
+    let pos = this.gridPosition[0];
+    
+    // @todo check that they are not outside of the boundaries
+    return this.canvas.calculateRange(pos, 1, 1);
+  },
+  
   getAdjacentTilesOfObject(obj) {
     return obj.gridPosition.filter((tileA) => {
       return this.gridPosition.some((tileB) => {
