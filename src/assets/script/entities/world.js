@@ -111,25 +111,27 @@ const World = fabric.util.createClass(fabric.Canvas, {
     return round ? Math[round](octileDistance) : octileDistance;
   },
   
-  // @todo Refactor this using BFS and a generator function
-  calculateRange(from, range, min = 0) {
+  calculateRange: function (from, range, min = 0, rangeType = 'all') {
     console.time(`Calculating ${range} range from ${JSON.stringify(from)}`);
     
-    let tiles = [];
+    let currentCost = 0,
+        search = this.searchAroundTile(
+          { ...from, cost: 0 },
+          rangeType
+        ),
+        visitedTiles = [];
     
-    for (let row = 0; row < this.size.y; row++) {
-      for (let col = 0; col < this.size.x; col++) {
-        let to = { x: col, y: row },
-            distance = this.calculateOctileDistance(from, to, 'ceil');
-        
-        if (distance <= range && distance >= min)
-          tiles.push(to);
-      }
+    while(currentCost < range) {
+      visitedTiles = search.next().value;
+      
+      currentCost = visitedTiles[visitedTiles.length - 1].cost;
     }
     
     console.timeEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
-    
-    return tiles;
+
+    return visitedTiles.filter(
+      tile => tile.cost >= min
+    );
   },
   
   calculateRelativeDirection(from, to, center = true) {
@@ -184,7 +186,76 @@ const World = fabric.util.createClass(fabric.Canvas, {
   },
   
   getTilesAdjacentTo(tile) {
-    return this.calculateRange(tile, 1, 1);
+    const cost = tile.cost || 0;
+    
+    return [
+      { x: tile.x, y: tile.y + 1, cost: cost + 1 },
+      { x: tile.x, y: tile.y - 1, cost: cost + 1 },
+      { x: tile.x + 1, y: tile.y, cost: cost + 1 },
+      { x: tile.x - 1, y: tile.y, cost: cost + 1 }
+    ].filter(tile => {
+      return (tile.x >= 0 && tile.x < this.size.x)
+      && (tile.y >= 0 && tile.y < this.size.y)
+    });
+  },
+  
+  getTilesDiagonalTo(tile) {
+    const cost = tile.cost || 0;
+    
+    return [
+      { x: tile.x - 1, y: tile.y - 1, cost: cost + 1.5 },
+      { x: tile.x - 1, y: tile.y + 1, cost: cost + 1.5 },
+      { x: tile.x + 1, y: tile.y + 1, cost: cost + 1.5 },
+      { x: tile.x + 1, y: tile.y - 1, cost: cost + 1.5 }
+    ].filter(tile => {
+      return (tile.x >= 0 && tile.x < this.size.x)
+      && (tile.y >= 0 && tile.y < this.size.y)
+    });
+  },
+  
+  searchAroundTile: function* (tile, type = 'all') {
+    let costStep = 0,
+        diagonalTiles = [],
+        frontier = [tile],
+        visitedTiles = [],
+        currentTile;
+    
+    while(true) {
+      currentTile = frontier.shift();
+      
+      if(!currentTile)
+        break;
+      
+      if(currentTile.cost <= costStep) {
+        if(
+          !visitedTiles.some(
+            tile => tile.x === currentTile.x && tile.y === currentTile.y
+          )
+          && (
+            currentTile === tile
+            || type === 'all'
+            || this.isPathable(currentTile)
+          )
+        ) {
+          frontier = [ ...frontier, ...this.getTilesAdjacentTo(currentTile) ];
+          diagonalTiles = [ ...diagonalTiles, ...this.getTilesDiagonalTo(currentTile) ];
+
+          visitedTiles.push(currentTile);
+        }
+      }
+      else {
+        frontier.unshift(currentTile);
+        frontier = [ ...frontier, ...diagonalTiles ];
+        costStep += 1;
+        
+        yield visitedTiles;
+      }
+      
+      if(!frontier.length)
+        break;
+    }
+    
+    yield visitedTiles;
   },
   
   highlightTiles(tiles, {

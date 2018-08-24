@@ -128,52 +128,16 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
             this.attributes[attr] += mod;
           }
         }
-      });
+      }); 
   },
   
-  calculateMovementRange() {
-    function addCostToTile(tile, parent) {
-      return {
-        ...tile,
-        cost: parent.cost + 1
-      }  
-    }
-    
-    let originalTile = this.gridPosition[0],
-        frontier = [
-          originalTile, 
-          ...this.getAdjacentTiles()
-            .map( tile => addCostToTile(tile, { cost: 0 }) )
-        ],
-        visitedTiles = [],
-        currentTile;
-    
-    while(frontier.length) {
-      currentTile = frontier.shift();
-      
-      if(!currentTile)
-        break;
-      
-      if(frontier.length > 100) {
-        console.warn('Something is fishy', frontier);
-        break;
-      }
-      
-      if(
-        currentTile.cost <= this.attributes.movement
-        && this.canvas.isPathable(currentTile)
-        && !visitedTiles.some(
-          (tile) => tile.x === currentTile.x && tile.y === currentTile.y 
-        )
-      ) {
-        visitedTiles.push(currentTile);
-        
-        frontier = frontier.concat( 
-          this.canvas.getTilesAdjacentTo(currentTile)
-            .map( tile => addCostToTile(tile, currentTile) )
-        );
-      }
-    }
+  calculateMovementRange() {    
+    let visitedTiles = this.canvas.calculateRange(
+      this.gridPosition[0],
+      this.attributes.movement,
+      0,
+      'pathableOnly'
+    )
     
     return {
       movementRange: visitedTiles,
@@ -182,37 +146,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     };
   },
   
-  calculateMovementRangeOld() {
-    let movementRange,
-        dashingRange,
-        totalRange;
-    
-    movementRange = this.canvas.calculateRange(
-      this.gridPosition[0],
-      this.attributes.movement,
-      1
-    );
-    
-    dashingRange = this.canvas.calculateRange(
-      this.gridPosition[0],
-      this.attributes.movement * 2,
-      this.attributes.movement + 1
-    );
-    
-    totalRange = movementRange.concat(dashingRange);
-    
-    return {
-      movementRange: movementRange,
-      dashingRange: dashingRange,
-      totalRange: totalRange.concat(this.gridPosition)
-    };
-  },
-  
   calculateVisionRange() {
     return this.canvas.calculateRange(
       this.gridPosition[0],
       this.attributes.vision,
-      1
+      3
     );
   },
   
