@@ -128,32 +128,21 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
             this.attributes[attr] += mod;
           }
         }
-      });
+      }); 
   },
   
-  calculateMovementRange() {
-    let movementRange,
-        dashingRange,
-        totalRange;
-    
-    movementRange = this.canvas.calculateRange(
+  calculateMovementRange() {    
+    let visitedTiles = this.canvas.calculateRange(
       this.gridPosition[0],
       this.attributes.movement,
-      1
-    );
-    
-    dashingRange = this.canvas.calculateRange(
-      this.gridPosition[0],
-      this.attributes.movement * 2,
-      this.attributes.movement + 1
-    );
-    
-    totalRange = movementRange.concat(dashingRange);
+      0,
+      'pathableOnly'
+    )
     
     return {
-      movementRange: movementRange,
-      dashingRange: dashingRange,
-      totalRange: totalRange.concat(this.gridPosition)
+      movementRange: visitedTiles,
+      dashingRange: visitedTiles,
+      totalRange: visitedTiles
     };
   },
   
@@ -161,7 +150,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.canvas.calculateRange(
       this.gridPosition[0],
       this.attributes.vision,
-      1
+      3
     );
   },
   
@@ -346,25 +335,23 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this;
   },
   
-  showMovementRange(showDashing = true) {
+  showMovementRange() {
+    console.time(`Calculating movement range for ${this.attributes.name}`);
     let range = this.calculateMovementRange(),
         movementTiles,
         dashingTiles;
     
+    console.timeEnd(`Calculating movement range for ${this.attributes.name}`);
+    
+    console.time(`Visualizing movement range for ${this.attributes.name}`);
     movementTiles = this.canvas.highlightTiles(range.movementRange, {
       highlightType: 'pathableOnly'
     });
     
-    if(showDashing) {
-      dashingTiles = this.canvas.highlightTiles(range.dashingRange, {
-        // @todo colors shouldn't be hardcoded
-        color: '#ffff00',
-        highlightType: 'pathableOnly'
-      });
-    };
-    
     this.destroyTilesHighlightedByThis();
-    this.highlightedTiles = [movementTiles, dashingTiles];
+    this.highlightedTiles = [movementTiles];
+    
+    console.timeEnd(`Visualizing movement range for ${this.attributes.name}`);
     
     return this.highlightedTiles;
   },
