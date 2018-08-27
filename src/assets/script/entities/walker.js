@@ -132,18 +132,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   calculateMovementRange() {    
-    let visitedTiles = this.canvas.calculateRange(
+    return this.canvas.calculateRange(
       this.gridPosition[0],
       this.attributes.movement,
       0,
-      'pathableOnly'
-    )
-    
-    return {
-      movementRange: visitedTiles,
-      dashingRange: visitedTiles,
-      totalRange: visitedTiles
-    };
+      'pathableOnly',
+      this.attributes.action
+    );
   },
   
   calculateVisionRange() {
@@ -270,9 +265,10 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   isWithinMovementRange(targetTile) {
-    return this.maxMovementRange.totalRange.some((tile) => {
-      return tile.x === targetTile.x && tile.y === targetTile.y;
-    });
+    return [].concat(...this.maxMovementRange)
+      .some((tile) => {
+        return tile.x === targetTile.x && tile.y === targetTile.y;
+      });
   },
   
   isWithinVisionRange(target) {
@@ -335,21 +331,31 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this;
   },
   
-  showMovementRange() {
+  showMovementRange(showDashing = true) {
     console.time(`Calculating movement range for ${this.attributes.name}`);
     let range = this.calculateMovementRange(),
-        movementTiles,
-        dashingTiles;
+        movementTiles = [];
     
     console.timeEnd(`Calculating movement range for ${this.attributes.name}`);
     
     console.time(`Visualizing movement range for ${this.attributes.name}`);
-    movementTiles = this.canvas.highlightTiles(range.movementRange, {
-      highlightType: 'pathableOnly'
+    
+    range.forEach((area, i) => {
+      let opacity = (1 - i * 0.25);
+      
+      movementTiles.push(
+        this.canvas.highlightTiles(
+          area, 
+          {
+            color: `rgba(0, 0, 255, ${opacity})`,
+            highlightType: 'pathableOnly'
+          }
+        )
+      )
     });
     
     this.destroyTilesHighlightedByThis();
-    this.highlightedTiles = [movementTiles];
+    this.highlightedTiles = movementTiles;
     
     console.timeEnd(`Visualizing movement range for ${this.attributes.name}`);
     

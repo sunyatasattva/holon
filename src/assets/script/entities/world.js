@@ -111,27 +111,43 @@ const World = fabric.util.createClass(fabric.Canvas, {
     return round ? Math[round](octileDistance) : octileDistance;
   },
   
-  calculateRange: function (from, range, min = 0, rangeType = 'all') {
-    console.time(`Calculating ${range} range from ${JSON.stringify(from)}`);
+  calculateRange: function (from, range, min = 0, rangeType = 'all', repeat = 1) {
+    console.group(`Calculating ${range} range from ${JSON.stringify(from)}`);
     
-    let currentCost = 0,
+    let area = [],
+        currentCost = 0,
+        i = 1,
         search = this.searchAroundTile(
           { ...from, cost: 0 },
           rangeType
         ),
-        visitedTiles = [];
+        visitedTiles;
     
-    while(currentCost < range) {
-      visitedTiles = search.next().value;
+    while(repeat) {
+      console.time(`Area ${i}`);
       
-      currentCost = visitedTiles[visitedTiles.length - 1].cost;
+      visitedTiles = [];
+      
+      while(currentCost < range * i) {
+        visitedTiles = search.next().value;
+        
+        currentCost = visitedTiles[visitedTiles.length - 1].cost;
+      }
+      
+      area.push(visitedTiles.filter(
+        tile => tile.cost >= min && tile.cost > range * (i - 1)
+      ));
+      
+      console.log(`Area ${i}: `, area);
+      console.timeEnd(`Area ${i}`);
+      
+      i++;
+      repeat -= 1;
     }
     
-    console.timeEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
+    console.groupEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
 
-    return visitedTiles.filter(
-      tile => tile.cost >= min
-    );
+    return area;
   },
   
   calculateRelativeDirection(from, to, center = true) {
@@ -280,7 +296,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
         width: this.tileSize,
         height: this.tileSize,
         fill: color,
-        opacity: 0.1,
+        opacity: 0.2,
         originX: 'left',
         originY: 'top',
         centeredRotation: true,
