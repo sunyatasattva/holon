@@ -27,6 +27,8 @@ const Entity = fabric.util.createClass(fabric.Object, {
    */
   initialize(options = {}) {
     this.callSuper('initialize', options);
+    
+    this.gridPosition = [];
 
     this.on('added', () => {
       this.updateGridCoordinates();
@@ -159,8 +161,18 @@ const Entity = fabric.util.createClass(fabric.Object, {
           { x: startTile.x + w, y: startTile.y + h});
       }
     }
+    
+    if(this.gridPosition.length) {
+      this.gridPosition.forEach(({ x, y }) => {
+        this.canvas.matrix[x][y].removeChild(this);
+      });
+    }
 
     this.gridPosition = occupiedTiles;
+    
+    occupiedTiles.forEach(({ x, y }) => {
+      this.canvas.matrix[x][y].addChild(this);
+    });
     
     return this.gridPosition;
   },
