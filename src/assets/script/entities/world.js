@@ -1,6 +1,7 @@
 const fabric = require('fabric').fabric;
 const Line   = require('./line');
 const Ruler  = require('./ruler');
+const Tile   = require('./tile');
 
 /**
  * Cover class
@@ -76,6 +77,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
     
     this._resizeToFullScreen();
     this._createGrid();
+    this._createMatrix();
     this._setupRuler();
   },
   
@@ -303,19 +305,15 @@ const World = fabric.util.createClass(fabric.Canvas, {
   },
   
   isOccupied(tile) {
-    return this.activeObjects.find((obj) => {
-        return obj.gridPosition.some((position) => {
-          return position.x === tile.x 
-               && position.y === tile.y
-        });
-    });
+    return this.matrix[tile.x][tile.y].getChildren();
   },
   
   isPathable(tile) {
-    let objectOccupyingTheTile = this.isOccupied(tile);
+    let objectsOccupyingTheTile = this.isOccupied(tile);
 
-    return (!objectOccupyingTheTile
-            || objectOccupyingTheTile.pathable) ? true : false;
+    return !this.matrix[tile.x][tile.y].pathable
+           || !objectsOccupyingTheTile.length
+           || objectsOccupyingTheTile.every(o => o.pathable);
   },
   
   remove(object) {
@@ -371,6 +369,18 @@ const World = fabric.util.createClass(fabric.Canvas, {
     gridGroup.moveTo(0);
     
     return gridGroup;
+  },
+  
+  _createMatrix() {
+    this.matrix = [];
+    
+    for(let x = 0; x <= this.size.x; x++) {
+      this.matrix[x] = new Array(this.size.y);
+      
+      for(let y = 0; y <= this.size.y; y++) {
+        this.matrix[x][y] = new Tile(x, y);
+      }
+    }
   },
   
   _resizeToFullScreen() {
