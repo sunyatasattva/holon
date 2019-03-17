@@ -5,6 +5,7 @@ const Label  = require('./label');
 
 import Vue from 'vue';
 
+import get from 'lodash.get';
 import xorBy from 'lodash.xorby';
 
 import Mechanics from '_mechanics';
@@ -321,6 +322,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           }
         })
       );
+      
+      this._applyAmmoModifiers();
     } else {
       console.warn('Cannot reload current weapon');
     }
@@ -428,6 +431,34 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     ]);
     
     return this.callSuper('toObject', props);
+  },
+  
+  _applyAmmoModifiers() {
+    this.equipment.weapons = this.equipment.weapons
+      .map(weapon => {
+        const base = weapon.baseAttributes || { ...weapon },
+              modifiers = get(weapon, 'ammo.current.modifiers');
+
+        if(modifiers) {
+          for(
+            let [attr, mod] of 
+            Object.entries(modifiers)
+          ) {
+              weapon[attr] = base[attr]
+                .toString()
+                .split('+')
+                .map(x => +x ? +x + mod : x)
+                .join('+');
+            }
+          
+          return {
+            ...weapon,
+            baseAttributes: base
+          }
+        }
+      
+        return base;
+      });
   },
   
   _highlightChanceToBeHitBy(source) {

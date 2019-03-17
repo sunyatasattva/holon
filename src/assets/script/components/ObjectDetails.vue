@@ -71,11 +71,16 @@
                 </span>
               </div>
               <div class="weapon-details">
-                <span class="weapon-damage">
+                <span 
+                 class="weapon-damage" 
+                 :class="{ 'is-modified' : weapon.baseAttributes && weapon.damage !== weapon.baseAttributes.damage }">
                   <md-icon>gps_not_fixed</md-icon>
                   {{ weapon.damage }}
                 </span>
-                <span class="weapon-critical">
+                <span
+                  class="weapon-critical"
+                  :class="{ 'is-modified' : weapon.baseAttributes && weapon.criticalHitChance !== weapon.baseAttributes.criticalHitChance }"
+                >
                   <md-icon>new_releases</md-icon>
                   {{ weapon.criticalHitChance }}
                 </span>
@@ -364,6 +369,10 @@ export default {
     span {
       display:      inline-block;
       margin-right: 19px;
+      
+      &.is-modified {
+        color: md-get-palette-color(blue, A200);
+      }
     }
   }
   

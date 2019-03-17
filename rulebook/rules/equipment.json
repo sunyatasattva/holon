@@ -164,7 +164,10 @@
       "cost": 1,
       "description": "Permette di ricaricare completamente la propria arma con munizioni che infliggono <em class=\"minus\">1 danno in meno</em>, ma una <em class=\"minus\">penalità cumulativa di -5</em> alla <em>Sicurezza</em> di un bersaglio robotico per <em class=\"stat\">3 turni</em>.",
       "effects": [ "reloadWeapon" ],
-      "id": "item-regularAmmo",
+      "modifiers": {
+        "damage": -1
+      },
+      "id": "item-bluescreenRounds",
       "type": "Munizioni Bluescreen"
     },
     {
@@ -339,18 +342,10 @@
       "category": "Ammo",
       "cost": 2,
       "description": "Ricarica completamente l’arma con munizioni che infliggono <em class='plus'>1 danno addizionale.</em>",
-      "effects": [
-        {
-          "type": "reloadWeapon",
-          "options": {
-            "modifiers": {
-              "damage": {
-                "bonus": 1
-              }
-            }
-          }
-        }
-      ],
+      "effects": [],
+      "modifiers": {
+        "damage": 1
+      },
       "id": "item-fmjRounds",
       "type": "Munizioni FMJ"
     },
