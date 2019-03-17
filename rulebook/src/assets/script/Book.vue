@@ -457,7 +457,7 @@
           <h2>
             Livello {{ i }}
             <md-chip>
-              {{2.5 * (i * i - i + 6) }}
+              {{ 2.5 * (i * i - i + 6) }}
             </md-chip>
           </h2>
           <skill-card

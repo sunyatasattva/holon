@@ -1,6 +1,6 @@
 <template>
   <div
-   @click="executeCommand"
+   @click="clickCommandButton"
    class="command-button"
    :class="{ 'is-cooldown': currentCooldown }">
     <img :src="`/rulebook/src/assets/images/skills-icons/${command.icon}.png`" alt="">
@@ -13,6 +13,21 @@
       />
       <span class="cooldown-value">{{ currentCooldown }}</span>
     </div>
+    
+    <md-menu
+      v-if="options"
+      :md-active="showOptions"
+      :md-offset-y="25"
+      md-direction="top-start"
+    >
+      <md-menu-content>
+        <md-menu-item 
+          v-for="option in options"
+          @click="clickCommandOption(option)">
+          {{ option.type }}
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </div>
 </template>
 
@@ -23,7 +38,7 @@ import { skills } from '_skills';
   
 export default {
   name: 'command-button',
-  props: ['character', 'commandId', 'currentCooldown'],
+  props: ['character', 'commandId', 'currentCooldown', 'options'],
   components: {
     CommandButton
   },
@@ -34,12 +49,28 @@ export default {
         .find( _ => _.id === this.commandId );
     }
   },
+  data() {
+    return {
+      showOptions: false
+    }
+  },
   methods: {
-    executeCommand() {
+    clickCommandButton() {
+      if(!this.options)
+        this.executeCommand();
+      else {
+        this.showOptions = !this.showOptions;
+      }
+    },
+    clickCommandOption(option) {
+      this.executeCommand(option);
+      this.showOptions = false;
+    },
+    executeCommand(options) {
       if(this.currentCooldown)
         return;
       
-      this.character.executeCommand(this.command);
+      this.character.executeCommand(this.command, options);
       this.$emit('command', this.command);
     }
   }
@@ -72,6 +103,8 @@ export default {
       font-weight: bold;
       line-height: 50px;
     }
+    
+    .md-menu { float: left; }
     
     .md-progress-spinner {
       position: absolute;

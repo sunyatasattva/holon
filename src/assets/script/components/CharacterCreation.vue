@@ -183,6 +183,7 @@
 </template>
 
 <script>
+import get from 'lodash.get';
 import groupBy from 'lodash.groupBy';
   
 import AttributeInput from './AttributeInput.vue';
@@ -262,7 +263,7 @@ export default {
         weapons = weapons.map((weapon) => {
           return {
             ...weapon,
-            currentAmmo: weapon.ammo
+            currentAmmo: get(weapon, 'ammo.capacity')
           }
         });
         
