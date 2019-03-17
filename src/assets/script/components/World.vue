@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
+
 import World from '../entities/world';
 
 const component = {
@@ -19,6 +21,10 @@ const component = {
     const world = new World('c', { activeObjects: this.activeObjects });
     
     this.canvas = world;
+    
+    window.addEventListener('resize', () => {
+      debounce( world._resizeToFullScreen(), 1000 );
+    });
     
     world.wrapperEl.tabIndex = 1;
     

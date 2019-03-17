@@ -35,6 +35,7 @@
   "dependencies": {
     "fabric": "^1.6.6",
     "firebase": "^3.5.3",
+    "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.groupby": "^4.6.0",
     "lodash.pick": "^4.4.0",
