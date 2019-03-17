@@ -120,18 +120,17 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
 
     equipment
       .filter(x => x)
-      .forEach((item) => {
-        let modifiers = item.modifiers;
-
-        if(modifiers) {
-          for(
-            let [attr, mod] of 
-            Object.entries(modifiers)
-          ) {
-            this.attributes[attr] += mod;
-          }
-        }
-      }); 
+      .forEach( this._applyModifiers.bind(this) );
+    
+    this.attributes.status
+      .map(characterStatus => {
+        return Mechanics.statii.find(
+          status => status.id === characterStatus.id
+        );
+      })
+      .forEach( this._applyModifiers.bind(this) );
+    
+    return this;
   },
   
   calculateMovementRange() {    
@@ -415,7 +414,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.setAttribute(
       'status',
       xorBy( this.attributes.status, [{...status}], 'id' )
-    );
+    ).calculateModifiedAttributes();
   },
   
   toObject: function(props = []) {
@@ -472,6 +471,29 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           baseAttributes: base
         }
       });
+  },
+  
+  _applyModifiers(source) {
+    let modifiers = source.modifiers;
+    
+    if(modifiers) {
+      for( let [attr, mod] of Object.entries(modifiers) ) {
+        if(!this.attributes[attr])
+          continue;
+        
+        if(typeof mod === 'number')
+          this.attributes[attr] += mod;
+        else {
+          if(mod[0] === 'x')
+            this.attributes[attr] *= mod[1];
+          if(mod[1] === '½') {
+            this.attributes[attr] = Math.floor(
+              this.attributes[attr] / 2
+            );
+          }
+        }
+      }
+    }
   },
   
   _highlightChanceToBeHitBy(source) {

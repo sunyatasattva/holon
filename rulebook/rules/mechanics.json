@@ -141,7 +141,7 @@
         "aim": -20,
         "cover": "x2",
         "movement": "-½",
-        "visibility": "-½"
+        "vision": "-½"
       },
       "name": "Accovacciamento"
     },
