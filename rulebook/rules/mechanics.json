@@ -117,6 +117,19 @@
       "icon": "ico-base-overwatch",
       "id": "overwatch",
       "name": "Sorvegliare"
+    },
+    {
+      "action": 1,
+      "cooldown": false,
+      "effects": [
+        {
+          "type": "reloadWeapon",
+          "arguments": []
+        }
+      ],
+      "icon": "ico-base-reload",
+      "id": "reloadWeapon",
+      "name": "Ricaricare"
     }
   ],
   "statii": [

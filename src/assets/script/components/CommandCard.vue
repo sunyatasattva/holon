@@ -9,6 +9,16 @@
       :character="character"
       commandId="hunkerDown"
       />
+    
+    <command-button 
+      v-if="
+        character.equipment.activeWeapon.ammo
+        && availableAmmo.length
+      "
+      :character="character"
+      :options="availableAmmo"
+      commandId="reloadWeapon"
+      />
       
     <command-button 
       v-for="skill in character.attributes.skills"
@@ -31,6 +41,11 @@ export default {
   props: ['character'],
   components: {
     CommandButton
+  },
+  computed: {
+    availableAmmo() {
+      return this.character.equipment.items.filter(item => item.category === 'Ammo');
+    }
   },
   methods: {
     startCooldown(command) {

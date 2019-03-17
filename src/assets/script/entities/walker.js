@@ -3,6 +3,9 @@ const extend = fabric.util.object.extend;
 const Entity = require('./entity');
 const Label  = require('./label');
 
+import Vue from 'vue';
+
+import get from 'lodash.get';
 import xorBy from 'lodash.xorby';
 
 import Mechanics from '_mechanics';
@@ -165,7 +168,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   
   displayNameLabel() {
     return this.displayLabel(this.attributes.name, {
-      icon: 'person'
+      icon: 'person',
+      top: this.top + this.height
     });
   },
   
@@ -195,8 +199,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
 
     this.statusLabel = new Label('', {
       icon: { icon: icons.join(' ') },
-      left: this.left - this.width / 2,
-      top: this.top - this.height / 2
+      left: this.left,
+      top: this.top
     });
     
     this.canvas.add(this.statusLabel);
@@ -204,15 +208,15 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this;
   },
   
-  executeCommand(command) {
-    console.log(`${this.attributes.name} is executing ${command.name}.`);
+  executeCommand(command, ...options) {
+    console.log(`${this.attributes.name} is executing ${command.name}.`, options);
     
     try {
       command.effects.forEach((effect) => {
-        this[effect.type](...effect.arguments);
+        this[effect.type](...effect.arguments, ...options);
       });
     } catch(e) {
-      console.warn(`Couldn't execute effects for ${command.name}`);
+      console.warn(`Couldn't execute effects for ${command.name}`, e);
     }
   },
   
@@ -293,6 +297,36 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this._update();
     
     return this;
+  },
+  
+  reloadWeapon(ammo) {
+    const activeWeapon = this.equipment.activeWeapon;
+    
+    if(activeWeapon.ammo.capacity) {
+      // @todo Currently doesn't support two weapons of the same type
+      Vue.set(
+        this.equipment,
+        'weapons',
+        this.equipment.weapons.map(weapon => {
+          if(weapon.type !== activeWeapon.type)
+            return weapon;
+          else {
+            return {
+              ...weapon,
+              ammo: {
+                ...weapon.ammo,
+                current: ammo
+              },
+              currentAmmo: weapon.ammo.capacity
+            }
+          }
+        })
+      );
+      
+      this._applyAmmoModifiers();
+    } else {
+      console.warn('Cannot reload current weapon');
+    }
   },
   
   resetBaseAttributes() {
@@ -399,11 +433,58 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     return this.callSuper('toObject', props);
   },
   
+  _applyAmmoModifiers() {
+    this.equipment.weapons = this.equipment.weapons
+      .map(weapon => {
+        const base = weapon.baseAttributes || { ...weapon },
+              modifiedAttributes = {},
+              modifiers = get(weapon, 'ammo.current.modifiers') || {};
+
+        for( let [attr, mod] of Object.entries(modifiers) ) {
+            let baseAttribute = base[attr].toString().split('+'),
+                separator;
+
+            if(baseAttribute.length > 1) {
+              modifiedAttributes[attr] = baseAttribute
+                .map(x => +x ? +x + mod : x)
+                .reduce((acc, curr) => {
+                  if( isNaN(curr) )
+                    return curr;
+                  else if(curr === 0)
+                    return `${acc}`;
+                  else {
+                    separator = curr > 0 ? '+' : '-';
+
+                    return `${acc}${separator}${curr}`
+                  }
+                }, '');
+            } else {
+              separator = mod > 0 ? '+' : '';
+
+              modifiedAttributes[attr] = `${baseAttribute[0]}${separator}${mod}`;
+            }
+          }
+
+        return {
+          ...base,
+          ...modifiedAttributes,
+          ammo: weapon.ammo,
+          baseAttributes: base
+        }
+      });
+  },
+  
   _highlightChanceToBeHitBy(source) {
     let chanceToHit = source.calculateChanceToHit(this),
         cover = Rules.isTargetInCoverRelativeToSource(source, this);
     
-    this.displayLabel(`${chanceToHit}%`, { icon: 'gps_fixed' });
+    this.displayLabel(
+      `${chanceToHit}%`,
+      { 
+        icon: 'gps_fixed',
+        top: this.top + this.height
+      }
+    );
     
     if(cover > 0) {
       this.set(

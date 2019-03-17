@@ -53,7 +53,7 @@
         <section class="weapons">
           <ul v-if="object.equipment.weapons">
             <li
-              v-for="weapon in object.equipment.weapons"
+              v-for="(weapon, i) in object.equipment.weapons"
               :class="{ 'is-selected': object.equipment.activeWeapon.type === weapon.type }"
               @click="selectWeapon(weapon)"
              >
@@ -71,21 +71,29 @@
                 </span>
               </div>
               <div class="weapon-details">
-                <span class="weapon-damage">
+                <span 
+                 class="weapon-damage" 
+                 :class="{ 'is-modified' : weapon.baseAttributes && weapon.damage !== weapon.baseAttributes.damage }">
                   <md-icon>gps_not_fixed</md-icon>
                   {{ weapon.damage }}
                 </span>
-                <span class="weapon-critical">
+                <span
+                  class="weapon-critical"
+                  :class="{ 'is-modified' : weapon.baseAttributes && weapon.criticalHitChance !== weapon.baseAttributes.criticalHitChance }"
+                >
                   <md-icon>new_releases</md-icon>
                   {{ weapon.criticalHitChance }}
                 </span>
-                <span class="weapon-ammo" v-if='weapon.ammo > 0'>
+                <span class="weapon-ammo" v-if="weapon.ammo">
+                  <md-tooltip v-if="currentWeaponsAmmo[i]">
+                    {{ currentWeaponsAmmo[i].type }}
+                  </md-tooltip>
                   <md-icon>settings_input_component</md-icon>
                   <health-bar
                     class="ammo-tracker"
-                    :health='weapon.ammo'
-                    :wounds='weapon.ammo - weapon.currentAmmo'
-                    @update='modifyAmmo(weapon, ...arguments)'
+                    :health="3"
+                    :wounds="weapon.ammo.capacity - weapon.currentAmmo"
+                    @update="modifyAmmo(weapon, ...arguments)"
                   />
                 </span>
               </div>
@@ -154,6 +162,14 @@ export default {
     StatusDrawer
   },
   computed: {
+    currentWeaponsAmmo() {
+      return this.object.equipment.weapons.map(weapon => {
+        if(weapon.ammo)
+          return weapon.ammo.current;
+        else
+          return;
+      });
+    },
     statii() {
       if(this.object.attributes.status)
         return this.object.attributes.status
@@ -353,6 +369,10 @@ export default {
     span {
       display:      inline-block;
       margin-right: 19px;
+      
+      &.is-modified {
+        color: md-get-palette-color(blue, A200);
+      }
     }
   }
   
