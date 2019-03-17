@@ -31,8 +31,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   fullyCoveredColor: Cover._coverOpts.fullFill,
   partiallyCoveredColor: Cover._coverOpts.partialFill,
   includeDefaultValues: false,
-  originX: 'center',
-  originY: 'center',
+  originX: 'left',
+  originY: 'top',
   teamFills: [
     '#43de5d',
     '#43a2de'
@@ -439,8 +439,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   _snapToPathableGrid() {
     let tileSize = this.canvas.tileSize,
         targetCoords = {
-        x: Math.floor(this.left / tileSize) * tileSize + tileSize * 0.5,
-        y: Math.floor(this.top / tileSize) * tileSize + tileSize * 0.5
+        x: Math.floor((this.left + tileSize / 2) / tileSize) * tileSize,
+        y: Math.floor((this.top + tileSize / 2) / tileSize) * tileSize
       },
         targetTile = this.canvas.getTileFromCoordinates(
           targetCoords.x,

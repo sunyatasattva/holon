@@ -195,9 +195,11 @@ const Entity = fabric.util.createClass(fabric.Object, {
   
   _calculateCenterCoordinates() {
     let averageX = this.gridPosition.reduce(
-      (prev, curr) => prev + curr.x, 0) / this.gridPosition.length,
+      (prev, curr) => prev + curr.x, 0
+    ) / this.gridPosition.length,
         averageY = this.gridPosition.reduce(
-      (prev, curr) => prev + curr.y, 0) / this.gridPosition.length;
+      (prev, curr) => prev + curr.y, 0
+    ) / this.gridPosition.length;
     
     return {
       x: averageX,
@@ -233,8 +235,10 @@ const Entity = fabric.util.createClass(fabric.Object, {
           targetCoords.y
         );
 
-        if( this.canvas.isOccupied(targetTile) === this
-            || this.canvas.isPathable(targetTile) ) {
+        if(
+          this.canvas.isOccupied(targetTile) === this
+          || this.canvas.isPathable(targetTile)
+        ) {
           this.allowedLeft = targetCoords.x;
           this.allowedTop = targetCoords.y;
         }
