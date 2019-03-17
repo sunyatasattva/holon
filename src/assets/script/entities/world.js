@@ -123,6 +123,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
           { ...from, cost: 0 },
           rangeType
         ),
+        currentValue,
         visitedTiles;
     
     while(repeat) {
@@ -131,14 +132,21 @@ const World = fabric.util.createClass(fabric.Canvas, {
       visitedTiles = [];
       
       while(currentCost < range * i) {
-        visitedTiles = search.next().value;
+        currentValue = search.next().value;
+        visitedTiles = currentValue.visitedTiles;
         
-        currentCost = visitedTiles[visitedTiles.length - 1].cost;
+        currentCost = currentValue.tilesCosts.get(
+          visitedTiles[visitedTiles.length - 1]
+        );
       }
       
-      area.push(visitedTiles.filter(
-        tile => tile.cost >= min && tile.cost > range * (i - 1)
-      ));
+      area.push(
+        visitedTiles.filter(tile => {
+          const cost = currentValue.tilesCosts.get(tile);
+          
+          return cost >= min && cost > range * (i - 1);
+        })
+      );
       
       console.log(`Area ${i}: `, area);
       console.timeEnd(`Area ${i}`);
@@ -203,77 +211,83 @@ const World = fabric.util.createClass(fabric.Canvas, {
     }
   },
   
-  getTilesAdjacentTo(tile) {
-    const cost = tile.cost || 0;
+  getTilesAdjacentTo(tile, diagonal = false) {
+    const adjacentOffsets = [ [0, 1], [0, -1], [1, 0], [-1, 0] ],
+          diagonalOffsets = [ [1, 1], [-1, -1], [1, -1], [-1, 1] ];
     
-    return [
-      { x: tile.x, y: tile.y + 1, cost: cost + 1 },
-      { x: tile.x, y: tile.y - 1, cost: cost + 1 },
-      { x: tile.x + 1, y: tile.y, cost: cost + 1 },
-      { x: tile.x - 1, y: tile.y, cost: cost + 1 }
-    ].filter(tile => {
-      return (tile.x >= 0 && tile.x < this.size.x)
-      && (tile.y >= 0 && tile.y < this.size.y)
-    });
+    let offsets = diagonal ? diagonalOffsets : adjacentOffsets;
+    
+    return offsets
+      .map(([x,y]) => {
+        
+        return this.matrix[tile.x + x] ? this.matrix[tile.x + x][tile.y + y] : null;
+      })
+      .filter(_ => _);
   },
   
   getTilesDiagonalTo(tile) {
-    const cost = tile.cost || 0;
-    
-    return [
-      { x: tile.x - 1, y: tile.y - 1, cost: cost + 1.5 },
-      { x: tile.x - 1, y: tile.y + 1, cost: cost + 1.5 },
-      { x: tile.x + 1, y: tile.y + 1, cost: cost + 1.5 },
-      { x: tile.x + 1, y: tile.y - 1, cost: cost + 1.5 }
-    ].filter(tile => {
-      return (tile.x >= 0 && tile.x < this.size.x)
-      && (tile.y >= 0 && tile.y < this.size.y)
-    });
+    return this.getTilesAdjacentTo(tile, true);
   },
   
-  searchAroundTile: function* (tile, type = 'all') {
+  searchAroundTile: function* (originalTile, type = 'all') {
     let costStep = 0,
         diagonalTiles = [],
-        frontier = [tile],
-        visitedTiles = [],
-        currentTile;
+        frontier = new Set([originalTile]),
+        tilesCosts = new Map([ [originalTile, costStep] ]),
+        visitedTiles = new Set(),
+        currentTile,
+        currentTileCost;
     
-    while(true) {
-      currentTile = frontier.shift();
+    const addCostToTiles = function(map, tiles, cost) {
+      tiles.forEach(tile => {
+        if( !map.get(tile) )
+          map.set(tile, cost * tile.costMultiplier);
+      });
+    };
+    
+    const canVisitTile = (tile) => {
+      return !visitedTiles.has(tile)
+        && (
+          tile === originalTile
+          || type === 'all'
+          || this.isPathable(tile)
+        )
+    };
+    
+    while(frontier.size) {
+      currentTile = frontier.values().next().value;
+      currentTileCost = tilesCosts.get(currentTile);
       
-      if(!currentTile)
-        break;
-      
-      if(currentTile.cost <= costStep) {
-        if(
-          !visitedTiles.some(
-            tile => tile.x === currentTile.x && tile.y === currentTile.y
-          )
-          && (
-            currentTile === tile
-            || type === 'all'
-            || this.isPathable(currentTile)
-          )
-        ) {
-          frontier = [ ...frontier, ...this.getTilesAdjacentTo(currentTile) ];
-          diagonalTiles = [ ...diagonalTiles, ...this.getTilesDiagonalTo(currentTile) ];
+      if(currentTileCost <= costStep) {
+        frontier.delete(currentTile);
+        
+        if( canVisitTile(currentTile) ) {
+          this.getTilesAdjacentTo(currentTile)
+            .forEach(frontier.add, frontier);
+          
+          diagonalTiles.push( ...this.getTilesDiagonalTo(currentTile) );
+          
+          addCostToTiles(tilesCosts, frontier, currentTileCost + 1);
+          addCostToTiles(tilesCosts, diagonalTiles, currentTileCost + 1.5);
 
-          visitedTiles.push(currentTile);
+          visitedTiles.add(currentTile);
         }
       }
       else {
-        frontier.unshift(currentTile);
-        frontier = [ ...frontier, ...diagonalTiles ];
+        diagonalTiles.forEach(frontier.add, frontier);
         costStep += 1;
         
-        yield visitedTiles;
+        yield { 
+          tilesCosts, 
+          visitedTiles: Array.from(visitedTiles)
+        };
       }
-      
-      if(!frontier.length)
-        break;
     }
     
-    yield visitedTiles;
+    yield { 
+      tilesCosts, 
+      visitedTiles: Array.from(visitedTiles)
+    };
   },
   
   highlightTiles(tiles, {
