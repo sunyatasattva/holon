@@ -437,27 +437,40 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.equipment.weapons = this.equipment.weapons
       .map(weapon => {
         const base = weapon.baseAttributes || { ...weapon },
-              modifiers = get(weapon, 'ammo.current.modifiers');
+              modifiedAttributes = {},
+              modifiers = get(weapon, 'ammo.current.modifiers') || {};
 
-        if(modifiers) {
-          for(
-            let [attr, mod] of 
-            Object.entries(modifiers)
-          ) {
-              weapon[attr] = base[attr]
-                .toString()
-                .split('+')
+        for( let [attr, mod] of Object.entries(modifiers) ) {
+            let baseAttribute = base[attr].toString().split('+'),
+                separator;
+
+            if(baseAttribute.length > 1) {
+              modifiedAttributes[attr] = baseAttribute
                 .map(x => +x ? +x + mod : x)
-                .join('+');
+                .reduce((acc, curr) => {
+                  if( isNaN(curr) )
+                    return curr;
+                  else if(curr === 0)
+                    return `${acc}`;
+                  else {
+                    separator = curr > 0 ? '+' : '-';
+
+                    return `${acc}${separator}${curr}`
+                  }
+                }, '');
+            } else {
+              separator = mod > 0 ? '+' : '';
+
+              modifiedAttributes[attr] = `${baseAttribute[0]}${separator}${mod}`;
             }
-          
-          return {
-            ...weapon,
-            baseAttributes: base
           }
+
+        return {
+          ...base,
+          ...modifiedAttributes,
+          ammo: weapon.ammo,
+          baseAttributes: base
         }
-      
-        return base;
       });
   },
   

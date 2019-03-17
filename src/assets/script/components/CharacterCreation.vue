@@ -263,7 +263,7 @@ export default {
         weapons = weapons.map((weapon) => {
           return {
             ...weapon,
-            currentAmmo: get(weapon, 'ammo.capacity')
+            currentAmmo: get(weapon, 'ammo.capacity') || -1
           }
         });
         
