@@ -399,7 +399,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     let range = this.calculateVisionRange(),
         visionTiles;
     
-    visionTiles = this.canvas.highlightTiles(range, {
+    visionTiles = this.canvas.highlightTiles(range[0], {
       color: '#000',
       opacity: 0.1
     });
