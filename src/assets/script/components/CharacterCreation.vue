@@ -1,5 +1,5 @@
 <template>
- <section class="character-creation">
+  <section class="character-creation">
     <md-field>
       <label for="team">Team</label>
       <md-select name="team" id="team" v-model="team">
@@ -13,7 +13,7 @@
         id="character-load"
         v-model="loadedCharacterId"
         @md-selected="loadCharacter">
-        <md-option 
+        <md-option
           v-for="character of characters"
           :value="character['.key']">
           {{ character.attributes.name }}
@@ -44,7 +44,7 @@
           :cost='1'
           :initial='20'
           :model.sync='attributes.will' />
-        <attribute-input 
+        <attribute-input
           icon='gps_fixed'
           label='Aim'
           type='number'
@@ -139,8 +139,8 @@
       </section>
       <section class="items">
         <item-selection-menu
-        :items="equipment.items" 
-        :showAllItems="true"
+          :items="equipment.items"
+          :showAllItems="true"
         @update="updateInventory" />
       </section>
     </section>
@@ -185,7 +185,7 @@
 <script>
 import get from 'lodash.get';
 import groupBy from 'lodash.groupBy';
-  
+
 import AttributeInput from './AttributeInput.vue';
 import ItemSelectionMenu from './ItemSelectionMenu.vue';
 import Network from '../modules/networking';
@@ -193,8 +193,60 @@ import Network from '../modules/networking';
 import { groupedSkills } from '../../../../rulebook/src/assets/script/lib/utils';
 
 import Equipment from '_equipment';
-  
+
 const db = Network.database();
+const initialState = () => ({
+  Equipment: Equipment,
+  Skills: groupedSkills,
+
+  attributes: {
+    action: {
+      totalCost: 0,
+      value: 2
+    },
+    aim: {
+      totalCost: 0,
+      value: 10
+    },
+    movement: {
+      totalCost: 0,
+      value: 6
+    },
+    reflexes: {
+      totalCost: 0,
+      value: 0
+    },
+    resistance: {
+      totalCost: 0,
+      value: 3
+    },
+    toughness: {
+      totalCost: 0,
+      value: 0
+    },
+    vision: {
+      totalCost: 0,
+      value: 12
+    },
+    will: {
+      totalCost: 0,
+      value: 20
+    }
+  },
+  equipment: {
+    armor: null,
+    items: [],
+    weapons: []
+  },
+  skills: [],
+
+  loadedCharacterId: null,
+  name: "",
+  team: 0,
+
+  selectedArmorType: "",
+  selectedWeaponsTypes: []
+});
 
 export default {
   name: 'character-creation',
@@ -206,9 +258,9 @@ export default {
     characterPoints() {
       return Object.values(this.attributes)
         .reduce(
-          (sum, curr) => sum + curr.totalCost,
-          this.skillPoints
-        );
+        (sum, curr) => sum + curr.totalCost,
+        this.skillPoints
+      );
     },
     // @fixme this is due to a bug in vue-material
     // can't assign objects to select value
@@ -222,23 +274,23 @@ export default {
         ),
         'level'
       );
-      
+
       
       return Object.values(skills).reduce(
         (acc, curr) => {
-          const n = curr[0].level;
-          const pointsPerSkill = 2.5 * (n * n - n + 6);
-          
+        const n = curr[0].level;
+        const pointsPerSkill = 2.5 * (n * n - n + 6);
+
           const pointsThisLevel = curr.reduce(
             (points, skill, k) => {
               k++;
               
-              return points + pointsPerSkill * k; 
+          return points + pointsPerSkill * k;
             },
             0
           )
-          
-          return acc + pointsThisLevel;
+
+        return acc + pointsThisLevel;
         },
         0
       )
@@ -258,75 +310,24 @@ export default {
       let weapons = Equipment.weapons.filter(
         (item) => this.selectedWeaponsTypes.includes(item.type)
       );
-      
-      if(weapons.length) {
+
+      if (weapons.length) {
         weapons = weapons.map((weapon) => {
           return {
             ...weapon,
             currentAmmo: get(weapon, 'ammo.capacity') || -1
           }
         });
-        
+
         this.equipment.weapons = weapons;
         this.equipment.activeWeapon = weapons[0];
       }
-      
+
       return weapons;
     }
   },
   data() {
-    return {
-      Equipment: Equipment,
-      Skills: groupedSkills,
-      
-      attributes: {
-        action: {
-          totalCost: 0,
-          value: 2
-        },
-        aim: {
-          totalCost: 0,
-          value: 10
-        },
-        movement: {
-          totalCost: 0,
-          value: 6
-        },
-        reflexes: {
-          totalCost: 0,
-          value: 0
-        },
-        resistance: {
-          totalCost: 0,
-          value: 3
-        },
-        toughness: {
-          totalCost: 0,
-          value: 0
-        },
-        vision: {
-          totalCost: 0,
-          value: 12
-        },
-        will: {
-          totalCost: 0,
-          value: 20
-        }
-      },
-      equipment: {
-        armor: null,
-        items: [],
-        weapons: []
-      },
-      skills: [],
-      
-      loadedCharacterId: null,
-      name: '',
-      team: 0,
-      
-      selectedArmorType: '',
-      selectedWeaponsTypes: []
-    }
+    return initialState();
   },
   firebase: {
     characters: db.ref('characters')
@@ -345,24 +346,36 @@ export default {
       
       if(!character)
         return;
-      
+
+      this.resetToDefault();
+
       console.log('Loaded character: ', character);
-      
+
       Object.keys(character.baseAttributes)
         .forEach((attr) => {
-          this.attributes[attr].value = character.baseAttributes[attr];
-        });
-      
-      this.selectedArmorType = character.equipment.armor.type;
-      this.selectedWeaponsTypes = character.equipment.weapons
-        .map(weapon => weapon.type);
+        this.attributes[attr].value = character.baseAttributes[attr];
+      });
+
       this.name = character.attributes.name;
 
-      if(character.equipment.items)
-        this.updateInventory(character.equipment.items);
-      
+      if(character.equipment) {
+        if(character.equipment.armor.type)
+          this.selectedArmorType = character.equipment.armor.type;
+
+        if(character.equipment.weapons.length)
+          this.selectedWeaponsTypes = character.equipment.weapons.map(
+            weapon => weapon.type
+          );
+
+        if(character.equipment.items)
+          this.updateInventory(character.equipment.items);
+      }
+
       if(character.attributes.skills)
         this.skills = character.attributes.skills.map(skill => skill.id);
+    },
+    resetToDefault() {
+      Object.assign(this.$data, initialState());
     },
     updateInventory(inventory) {
       this.equipment.items = Object.values(inventory)
@@ -374,11 +387,11 @@ export default {
 </script>
 
 <style scoped>
-  .stats {
-    display: flex;
-  }
-  
-  .characteristics {
-    margin-right: 25px;
-  }
+.stats {
+  display: flex;
+}
+
+.characteristics {
+  margin-right: 25px;
+}
 </style>
