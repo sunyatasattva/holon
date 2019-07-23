@@ -191,7 +191,7 @@ export default {
       
       try {
         if(!state.gameObjects || !state.gameObjects.length)
-          throw "Invalid state object or state object empty";
+          throw new Error("Invalid state object or state object empty");
         
         fabric.util.enlivenObjects(
           state.gameObjects, 
@@ -203,7 +203,7 @@ export default {
           }
         );
         
-        this.currentTurn = state.currentTurn;
+        this.currentTurn = state.currentTurn || 0;
         
         console.log("Saved state loaded:", state);
       }
