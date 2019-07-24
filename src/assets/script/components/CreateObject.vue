@@ -132,12 +132,12 @@ export default {
 </script>
 
 <style>
-  .md-button {
+  .md-button:not(.md-icon-button) {
     margin-left:  0;
     margin-right: 20px;
   }
   
-  .md-button.md-raised .md-icon {
+  .md-button.md-raised:not(.md-icon-button) .md-icon {
     margin-right: 5px;
   }
   

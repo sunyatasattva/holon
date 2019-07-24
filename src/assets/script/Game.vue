@@ -27,51 +27,133 @@
           />
         </md-tab>
         
-        <md-tab md-label="Options" md-icon="settings">
-          <section class="vision-options">
-            <h2>Vision options</h2>
-            <md-switch
-               class="md-primary"
-               v-model="options.showHitChance"
-             >
-              Show hit chance
-            </md-switch>
-          </section>
-          <section class="turn-options">
-            <h2>Turn control options</h2>
-            <md-switch
-               class="md-primary"
-               v-model="options.autoPan"
-             >
-              Automatically center current character
-            </md-switch>
-          </section>
-          <section class="save-options">
-            <h2>Save options</h2>
-            <md-switch
-               class="md-primary"
-               v-model="options.autoSync"
-             >
-              Automatically syncronize the state
-            </md-switch>
-            <md-button
-             class="md-primary md-raised"
-             @click="exportCurrentState"
-             >
-              <md-icon>file_download</md-icon>
-              Export current state
-            </md-button>
-            <md-field class="state-upload">
-              <label>
-                Import state
-              </label>
-              <md-file 
-                v-model="options.uploadedState"
-                accept="application/json"
-                @md-change="importStateFromJSON"
-              />
-            </md-field>
-          </section>
+        <md-tab md-label="Options" md-icon="settings" class="options">
+          <md-list>
+            <md-list-item md-expand>
+              <md-icon>visibility</md-icon>
+              <span class="md-list-item-text">Vision options</span>
+
+              <md-list slot="md-expand">
+                <md-list-item>
+                  <span class="md-list-item-text">Show hit chance</span>
+                  <md-switch
+                    class="md-primary"
+                    v-model="options.showHitChance"
+                  />
+                </md-list-item>
+              </md-list>
+            </md-list-item>
+
+            <md-list-item md-expand>
+              <md-icon>games</md-icon>
+              <span class="md-list-item-text">Turn control options</span>
+
+              <md-list slot="md-expand">
+                <md-list-item>
+                  <span class="md-list-item-text">
+                    Automatically center current character
+                  </span>
+                  <md-switch
+                    class="md-primary"
+                    v-model="options.autoPan"
+                  />
+                </md-list-item>
+              </md-list>
+            </md-list-item>
+
+            <md-list-item md-expand>
+              <md-icon>save</md-icon>
+              <span class="md-list-item-text">Save options</span>
+
+              <md-list slot="md-expand">
+                <md-subheader>Cloud storage</md-subheader>
+                <md-list-item>
+                  <span class="md-list-item-text">
+                    Automatically syncronize the state
+                  </span>
+                  <md-switch
+                    class="md-primary"
+                    v-model="options.autoSync"
+                  />
+                </md-list-item>
+
+                <md-list-item>
+                  <md-dialog-prompt
+                    :md-active.sync="options.showSaveDialog"
+                    v-model="options.newMapName"
+                    md-title="Choose a name for this map"
+                    md-input-maxlength="50"
+                    md-confirm-text="Upload"
+                    @md-confirm="uploadState(options.newMapName)" 
+                  />
+                  <span class="md-list-item-text">
+                    Upload current state
+                  </span>
+                  <md-button 
+                    class="md-icon-button md-raised md-primary"
+                    @click="options.showSaveDialog = true"
+                  >
+                    <md-icon>cloud_upload</md-icon>
+                  </md-button>
+                </md-list-item>
+
+                <md-list-item class="load-state">
+                  <md-field>
+                    <label for="load-state">Load state</label>
+                    <md-select v-model="options.selectedMap" name="load-state" id="load-state">
+                      <md-option 
+                        v-for="(map, i) in maps" 
+                        :key="map['.key']"
+                        :value="i"
+                      >
+                        {{ map.name }}
+                      </md-option>
+                    </md-select>
+                  </md-field>
+                  <md-button
+                    :disabled="options.selectedMap === null"
+                    class="md-icon-button md-raised md-primary"
+                    @click="loadGame(maps[options.selectedMap])"
+                  >
+                    <md-icon>play_for_work</md-icon>
+                  </md-button>
+                  <md-button
+                    :disabled="options.selectedMap === null"
+                    class="md-icon-button md-raised md-accent"
+                    @click="removeMapFromDatabase(maps[options.selectedMap]['.key'])"
+                  >
+                    <md-icon>delete</md-icon>
+                  </md-button>
+                </md-list-item>
+
+                <md-subheader>Local storage</md-subheader>
+                <md-list-item>
+                  <span class="md-list-item-text">
+                    Export current state
+                  </span>
+                  <md-button 
+                    class="md-icon-button md-raised md-primary"
+                    @click="exportCurrentState"
+                  >
+                    <md-icon>file_download</md-icon>
+                  </md-button>
+                </md-list-item>
+
+                <md-list-item>
+                  <md-field class="state-upload">
+                    <label>
+                      Import state
+                    </label>
+                    <md-file 
+                      v-model="options.uploadedState"
+                      accept="application/json"
+                      @md-change="importStateFromJSON"
+                    />
+                  </md-field>
+                </md-list-item>
+              </md-list>
+            </md-list-item>
+          </md-list>
           <section class="version-details">
             <h2>Version</h2>
             <div>
@@ -101,6 +183,15 @@
       @select="panToObject" />
       
     <command-card v-if="selectedObject.attributes" :character="selectedObject" />
+
+    <md-snackbar
+     :md-active.sync="showSnackbar"
+     >
+      <span>
+        <md-icon class="md-accent">check</md-icon>
+        {{ snackbarMessage }}
+      </span>
+    </md-snackbar>
   </div>
 </template>
 
@@ -132,11 +223,15 @@ export default {
       currentTurn: 0,
       editMode: false,
       selectedObject: false,
+      showSnackbar: false,
       options: {
         autoPan: false,
         autoSync: true,
         isAddingObject: false,
+        newMapName: null,
+        selectedMap: null,
         showHitChance: true,
+        showSaveDialog: false,
         uploadedState: null
       },
       // @todo maybe generate a better unique ID, 
@@ -145,6 +240,9 @@ export default {
     }
   },
   firebase: {
+    maps: {
+      source: db.ref('maps')
+    },
     savedState: {
       source: db.ref('savedState'),
       asObject: true
@@ -257,6 +355,26 @@ export default {
       if(this.options.autoSync)
         return this.saveGame();
     },
+    removeMapFromDatabase(id) {
+      this.$firebaseRefs.maps
+        .child(id)
+        .remove(
+          (error) => {
+            if(!error) {
+              this.showSnackbar = true;
+              this.snackbarMessage = 'References to map removed from the database.';
+            
+              console.log(
+                'Map removed: ',
+                id
+              );
+            }
+            else {
+              console.error('There was an error removing the map', error);
+            }
+          }
+        );
+    },
     resetTurnCounter() {
       this.currentTurn = 0;
       
@@ -290,6 +408,34 @@ export default {
         this.options[option] = !this.options[option];
       
       return this.options[option];
+    },
+    uploadState(name) {
+      const gameObjects = this.activeObjects.map( (o) => o.toObject() );
+
+      this.$firebaseRefs.maps
+        .push(
+          {
+            gameObjects,
+            name
+          },
+          (error) => {
+            if(!error) {
+              this.showSnackbar = true;
+              this.snackbarMessage = "Map saved successfully.";
+            
+              console.log(
+                "Map saved: ",
+                name,
+                gameObjects
+              );
+            }
+            else {
+              console.error('There was an error saving the map in the database', error);
+            }
+          }
+        );
+
+      return this;
     }
   },
   watch: {
@@ -333,6 +479,18 @@ export default {
   
   .md-tabs.md-alignment-fixed .md-tabs-navigation .md-button {
     min-width: auto;
+  }
+
+  .options .md-icon-button {
+    margin: 0;
+  }
+
+  .options .load-state .md-icon-button {
+    margin-left: 10px;
+  }
+
+  .options .md-list-item .md-field {
+    max-width: 70%;
   }
   
   .turn-controls {
