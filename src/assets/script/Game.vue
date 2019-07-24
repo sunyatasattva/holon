@@ -241,12 +241,16 @@ export default {
       }
     },
     removeEntity(obj) {
+      const world = this.$refs.World.canvas;
       let idx = this.activeObjects.indexOf(obj);
       
-      this.$refs.World.canvas
-        .removeFromActiveObjects(obj);
+      world.removeFromActiveObjects(obj);
       
       this.activeObjects.splice(idx, 1);
+
+      obj.gridPosition.forEach(({ x, y }) => {
+        world.matrix[x][y].removeChild(obj);
+      });
 
       console.log('Object removed:', obj);
       
