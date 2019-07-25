@@ -95,7 +95,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
       save: save
     });
     
-    console.log("Added as active objects:", objects);
+    console.log('Added as active objects:', objects);
     
     return this;
   },

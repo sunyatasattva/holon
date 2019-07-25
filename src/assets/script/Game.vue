@@ -250,7 +250,20 @@ export default {
   },
   methods: {
     addEntities(entities, save = true) {
-      this.activeObjects.push.apply(this.activeObjects, entities);
+      // @note This doesn't fully solve the problem of entity stacking,
+      // they will only be properly stacked once game is saved AND reloaded
+      let firstCharacterIndex = -1;
+
+      if(entities.length === 1) {
+        firstCharacterIndex = this.activeObjects.findIndex(
+          (obj) => obj.type === 'walker'
+        );
+      }
+
+      if(firstCharacterIndex > -1)
+        this.activeObjects.splice(firstCharacterIndex, 0, entities[0]);
+      else
+        this.activeObjects.push.apply(this.activeObjects, entities);
       
       if(save && this.options.autoSync)
         this.saveGame();
