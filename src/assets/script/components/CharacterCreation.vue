@@ -106,10 +106,11 @@
           <md-select
            id="weapons"
            multiple
-           v-model="selectedWeaponsTypes">
+           v-model="selectedWeaponsIds">
             <md-option 
               v-for="weapon in Equipment.weapons"
-              :value="weapon.type">
+              :key="weapon.id"
+              :value="weapon.id">
               {{ weapon.type }}
             </md-option>
           </md-select>
@@ -123,11 +124,12 @@
           <label for="armors">Armor</label>
           <md-select
            id="armors"
-           v-model="selectedArmorType"
+           v-model="selectedArmorId"
            >
             <md-option
              v-for="armor in Equipment.armors"
-             :value="armor.type"
+             :key="armor.id"
+             :value="armor.id"
              >
               {{ armor.type }}
             </md-option>
@@ -154,8 +156,9 @@
          >
           <md-optgroup
            v-for="(group, i) in Skills"
+           :key="`skill-levels-${i}`"
            :label="`Level ${(i++,i)}`">
-            <md-option v-for="skill in group" :value="skill.id">
+            <md-option v-for="skill in group" :value="skill.id" :key="skill.id">
               {{ skill.name }}
             </md-option>
           </md-optgroup>
@@ -244,8 +247,8 @@ const initialState = () => ({
   name: "",
   team: 0,
 
-  selectedArmorType: "",
-  selectedWeaponsTypes: []
+  selectedArmorId: "",
+  selectedWeaponsIds: []
 });
 
 export default {
@@ -297,7 +300,7 @@ export default {
     },
     selectedArmor() {
       let armor = Equipment.armors.find(
-        (item) => item.type === this.selectedArmorType
+        (item) => item.id === this.selectedArmorId
       );
       
       if(armor) {
@@ -308,7 +311,7 @@ export default {
     },
     selectedWeapons() {
       let weapons = Equipment.weapons.filter(
-        (item) => this.selectedWeaponsTypes.includes(item.type)
+        (item) => this.selectedWeaponsIds.includes(item.id)
       );
 
       if (weapons.length) {
@@ -359,12 +362,12 @@ export default {
       this.name = character.attributes.name;
 
       if(character.equipment) {
-        if(character.equipment.armor.type)
-          this.selectedArmorType = character.equipment.armor.type;
+        if(character.equipment.armor)
+          this.selectedArmorId = character.equipment.armor.id;
 
         if(character.equipment.weapons.length)
-          this.selectedWeaponsTypes = character.equipment.weapons.map(
-            weapon => weapon.type
+          this.selectedWeaponsIds = character.equipment.weapons.map(
+            weapon => weapon.id
           );
 
         if(character.equipment.items)
