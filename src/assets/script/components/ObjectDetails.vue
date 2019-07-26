@@ -54,6 +54,7 @@
           <ul v-if="object.equipment.weapons">
             <li
               v-for="(weapon, i) in object.equipment.weapons"
+              :key="`weapon-${weapon.type}-${i}`"
               :class="{ 'is-selected': object.equipment.activeWeapon.type === weapon.type }"
               @click="selectWeapon(weapon)"
              >
@@ -96,6 +97,56 @@
                     @update="modifyAmmo(weapon, ...arguments)"
                   />
                 </span>
+              </div>
+              <div 
+                class="weapon-mods" 
+                v-if="availableWeaponMods.length || (weapon.mods && weapon.mods.length)"
+              >
+                <ul v-if="weapon.mods && weapon.mods.length">
+                  <li v-for="(mod, i) in weapon.mods" :key="mod.id">
+                    <span class="mod-count">{{ i + 1 }}</span>
+                    <span class="mod-type"> {{ mod.type }}</span>
+                    <ul class="mod-modifiers">
+                      <span
+                        v-for="(value, key) in mod.modifiers"
+                        :key="key"
+                      >
+                        <md-icon>
+                          {{ $options.mechanics.attributes.find( x => x.id === key ).icon }}
+                        </md-icon>
+                        <span class="modifier-value">
+                          {{ value }}
+                        </span>
+                      </span>
+                    </ul>
+                  </li>
+                </ul>
+
+                <md-menu md-size="medium" v-if="availableWeaponMods.length">
+                  <md-button 
+                    md-menu-trigger
+                    class="md-icon-button"
+                  >
+                    <md-icon>add</md-icon>
+                  </md-button>
+
+                  <md-menu-content>
+                    <md-menu-item
+                      v-for="mod in availableWeaponMods"
+                      :key="mod.id"
+                      :disabled="weapon.mods && weapon.mods.some(
+                        oldMod => oldMod.id === mod.id
+                      )"
+                      @click="addModToWeapon(mod, weapon)"
+                      >
+                      <span class="md-list-item-text">{{ mod.type }}</span>
+                      <md-badge 
+                        class="md-primary md-square" 
+                        :md-content="mod.value"
+                      />
+                    </md-menu-item>
+                  </md-menu-content>
+                </md-menu>
               </div>
             </li>
           </ul>
@@ -162,6 +213,10 @@ export default {
     StatusDrawer
   },
   computed: {
+    availableWeaponMods() {
+      return this.object.equipment.items
+        .filter(item => item.category === 'Weapon Mods');
+    },
     currentWeaponsAmmo() {
       return this.object.equipment.weapons.map(weapon => {
         if(weapon.ammo)
@@ -191,6 +246,20 @@ export default {
     }
   },
   methods: {
+    addModToWeapon(mod, weapon) {
+      if(!weapon.mods)
+        weapon.mods = [];
+
+      if( weapon.mods.some(oldMod => mod.type === oldMod.type) ) {
+        console.error(`Weapon ${weapon.type} already has ${mod.type}`);
+        return;
+      }
+      
+      weapon.mods.push(mod);
+      this.object.useItem(mod);
+
+      console.log(`Mod ${mod.type} added to ${weapon.type}`, { mod, weapon });
+    },
     calculateModifiedAttributes() {
       if(this.object.calculateModifiedAttributes)
         this.object.calculateModifiedAttributes();
@@ -389,7 +458,7 @@ export default {
       padding:         0;
     }
     
-    li {
+    > ul > li {
       cursor:  pointer;
       opacity: 0.5;
       padding: 10px;
@@ -402,6 +471,54 @@ export default {
         background-color: rgba(md-get-palette-color(blue, A200), 0.1);
         opacity:          1;
       }
+    }
+  }
+
+  .weapon-mods {
+    border-top: 1px solid rgba(md-get-palette-color(blue, A200), 0.25);;
+    font-size:  0.8em;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+
+    .mod-count,
+    .mod-modifiers,
+    .mod-type {
+      display:         inline-block;
+      margin-right:    5px;
+      vertical-align:  middle;
+    }
+
+    .md-button {
+      min-width: 24px;
+      width:     24px;
+      height:    24px;
+
+      i {
+        font-size: 19px !important;
+        margin:    0;
+      }
+    }
+
+    .mod-count {
+      background-color: md-get-palette-color(blue, A200);
+      border-radius:    3px;
+      color:            #fff;
+      margin:           0 15px 0 2.5px;
+      text-align:       center;
+
+      width:            19px;
+      height:           19px;
+    }
+
+    .mod-modifiers {
+      i {
+        font-size:    19px !important;
+        margin-right: 5px;
+      }
+    }
+
+    .mod-type {
+      width: 155px;
     }
   }
   

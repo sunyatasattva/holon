@@ -431,6 +431,34 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     
     return this.callSuper('toObject', props);
   },
+
+  useItem(item) {
+    let itemIndex;
+    const ownItem = this.equipment.items
+      .find((ownItem, idx) => {
+        const id = item.id || item;
+        
+        if(id === ownItem.id) {
+          itemIndex = idx;
+
+          return true;
+        }
+      });
+
+    if(!ownItem) {
+      console.error(`${this.attributes.name} can't use ${item.type}`);
+      return;
+    }
+
+    if(--ownItem.value <= 0)
+      this.equipment.items.splice(itemIndex, 1);
+
+    // @todo implement actual item effect
+
+    console.log(`${this.attributes.name} used ${item.type}`);
+
+    return this;
+  },
   
   _applyAmmoModifiers() {
     this.equipment.weapons = this.equipment.weapons
