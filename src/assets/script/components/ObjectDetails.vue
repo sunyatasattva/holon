@@ -66,7 +66,9 @@
                   <md-icon>
                     {{ $options.mechanics.attributes.find( x => x.id === key ).icon }}
                   </md-icon>
-                  <span class="modifier-value">
+                  <span 
+                    class="modifier-value"
+                    :class="{ 'is-modified' : weapon.modifiers[key] !== weapon.baseAttributes.modifiers[key] }">
                     {{ value }}
                   </span>
                 </span>
@@ -74,13 +76,13 @@
               <div class="weapon-details">
                 <span 
                  class="weapon-damage" 
-                 :class="{ 'is-modified' : weapon.baseAttributes && weapon.damage !== weapon.baseAttributes.damage }">
+                 :class="{ 'is-modified' : weapon.damage !== weapon.baseAttributes.damage }">
                   <md-icon>gps_not_fixed</md-icon>
                   {{ weapon.damage }}
                 </span>
                 <span
                   class="weapon-critical"
-                  :class="{ 'is-modified' : weapon.baseAttributes && weapon.criticalHitChance !== weapon.baseAttributes.criticalHitChance }"
+                  :class="{ 'is-modified' : weapon.criticalHitChance !== weapon.baseAttributes.criticalHitChance }"
                 >
                   <md-icon>new_releases</md-icon>
                   {{ weapon.criticalHitChance }}
@@ -112,7 +114,7 @@
                         :key="key"
                       >
                         <md-icon>
-                          {{ $options.mechanics.attributes.find( x => x.id === key ).icon }}
+                          {{ $options.getIconForAttribute(key) }}
                         </md-icon>
                         <span class="modifier-value">
                           {{ value }}
@@ -195,6 +197,7 @@ import pick from 'lodash.pick';
 import Vue from 'vue';
   
 import Mechanics from '_mechanics';
+import Weapon from '../entities/weapon';
 
 import HealthBar from './HealthBar.vue';
 import ItemSelectionMenu from './ItemSelectionMenu.vue';
@@ -247,16 +250,9 @@ export default {
   },
   methods: {
     addModToWeapon(mod, weapon) {
-      if(!weapon.mods)
-        weapon.mods = [];
-
-      if( weapon.mods.some(oldMod => mod.type === oldMod.type) ) {
-        console.error(`Weapon ${weapon.type} already has ${mod.type}`);
-        return;
-      }
-      
-      weapon.mods.push(mod);
+      weapon.attachMod(mod);
       this.object.useItem(mod);
+      this.object.calculateModifiedAttributes();
 
       console.log(`Mod ${mod.type} added to ${weapon.type}`, { mod, weapon });
     },
@@ -338,6 +334,7 @@ export default {
     'object.equipment.armor': 'calculateModifiedAttributes',
     'object.equipment.activeWeapon': 'calculateModifiedAttributes'
   },
+  getIconForAttribute: Weapon.getIconFor,
   mechanics: Mechanics
 }
 </script>
@@ -418,9 +415,21 @@ export default {
   .weapon-type {
     width: 165px;
   }
+
+  .mod-modifiers,
+  .weapon-modifiers {
+    i {
+      font-size:    19px !important;
+      margin-right: 5px;
+    }
+  }
   
   .modifier-value {
     margin-right: 10px;
+
+    &.is-modified {
+      color: md-get-palette-color(blue, A200);
+    }
   }
   
   .skills {
@@ -508,13 +517,6 @@ export default {
 
       width:            19px;
       height:           19px;
-    }
-
-    .mod-modifiers {
-      i {
-        font-size:    19px !important;
-        margin-right: 5px;
-      }
     }
 
     .mod-type {

@@ -11,6 +11,7 @@ import xorBy from 'lodash.xorby';
 import Mechanics from '_mechanics';
 import Rules from '../modules/rules';
 import { prototype as Cover } from './cover'; 
+import Weapon from './weapon';
 
 /**
  * Walker class
@@ -81,6 +82,10 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           else
             return skill;
         });
+
+    if(this.equipment.weapons.length)
+      this.equipment.weapons = this.equipment.weapons
+        .map(weapon => new Weapon(weapon));
     
     if(this.showRangeOnSelected) {
       this.on('selected', () => {
