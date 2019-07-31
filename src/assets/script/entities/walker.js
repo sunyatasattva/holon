@@ -83,9 +83,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
             return skill;
         });
 
-    if(this.equipment.weapons.length)
+    if(this.equipment.weapons.length) {
       this.equipment.weapons = this.equipment.weapons
         .map(weapon => new Weapon(weapon));
+
+      this.equipment.activeWeapon = new Weapon(this.equipment.activeWeapon);
+    }
     
     if(this.showRangeOnSelected) {
       this.on('selected', () => {
@@ -93,6 +96,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           this.showMovementRange();
       });
     }
+
+    this.calculateModifiedAttributes();
     
     this.on('deselected', () => {
       this.destroyTilesHighlightedByThis();

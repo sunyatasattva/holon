@@ -38,11 +38,14 @@ export default class Weapon extends Item {
   };
   criticalHitChance: number;
   damage: string;
-  mods: Item[] = [];
+  mods: Item[];
   range: string;
 
   constructor(opts: WeaponSchema) {
     super(opts);
+
+    if(!this.mods)
+      this.mods = [];
 
     this.baseAttributes = {
       //"ammo.capacity": get(opts, "ammo.capacity") || -1,
@@ -50,6 +53,8 @@ export default class Weapon extends Item {
       damage: this.damage,
       modifiers: { ...this.modifiers }
     }
+
+    this.calculateModifiedAttributes();
   }
 
   static getIconFor(attribute: string) {
