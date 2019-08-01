@@ -139,6 +139,19 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     equipment
       .filter(x => x)
       .forEach( this._applyModifiers.bind(this) );
+
+    this.attributes.skills
+      .filter(skill => skill.modifiers)
+      .forEach(
+        (skill) => {
+          console.log(
+            `Applying modifiers for ${skill.name} to ${this.attributes.name}`,
+            skill.modifiers,
+            this
+          );
+          Rules.applyModifiers(skill.modifiers, this)
+        }
+      );
     
     this.attributes.status
       .map(characterStatus => {
@@ -258,6 +271,9 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   getValidTargets() {
+    if(!this.canvas)
+      return [];
+
     return this.canvas.getActiveObjects('walker')
       .filter(this.isValidTarget.bind(this));
   },
@@ -332,10 +348,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
 
             return weapon;
           }
+
+          return weapon;
         })
       );
-      
-      this._applyAmmoModifiers();
+
+      this.useItem(ammo);
     } else {
       console.warn('Cannot reload current weapon');
     }

@@ -1,17 +1,25 @@
 import get from "lodash.get";
 import { statii } from "../../../../rulebook/rules/mechanics.json";
-import { Modifiers, isNumber, Modifier, isConditionalModifier } from "../types";
+import { Modifiers, isNumber, Modifier, isConditionalModifier, ConditionalModifier } from "../types";
 import { set } from "lodash";
 
 /*
  * These are to be called bound.
  */
 export const Conditionals = {
-  hasStatus(statusId: string) {
-    return this.hasStatus(statusId) 
+  forEachEnemyWithinVision(modifier: ConditionalModifier) {
+    return Math.min(
+      modifier.bonus * this.getValidTargets().length, 
+      modifier.max
+    );
   },
-  isActiveWeaponCategory(category: string) {
-    return this.equipment.activeWeapon.category === category;
+  hasStatus(statusId: string, modifier: ConditionalModifier) {
+    return this.hasStatus(statusId) ? modifier.bonus : 0;
+  },
+  isActiveWeaponCategory(category: string, modifier: ConditionalModifier) {
+    return this.equipment.activeWeapon
+      && this.equipment.activeWeapon.category === category ? 
+      modifier.bonus : 0;
   }
 }
 
@@ -57,7 +65,7 @@ export class Rules {
         } else {
           separator = mod > 0 ? "+" : "";
 
-          set(basePath, attr, `${baseAttribute[0]}${separator}${mod}`);
+          set(basePath, attr, `${attributeParts[0]}${separator}${mod}`);
         }
       } else {
         set(basePath, attr, baseAttribute + mod);
@@ -68,9 +76,9 @@ export class Rules {
   }
 
   static calculateChanceToHit(source, target) {
-    let mod;
-    
-    mod = [
+    target.calculateModifiedAttributes();
+
+    const mod = [
       this._hitModCover,
       this._hitModWeapons,
       this._hitModWounds
@@ -155,15 +163,15 @@ export class Rules {
       return modifier;
 
     if( isConditionalModifier(modifier) ) {
-      return modifier.conditions.every(condition => {
+      return modifier.conditions.reduce((sum, condition) => {
         const conditional = Conditionals[condition.type],
               args = condition.args || [];
 
         if(typeof conditional !== "function")
-          return modifier.bonus;
+          return sum + modifier.bonus;
 
-        return conditional.apply(target, args);
-      }) ? modifier.bonus : 0;
+        return sum + conditional.apply(target, [...args, modifier]);
+      }, 0);
     }
   }
 };
