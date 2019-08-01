@@ -98,7 +98,9 @@ export default {
           movement: data.attributes.movement.value,
           action: data.attributes.action.value,
           vision: data.attributes.vision.value,
-          toughness: data.attributes.toughness.value
+          toughness: data.attributes.toughness.value,
+
+          defense: data.attributes.reflexes.value
         };
 
         obj = new Walker({

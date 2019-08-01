@@ -64,6 +64,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   initialize(options = {}) {
     this.callSuper('initialize', options);
 
+    this.attributes.defense = this.attributes.reflexes;
     this.attributes.skills = this.attributes.skills || [];
     this.attributes.status = this.attributes.status || [];
     this.attributes.wounds = this.attributes.wounds || 0;

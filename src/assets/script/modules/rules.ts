@@ -78,7 +78,7 @@ export class Rules {
       return sum + modifier.call(this, source, target);
     }, 0);
     
-    return source.attributes.aim - target.attributes.reflexes + mod;
+    return source.attributes.aim - target.attributes.defense + mod;
   }
   
   static isTargetInCoverRelativeToSource(source, target) {
