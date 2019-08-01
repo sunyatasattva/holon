@@ -7,19 +7,11 @@
       "description": "Il personaggio <em class='plus'>aumenta del 150%</em> (arrotondato per eccesso) il bonus alla <em>Resistenza</em> ottenuto tramite le armature ed <em class='plus'>ignora le penalità</em> al <em>Movimento</em>.",
       "icon": "ico-heavyconditioning",
       "modifiers": {
-        "equipment": {
-          "armor": {
-            "modifiers": {
-              "toughness": {
-                "bonus": "x1.5"
-              }
-            }
-          }
-        },
+        "equipment|armor|modifiers|toughness": "x1.5",
         "defense": {
           "bonus": 10,
           "conditions": [
-            "isStatus"
+            "hasStatus"
           ],
           "conditionsArguments": [
             [
@@ -151,7 +143,7 @@
     },
     {
       "action": 0,
-      "cooldown": 3,
+      "cooldown": 4,
       "cost": 10,
       "description": "Il personaggio <em class='bonus'>ottiene un Punto Azione extra</em> che può spendere per <em>Attaccare</em> o <em>Sorvegliare</em>.",
       "icon": "ico-runandgun",
@@ -183,10 +175,10 @@
       "description": "Conferisce <em class='plus'>un bonus di 1 punto</em> alla probabilità di <em>successo critico</em> per ogni nemico entro la propria <em>Visione</em> (Max. 4).",
       "icon": "ico-aggression",
       "modifiers": {
-        "criticalHitChance": {
+        "equipment|activeWeapon|criticalHitChance": {
           "bonus": 1,
           "conditions": [
-            "forEachEnemyWithinVision"
+            { "type": "forEachEnemyWithinVision" }
           ],
           "max": 4
         }
@@ -204,15 +196,7 @@
       "cost": 10,
       "description": "Se il personaggio non effettua nessuna <em>azione offensiva</em>, si <em>Accovaccia</em> automaticamente alla fine del suo turno.",
       "icon": "ico-cautiousadvancement",
-      "modifiers": {
-        "criticalHitChance": {
-          "bonus": 1,
-          "conditions": [
-            "forEachEnemyWithinVision"
-          ],
-          "max": 4
-        }
-      },
+      "modifiers": {},
       "id": "cautious-advancement",
       "name": "Avanzamento cauto",
       "requirements": [],
@@ -296,10 +280,10 @@
     },
     {
       "action": 1,
-      "cooldown": 2,
+      "cooldown": 3,
       "cost": 10,
       "description": "Effettua un <em>Attacco</em> con un'<em>arma da mischia</em> contro un bersaglio entro la propria <em>Mobilità</em> con un <em class='plus'>bonus di +1</em> ai <em>danni</em> per ogni <em class='stat'>2 mt.</em> percorsi in questo modo.",
-      "endsTurn": false,
+      "endsTurn": true,
       "icon": "ico-charge",
       "modifiers": {},
       "id": "charge",
@@ -467,7 +451,7 @@
       "action": 1,
       "cooldown": 2,
       "cost": 10,
-      "description": "Gli <em>Attacchi</em> degli alleati contro un bersaglio entro il punteggio di <em>Visione</em> del personaggio hanno un <em class='plus'>bonus di +15</em> alla <em>Mira</em> ed un <em class='plus'>bonus di +1</em> alla <em>probabilità di successo critico</em>.",
+      "description": "Gli <em>Attacchi</em> degli alleati contro un bersaglio entro il punteggio di <em>Visione</em> del personaggio hanno un <em class='plus'>bonus di +15</em> alla <em>Mira</em> ed un <em class='plus'>bonus di +1</em> alla <em>probabilità di successo critico</em> per <em class='stat'>un turno</em>.",
       "endsTurn": false,
       "icon": "ico-mark",
       "modifiers": {},
@@ -562,9 +546,7 @@
       "cost": 10,
       "description": "<em class='plus'>Aumenta di +1 mt</em> il <em class='stat'>raggio di esplosione</em> delle <em>Granate</em>. Inoltre, queste infliggono <em class='plus'>la metà</em> dei <em>danni</em> agli alleati entro il <em class='stat'>raggio di esplosione</em>.",
       "icon": "ico-controlledexplosion",
-      "modifiers": {
-        "movement": 5
-      },
+      "modifiers": {},
       "id": "controlled-explosion",
       "name": "Esplosioni controllate",
       "requirements": [
@@ -592,9 +574,7 @@
       "cost": 10,
       "description": "Può <em>Estrarre</em> armi senza spendere un'<em>Azione</em>.",
       "icon": "ico-quickdraw",
-      "modifiers": {
-        "movement": 5
-      },
+      "modifiers": {},
       "id": "quick-draw",
       "name": "Estrazione rapida",
       "requirements": [
@@ -675,7 +655,7 @@
       "id": "sapper",
       "name": "Geniere",
       "requirements": [
-        "talent-demolition",
+        "talent-demolition"
       ],
       "tags": ["items", "cover"]
     },
@@ -848,7 +828,32 @@
       "cost": 10,
       "description": "Ottiene un <em class='plus'>bonus di +10</em> ai <em>Riflessi</em> ed alla <em>Mira</em>, ed un <em class='plus'>bonus di +1</em> alla probabilità di <em>successo critico</em> ed alla <em>Robustezza</em> fintanto che non ci sono alleati coscienti entro la sua <em>Visione</em>.",
       "icon": "ico-lonewolf",
-      "modifiers": {},
+      "modifiers": {
+        "aim": {
+          "bonus": 10,
+          "conditions": [
+            { "type": "numberOfAlliesWithinVision", "args": ["===", 0] }
+          ]
+        },
+        "equipment|activeWeapon|criticalHitChance": {
+          "bonus": 1,
+          "conditions": [
+            { "type": "numberOfAlliesWithinVision", "args": ["===", 0] }
+          ]
+        },
+        "reflexes": {
+          "bonus": 10,
+          "conditions": [
+            { "type": "numberOfAlliesWithinVision", "args": ["===", 0] }
+          ]
+        },
+        "toughness": {
+          "bonus": 1,
+          "conditions": [
+            { "type": "numberOfAlliesWithinVision", "args": ["===", 0] }
+          ]
+        }
+      },
       "id": "lone-wolf",
       "name": "Lupo solitario",
       "requirements": [
@@ -1267,14 +1272,24 @@
       "description": "Conferisce un <em class='plus'>bonus di +1</em> <em>danno</em>, <em class='plus'>+5</em> alla <em>Mira</em>, e <em class='plus'>+1</em> alla <em>Visione</em> con armi leggere.",
       "icon": "ico-ranger",
       "modifiers": {
-        "equipment": {
-          "weapon": {
-            "modifiers": {
-              "damage": 1
-            }
-          }
+        "aim": {
+          "bonus": 5,
+          "conditions": [
+            { "type": "isActiveWeaponCategory", "args": ["Leggera"] }
+          ]
         },
-        "vision": 1
+        "equipment|activeWeapon|damage": {
+          "bonus": 1,
+          "conditions": [
+            { "type": "isActiveWeaponCategory", "args": ["Leggera"] }
+          ]
+        },
+        "vision": {
+          "bonus": 1,
+          "conditions": [
+            { "type": "isActiveWeaponCategory", "args": ["Leggera"] }
+          ]
+        }
       },
       "id": "ranger",
       "name": "Ranger",
@@ -1509,12 +1524,7 @@
         "defense": {
           "bonus": 10,
           "conditions": [
-            "isStatus"
-          ],
-          "conditionsArguments": [
-            [
-              "overwatch"
-            ]
+            { "type": "hasStatus", "args": ["_overwatch"] }
           ]
         }
       },
@@ -1536,7 +1546,7 @@
         "defense": {
           "bonus": 5,
           "conditions": [
-            "forEachEnemyWithinVision"
+            { "type": "forEachEnemyWithinVision" }
           ],
           "max": 30
         }
@@ -1552,15 +1562,7 @@
       "cost": 10,
       "description": "I <em>successi critici</em> con gli <em>Attacchi</em> del personaggio, infliggono il <em class='plus'>doppio</em> dei <em>danni</em>. ",
       "icon": "ico-merciless",
-      "modifiers": {
-        "defense": {
-          "bonus": 5,
-          "conditions": [
-            "forEachEnemyWithinVision"
-          ],
-          "max": 30
-        }
-      },
+      "modifiers": {},
       "id": "merciless",
       "name": "Spietato",
       "requirements": [

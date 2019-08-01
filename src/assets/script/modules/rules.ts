@@ -20,9 +20,10 @@ export class Rules {
     let modifiedVal: string;
     
     for( let [attr, mod] of Object.entries(modifiers) ) {
-      // Needed to convert `path/to/prop` to `path.to.prop` because
+      // Need to convert `path|to|prop` to `path.to.prop` because
       // it is not possible to save dotted keys in Firebase
-      attr = attr.split("/").join(".");
+      // (also not possible to have slashed keys)
+      attr = attr.split("|").join(".");
       mod = this._parseModifier(mod, target);
 
       const basePath = get(target, attr)
