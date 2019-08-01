@@ -100,7 +100,7 @@ export default {
           vision: data.attributes.vision.value,
           toughness: data.attributes.toughness.value
         };
-        
+
         obj = new Walker({
           attributes: {
             ...attrs,

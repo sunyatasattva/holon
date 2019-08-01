@@ -248,7 +248,8 @@ const initialState = () => ({
   team: 0,
 
   selectedArmorId: "",
-  selectedWeaponsIds: []
+  selectedWeaponsIds: [],
+  weapons: null
 });
 
 export default {
@@ -310,21 +311,30 @@ export default {
       return armor; 
     },
     selectedWeapons() {
-      let weapons = Equipment.weapons.filter(
-        (item) => this.selectedWeaponsIds.includes(item.id)
-      );
+      if(!this.weapons)
+        return [];
 
-      if (weapons.length) {
-        weapons = weapons.map((weapon) => {
-          return {
-            ...weapon,
-            currentAmmo: get(weapon, 'ammo.capacity') || -1
-          }
-        });
+      const weapons = this.weapons.map((weapon) => {
+        let mods;
+        const currentWeaponProps = Equipment.weapons.find(
+          item => item.id === weapon.id
+        );
 
-        this.equipment.weapons = weapons;
-        this.equipment.activeWeapon = weapons[0];
-      }
+        if(weapon.mods && weapon.mods.length)
+          mods = weapon.mods.map(
+            mod => Equipment.items.find(item => item.id === mod.id)
+          );
+
+        return {
+          ...currentWeaponProps,
+          mods,
+          currentAmmo: get(weapon, 'ammo.capacity') || -1,
+        }
+      });
+
+      this.selectedWeaponsIds = weapons.map( weapon => weapon.id );
+      this.equipment.weapons = weapons;
+      this.equipment.activeWeapon = weapons[0];
 
       return weapons;
     }
@@ -366,9 +376,7 @@ export default {
           this.selectedArmorId = character.equipment.armor.id;
 
         if(character.equipment.weapons.length)
-          this.selectedWeaponsIds = character.equipment.weapons.map(
-            weapon => weapon.id
-          );
+          this.weapons = character.equipment.weapons;
 
         if(character.equipment.items)
           this.updateInventory(character.equipment.items);
@@ -382,7 +390,16 @@ export default {
     },
     updateInventory(inventory) {
       this.equipment.items = Object.values(inventory)
-        .filter(item => item.value > 0);
+        .filter(item => item.value > 0)
+        .map(item => {
+          const currentItemProps = Equipment.items
+            .find(obj => obj.id === item.id);
+          
+          return {
+            ...item,
+            ...currentItemProps
+          }
+        });
     }
   },
   props: ['isAddingObject']

@@ -128,7 +128,7 @@
       "effects": [],
       "id": "item-bipod",
       "modifiers": {
-        "aim": 10
+        "modifiers/aim": 10
       },
       "type": "Bipiede"
     },
@@ -147,7 +147,7 @@
       "effects": [],
       "id": "item-scope",
       "modifiers": {
-        "vision": 5
+        "modifiers/vision": 5
       },
       "type": "Cannocchiale"
     },
@@ -156,6 +156,9 @@
       "cost": 10,
       "description": "L'arma può contenere <em class='plus'>2 munizioni in più</em>.",
       "effects": [],
+      "modifiers": {
+        "ammo/capacity": 2
+      },
       "id": "item-highCapacityCartridge",
       "type": "Cartuccia ad alta capacità"
     },
@@ -165,7 +168,7 @@
       "description": "Permette di ricaricare completamente la propria arma con munizioni che infliggono <em class=\"minus\">1 danno in meno</em>, ma una <em class=\"minus\">penalità cumulativa di -5</em> alla <em>Sicurezza</em> di un bersaglio robotico per <em class=\"stat\">3 turni</em>.",
       "effects": [ "reloadWeapon" ],
       "modifiers": {
-        "damage": -1
+        "modifiers/damage": -1
       },
       "id": "item-bluescreenRounds",
       "type": "Munizioni Bluescreen"
@@ -261,7 +264,7 @@
       "effects": [],
       "id": "item-holoVisor",
       "modifiers": {
-        "aim": 5
+        "modifiers/aim": 5
       },
       "type": "Holo-visore"
     },
@@ -280,7 +283,7 @@
       "effects": [],
       "id": "item-gunsight",
       "modifiers": {
-        "aim": 10
+        "modifiers/aim": 10
       },
       "type": "Mirino"
     },
