@@ -390,7 +390,16 @@ export default {
     },
     updateInventory(inventory) {
       this.equipment.items = Object.values(inventory)
-        .filter(item => item.value > 0);
+        .filter(item => item.value > 0)
+        .map(item => {
+          const currentItemProps = Equipment.items
+            .find(obj => obj.id === item.id);
+          
+          return {
+            ...item,
+            ...currentItemProps
+          }
+        });
     }
   },
   props: ['isAddingObject']

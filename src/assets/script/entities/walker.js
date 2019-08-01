@@ -9,7 +9,7 @@ import get from 'lodash.get';
 import xorBy from 'lodash.xorby';
 
 import Mechanics from '_mechanics';
-import Rules from '../modules/rules';
+import { Rules } from '../modules/rules';
 import { prototype as Cover } from './cover'; 
 import Weapon from './weapon';
 
@@ -87,7 +87,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       this.equipment.weapons = this.equipment.weapons
         .map(weapon => new Weapon(weapon));
 
-      this.equipment.activeWeapon = new Weapon(this.equipment.activeWeapon);
+      this.equipment.activeWeapon = this.equipment.weapons
+        .find(weapon => this.equipment.activeWeapon.id === weapon.id);
     }
     
     if(this.showRangeOnSelected) {

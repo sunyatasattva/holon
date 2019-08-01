@@ -7,9 +7,10 @@ import { CharacterAttributes, Modifiers, isNumber } from "../types";
 import Mechanics from "../../../../rulebook/rules/mechanics.json";
 
 import { Item } from "./item";
+import { Rules } from "../modules/rules";
 
 type WeaponAttributes = CharacterAttributes |
-  "ammo.capacity" |
+  "ammoCapacity" |
   "criticalHitChance" |
   "damage" |
   "modifiers"
@@ -24,6 +25,7 @@ const attributesIcons = Mechanics.attributes
 
     return acc;
   }, {
+    "ammo/capacity": "settings_input_component",
     criticalHitChance: "new_releases",
     damage: "gps_not_fixed"
   });
@@ -48,7 +50,7 @@ export default class Weapon extends Item {
       this.mods = [];
 
     this.baseAttributes = {
-      //"ammo.capacity": get(opts, "ammo.capacity") || -1,
+      ammoCapacity: get(opts, "ammo.capacity") || -1,
       criticalHitChance: this.criticalHitChance,
       damage: this.damage,
       modifiers: { ...this.modifiers }
@@ -72,49 +74,6 @@ export default class Weapon extends Item {
     this.calculateModifiedAttributes();
   }
 
-  private applyModifiers(modifiers: Modifiers) {
-    let modifiedVal: string;
-    
-    for( const [attr, mod] of Object.entries(modifiers) ) {
-      const baseAttribute: string | number = this[attr] 
-        || this.modifiers[attr] 
-        || 0;
-      let separator: string;
-      
-      if(typeof baseAttribute === "string") {
-        let attributeParts = baseAttribute.toString().split("+");
-
-        if(attributeParts.length > 1) {
-          modifiedVal = attributeParts
-            .map(x => +x ? +x + mod : x)
-            .reduce<string>((acc, curr) => {
-              if( !isNumber(curr) )
-                return curr;
-              else if(curr === 0)
-                return `${acc}`;
-              else {
-                separator = curr > 0 ? "+" : "-";
-
-                return `${acc}${separator}${curr}`;
-              }
-            }, "");
-
-          set(this, attr, modifiedVal);
-        } else {
-          separator = mod > 0 ? "+" : "";
-
-          set(this, attr, `${baseAttribute[0]}${separator}${mod}`);
-        }
-      } else {
-        const path = this[attr] ? attr : `modifiers.${attr}`;
-
-        set(this, path, baseAttribute + mod);
-      }
-    }
-
-    return this;
-  }
-
   private calculateModifiedAttributes() {
     this.resetBaseAttributes();
 
@@ -122,7 +81,7 @@ export default class Weapon extends Item {
       const modifiers = mod.modifiers;
 
       if(modifiers)
-        this.applyModifiers(modifiers);
+        Rules.applyModifiers(modifiers, this);
     });
 
     return this;
@@ -135,7 +94,7 @@ export default class Weapon extends Item {
       modifiers
     } = this.baseAttributes;
     
-    //this.ammo.capacity = <number>this.baseAttributes["ammo.capacity"];
+    this.ammo.capacity = <number>this.baseAttributes.ammoCapacity;
     this.criticalHitChance = <number>criticalHitChance;
     this.damage = <string>damage;
     this.modifiers = { ...<Modifiers>modifiers };
