@@ -311,10 +311,13 @@ export default {
       return armor; 
     },
     selectedWeapons() {
-      if(!this.weapons)
+      const currentWeapons = this.weapons || this.selectedWeaponsIds
+        .map(id => ({ id }));
+      
+      if(!currentWeapons.length)
         return [];
 
-      const weapons = this.weapons.map((weapon) => {
+      const weapons = currentWeapons.map((weapon) => {
         let mods;
         const currentWeaponProps = Equipment.weapons.find(
           item => item.id === weapon.id
@@ -328,11 +331,10 @@ export default {
         return {
           ...currentWeaponProps,
           mods,
-          currentAmmo: get(weapon, 'ammo.capacity') || -1,
+          currentAmmo: get(currentWeaponProps, 'ammo.capacity') || -1,
         }
       });
 
-      this.selectedWeaponsIds = weapons.map( weapon => weapon.id );
       this.equipment.weapons = weapons;
       this.equipment.activeWeapon = weapons[0];
 
@@ -375,8 +377,12 @@ export default {
         if(character.equipment.armor)
           this.selectedArmorId = character.equipment.armor.id;
 
-        if(character.equipment.weapons.length)
+        if(character.equipment.weapons.length) {
           this.weapons = character.equipment.weapons;
+          this.selectedWeaponsIds = this.weapons.map(
+            weapon => weapon.id
+          );
+        }
 
         if(character.equipment.items)
           this.updateInventory(character.equipment.items);

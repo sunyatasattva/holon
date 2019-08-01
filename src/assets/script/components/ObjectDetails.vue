@@ -331,7 +331,6 @@ export default {
     }
   },
   watch: {
-    'object.equipment.armor': 'calculateModifiedAttributes',
     'object.equipment.activeWeapon': 'calculateModifiedAttributes'
   },
   getIconForAttribute: Weapon.getIconFor,

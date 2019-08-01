@@ -67,7 +67,6 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.attributes.skills = this.attributes.skills || [];
     this.attributes.status = this.attributes.status || [];
     this.attributes.wounds = this.attributes.wounds || 0;
-    this.calculateModifiedAttributes();
     this.set('defaultFill', this.teamFills[this.team]);
     this.set('fill', this.defaultFill);
     this._allowRotationOnly();
@@ -126,6 +125,13 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       this.equipment.armor,
       this.equipment.activeWeapon
     ];
+    
+    equipment
+      .filter(x => x)
+      .forEach(item => {
+        if(typeof item.calculateModifiedAttributes === 'function')
+          item.calculateModifiedAttributes();
+      });
     
     this.resetBaseAttributes();
 
@@ -318,17 +324,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         this.equipment,
         'weapons',
         this.equipment.weapons.map(weapon => {
-          if(weapon.type !== activeWeapon.type)
+          if(weapon.type === activeWeapon.type) {
+            weapon.ammo.current = ammo;
+
+            weapon.calculateModifiedAttributes();
+
             return weapon;
-          else {
-            return {
-              ...weapon,
-              ammo: {
-                ...weapon.ammo,
-                current: ammo
-              },
-              currentAmmo: weapon.ammo.capacity
-            }
           }
         })
       );
@@ -469,47 +470,6 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     console.log(`${this.attributes.name} used ${item.type}`);
 
     return this;
-  },
-  
-  _applyAmmoModifiers() {
-    this.equipment.weapons = this.equipment.weapons
-      .map(weapon => {
-        const base = weapon.baseAttributes || { ...weapon },
-              modifiedAttributes = {},
-              modifiers = get(weapon, 'ammo.current.modifiers') || {};
-
-        for( let [attr, mod] of Object.entries(modifiers) ) {
-            let baseAttribute = base[attr].toString().split('+'),
-                separator;
-
-            if(baseAttribute.length > 1) {
-              modifiedAttributes[attr] = baseAttribute
-                .map(x => +x ? +x + mod : x)
-                .reduce((acc, curr) => {
-                  if( isNaN(curr) )
-                    return curr;
-                  else if(curr === 0)
-                    return `${acc}`;
-                  else {
-                    separator = curr > 0 ? '+' : '-';
-
-                    return `${acc}${separator}${curr}`
-                  }
-                }, '');
-            } else {
-              separator = mod > 0 ? '+' : '';
-
-              modifiedAttributes[attr] = `${baseAttribute[0]}${separator}${mod}`;
-            }
-          }
-
-        return {
-          ...base,
-          ...modifiedAttributes,
-          ammo: weapon.ammo,
-          baseAttributes: base
-        }
-      });
   },
   
   _applyModifiers(source) {

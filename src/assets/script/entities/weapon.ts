@@ -36,7 +36,8 @@ export default class Weapon extends Item {
   };
 
   ammo: {
-    capacity: number
+    capacity: number,
+    current: Item
   };
   criticalHitChance: number;
   damage: string;
@@ -75,6 +76,8 @@ export default class Weapon extends Item {
   }
 
   private calculateModifiedAttributes() {
+    const currentAmmo = get(this, 'ammo.current');
+
     this.resetBaseAttributes();
 
     this.mods.forEach(mod => {
@@ -83,6 +86,9 @@ export default class Weapon extends Item {
       if(modifiers)
         Rules.applyModifiers(modifiers, this);
     });
+
+    if(currentAmmo && currentAmmo.modifiers)
+      Rules.applyModifiers(currentAmmo.modifiers, this);
 
     return this;
   }
@@ -94,7 +100,7 @@ export default class Weapon extends Item {
       modifiers
     } = this.baseAttributes;
     
-    this.ammo.capacity = <number>this.baseAttributes.ammoCapacity;
+    set(this, 'ammo.capacity', <number>this.baseAttributes.ammoCapacity);
     this.criticalHitChance = <number>criticalHitChance;
     this.damage = <string>damage;
     this.modifiers = { ...<Modifiers>modifiers };
