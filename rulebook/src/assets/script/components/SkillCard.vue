@@ -52,17 +52,24 @@
             <ul class="requirements-list">
               <li 
                 v-for="(requirement, idx) in requirements"
-                v-if="!( typeof requirement === 'string' &&
-                  requirement.includes('talent-') )">
+                :key="requirement.id"
+                >
                 <a 
-                  v-if="typeof requirement === 'string'"
-                  :href="`#skills-level-${requirement[1]}`">
+                  v-if="
+                    typeof requirement === 'string' 
+                    && !requirement.includes('talent-')
+                  "
+                  :href="`#skills-level-${requirement[1]}`">  
                     Qualsiasi abilità di Livello {{ requirement[1] }}
                 </a>
                 <a 
                   v-else-if="requirement.id"
-                  :href="`#skill-${requirement.id}`">
+                  :href="`#${requirement.level ? 'talent' : 'skill'}-${requirement.id}`">
                     {{ requirement.name }}
+                    
+                    <span v-if="requirement.level">
+                      ({{ requirement.level }})
+                    </span>
                 </a>
                 <span v-else-if="requirement.length">
                   Una qualsiasi tra
@@ -85,7 +92,7 @@
 </template>
 
 <script>
-import { skills } from "_skills";
+import { skills, talents } from "_skills";
   
 import Card from "./Card.vue";
 
@@ -118,6 +125,18 @@ export default {
             && !requirement.includes("talent")
           )
             return skills.find( skill => skill.id === requirement );
+          else if( 
+            typeof requirement === "string"
+            && requirement.includes("talent-")
+          ) {
+            const talentId = requirement.split("-")[1];
+            const talent = talents.find( talent => talent.id === talentId );
+
+            return {
+              ...talent,
+              level: requirement.split("-")[2]
+            }
+          }
           else if( Array.isArray(requirement) )
             return requirement.map((optionalRequirement) => {
               return skills.find( skill => skill.id === optionalRequirement ); 
@@ -214,16 +233,6 @@ export default {
         }
       }
       
-      .icon-container-inner::after {
-        content:          "";
-        mix-blend-mode:   color;
-        position:         absolute;
-        top:              3px;
-        right:            3px;
-        bottom:           3px;
-        left:             3px;
-      }
-      
       .skill-card-inner {
         display: none;
         
@@ -231,6 +240,22 @@ export default {
         width: 450px;
         z-index: 400;
       }
+    }
+
+    &.talent {
+      .icon-container-inner::after {
+        background-color: $purple-color;
+      }
+    }
+
+    .icon-container-inner::after {
+      content:          "";
+      mix-blend-mode:   color;
+      position:         absolute;
+      top:              0px;
+      right:            0px;
+      bottom:           0px;
+      left:             0px;
     }
   }
   

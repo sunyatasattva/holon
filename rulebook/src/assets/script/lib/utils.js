@@ -2,7 +2,6 @@ import skills from '_skills';
 
 export function parseRequirements(requirements, curr) {
   let nestedRequirements = [],
-      requirementLevel,
       skill;
 
   requirements.push(curr);
@@ -39,17 +38,18 @@ export function parseRequirements(requirements, curr) {
 
 export const groupedSkills = skills.skills
   .reduce((arr, skill) => {
-    if( !skill.requirements.some( _ => _.includes("talent-") ) )
-      arr.push(skill);
+    let requirementsLevel,
+        group;
+
+    if( skill.tags.includes('talent') )
+      requirementsLevel = skill.requirements.length - 1;
+    else
+      requirementsLevel = skill.requirements
+        .reduce(parseRequirements, []).length;
+
+    group = arr[requirementsLevel] || []
     
-    return arr;
-  }, [])
-  .reduce((arr, skill) => {
-    let requirementsLevel = skill.requirements
-      .reduce(parseRequirements, []).length,
-        group = arr[requirementsLevel] || [];
-    
-    group.push( { ...skill, level: requirementsLevel + 1} );
+    group.push( { ...skill, level: requirementsLevel + 1 } );
     arr[requirementsLevel] = group;
     
     return arr;

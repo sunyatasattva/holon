@@ -63,7 +63,10 @@
         <h1>Attributi</h1>
         <p>Ogni personaggio possiede {{ $options.mechanics.attributes.length }} <em>Attributi</em>:</p>
         <ul class="attribute-list">
-          <li v-for="attribute in $options.mechanics.attributes">
+          <li 
+            v-for="attribute in $options.mechanics.attributes"
+            :key="attribute.id"
+          >
             <p>
               <i class="material-icons">{{ attribute.icon }}</i>
               <span v-html="attribute.description"></span>
@@ -113,7 +116,7 @@
                   <th>Cap</th>
                   <th>Step</th>
                 </tr>
-                <tr v-for="(attribute, i) in $options.mechanics.attributes">
+                <tr v-for="(attribute, i) in $options.mechanics.attributes" :key="attribute.id">
                   <td>
                     <attribute-input
                       :max="availableCharacterPoints <= 0 ? attributes[i].value : 255"
@@ -215,7 +218,11 @@
         <h1>Condizioni alterate</h1>
         <p>Un personaggio può subire degli effetti, dall'ambiente, da oggetti o da altre cause, che ne alterano la condizione. Generalmente questi effetti hanno una <em>durata</em> in termini di <em>turni</em> che è specificata nella fonte dell'effetto in questione. Alcuni oggetti o azioni possono ridurre o rimuovere questa alterazione.</p>
         <ul>
-          <li class="status-condition" v-for="status in $options.mechanics.statii">
+          <li 
+            class="status-condition" 
+            v-for="status in $options.mechanics.statii"
+            :key="status.id"
+          >
             <card>
               <div slot="header-main">
                 <div class="icon-container-inner">
@@ -434,10 +441,19 @@
           </li>
         </ul>
       </section>
-      <section class="skill-list" id="section-skills">
+      <section
+        :class="{ 'show-talent-skills': showTalentSkills }"
+        class="skill-list" 
+        id="section-skills"
+      >
         <h1>
           <span>Abilità</span>
           <div class="view-options">
+            <md-switch 
+              v-model="showTalentSkills"
+              class="md-primary">
+              Show talent skills
+            </md-switch>
             <input type="radio" id="compactAbilities-compact" name="compactAbilities" :value=true v-model="compactAbilities">
             <label for="compactAbilities-compact">
               <i class="material-icons">view_comfy</i>
@@ -453,6 +469,7 @@
         <div 
           v-for="(group, i) in $options.groupedSkills"
           class="skill-group-compact"
+          :key="i"
           :id="`skills-level-${(i++, i)}`">
           <h2>
             Livello {{ i }}
@@ -462,6 +479,8 @@
           </h2>
           <skill-card
             v-for="skill in group"
+            :key="skill.id"
+            :class="skill.tags.join(' ')"
             :skill="skill"
             :compact="compactAbilities"
           />
@@ -469,11 +488,13 @@
         <hr />
         <div 
           v-for="(group, i) in $options.skillsByTag"
+          :key="i"
           class="skill-group-compact"
           :id="`skills-level-${i + 1}`">
           <h2>{{ i }}</h2>
           <skill-card
             v-for="skill in group"
+            :key="skill.id"
             :skill="skill"
             :compact="compactAbilities"
           />
@@ -488,7 +509,7 @@
         <p>Ogni livello di competenza da accesso ad una <em>abilità</em> che il personaggio può ottenere spendendo <em>punti esperienza</em>. La prima <em>abilità</em> conta come una di <em class="stat">primo livello</em>, la seconda come una di <em class="stat">terzo livello</em>, la terza come una di <em class="stat">quinto livello</em>.</p>
         <p>Personaggi con competenze nel medesimo settore, possono collaborare e conferirsi vicendevolmente dei <em class="plus">bonus</em> alla <em>prova</em>.</p>
         <ul>
-          <li v-for="talent in $options.talents">
+          <li v-for="talent in $options.talents" :key="talent.id">
             <card>
               <div slot="header-main" :id="`talent-${talent.id}`">
                 <div class="icon-container-inner">
@@ -505,8 +526,11 @@
               
               <div slot="footer">
                 <skill-card 
-                  v-for="skill in 
-                    $options.skills.filter( skill => skill.requirements.some( requirement => requirement === `talent-${talent.id}` ) )"
+                  v-for="skill in talentSkills"
+                  v-if="skill.requirements
+                    .find(requirement => requirement.includes('talent-'))
+                    .split('-')[1] === talent.id"
+                  :key="skill.id"
                   :skill="skill"
                   :compact="true"
                 />
@@ -534,7 +558,7 @@
         <section class="weapons" id="weapon-list">
           <h2>Armi</h2>
           <ul class="weapon-list">
-            <li v-for="weapon in $options.equipment.weapons">
+            <li v-for="weapon in $options.equipment.weapons" :key="weapon.id">
               <weapon-card :weapon="weapon" />
             </li>
           </ul>
@@ -542,7 +566,7 @@
         <section class="armors" id="armor-list">
           <h2>Armature</h2>
           <ul class="armor-list">
-            <li v-for="armor in $options.equipment.armors">
+            <li v-for="armor in $options.equipment.armors" :key="armor.id">
               <card>
                 <span slot="header-main">
                   {{ armor.type }}
@@ -570,8 +594,12 @@
         </section>
         <section class="items" id="item-list">
           <h2>Oggetti</h2>
-          <ul class="item-list" v-for="category in $options.equipment.items">
-            <li v-for="item in category">
+          <ul 
+            class="item-list" 
+            v-for="(category, i) in $options.equipment.items"
+            :key="i"
+          >
+            <li v-for="item in category" :key="item.id">
               <card>
                 <span slot="header-main">
                   <span class="icon-container-inner">
@@ -609,7 +637,10 @@
           <p>Ogni impianto neurale conferisce una <em class="minus">penalità</em> al <em>Focus</em> del personaggio.</p>
           <p>Di norma, gli effetti del <em>Cyberware</em> sono sempre attivi; alcuni effetti, potrebbero richiedere l'attivazione conscia del personaggio attraverso un'<em>Azione</em> od avere un <em>Cooldown</em>, come specificato nella descrizione dalle apposite icone (<i class="material-icons">reply_all</i> e <i class="material-icons">settings_backup_restore</i>).</p>
           <ul class="item-list">
-            <li v-for="item in $options.equipment.augmentations.cyberware">
+            <li 
+              v-for="item in $options.equipment.augmentations.cyberware"
+              :key="item.id"
+            >
               <card>
                 <span slot="header-main">
                   <span class="icon-container-inner">
@@ -647,7 +678,10 @@
           <h3>Bioware</h3>
           <p>Oltre ad eventuali effetti sempre attivi, in molti casi un <em>Bioware</em> ha un effetto supplementare che può essere attivato ad un costo in <em>Ferite</em>. Tranne dove diversamente specificato, l'attivazione non richiede un'<em>Azione</em> e non ha <em>Cooldown</em>.</p>
           <ul class="item-list">
-            <li v-for="item in $options.equipment.augmentations.bioware">
+            <li 
+              v-for="item in $options.equipment.augmentations.bioware"
+              :key="item.id"
+            >
               <card>
                 <span slot="header-main">
                   <span class="icon-container-inner">
@@ -1135,7 +1169,6 @@ const ITEM_ICONS = {
 const STARTING_CHARACTER_POINTS = 200;
   
 const skillsByTag = skills.skills
-.filter(x => x.requirements.indexOf("*9") !== -1)
 .reduce((acc, skill) => {
   skill.tags.forEach((tag) => {
       if(acc[tag])
@@ -1175,7 +1208,14 @@ export default {
         .map( attr => ({ cost: 0, value: attr.initial }) ),
       compactAbilities: true,
       selectedSkill: {},
-      showCharacterCreator: false
+      showCharacterCreator: false,
+      showTalentSkills: false,
+      talentSkills: skills.skills
+        .filter(
+          skill => skill.requirements.some(
+            requirement => requirement.includes('talent-')
+          )
+        ).sort( (a, b) => a.requirements.length - b.requirements.length )
     }
   },
   
@@ -1197,7 +1237,7 @@ export default {
   itemIcons: ITEM_ICONS,
   mechanics: mechanics,
   groupedSkills: groupedSkills,
-  skillsByTag: skillsByTag,
+  skillsByTag: [],
   skills: skills.skills,
   talents: skills.talents,
   _rulebookVersion: rulebookVersion
@@ -1447,6 +1487,22 @@ export default {
     display: block;
     margin: 10px 0;
   }
+
+  .skill-list {
+    .skill-card.talent {
+      display: none;
+    }
+
+    &.show-talent-skills {
+      .skill-card.talent {
+        display: block;
+
+        &.is-compact {
+          display: inline-block;
+        }
+      }
+    }
+  }
     
   .stat {
     color: $aqua-color;
@@ -1519,9 +1575,8 @@ export default {
   
   .view-options {
     float:     right;
-    font-size: 0;
-    position: relative;
-    top: 5px;
+    position:  relative;
+    top:       5px;
     
     input {
       display: none;
@@ -1530,22 +1585,29 @@ export default {
         background-color: darken($blue-color, 15);
         box-shadow:       inset 0 0 5px darken($blue-color, 25);
       }
+
+      + label {
+        background-color: $blue-color;
+        color:            $dark-color-darker;
+        cursor:           pointer;
+        display:          inline-block;
+        padding:          5px;
+        
+        &:last-child {
+          border-radius: 0 5px 5px 0;
+        }
+        
+        &:nth-child(3) {
+          border-radius: 5px 0 0 5px;
+        }
+      }
     }
-    
-    label {
-      background-color: $blue-color;
-      color:            $dark-color-darker;
-      cursor:           pointer;
-      display:          inline-block;
-      padding:          5px;
-      
-      &:last-child {
-        border-radius: 0 5px 5px 0;
-      }
-      
-      &:nth-child(2) {
-        border-radius: 5px 0 0 5px;
-      }
+
+    .md-switch {
+      font-size:      $unit-3;
+      padding-right:  $padding;
+      vertical-align: middle;
+      height:         auto;
     }
   }
 </style>
