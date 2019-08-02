@@ -31,9 +31,9 @@
       "id": "heavy-conditioning",
       "name": "Addestramento pesante",
       "requirements": [
-        "talent-athletics"
+        "talent-athletics-1"
       ],
-      "tags": ["special", "hp"]
+      "tags": ["talent", "special", "hp"]
     },
     {
       "action": -1,
@@ -414,9 +414,13 @@
       "id": "coordination",
       "name": "Coordinare",
       "requirements": [
-        "talent-networking"
+        "talent-networking-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["special"]
+      "tags": ["talent", "special"]
     },
     {
       "action": 1,
@@ -429,9 +433,13 @@
       "id": "improvised-cover",
       "name": "Copertura improvvisata",
       "requirements": [
-        "talent-survival"
+        "talent-survival-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["cover", "defensive"]
+      "tags": ["talent", "cover", "defensive"]
     },
     {
       "action": -1,
@@ -459,9 +467,13 @@
       "id": "collateral-damage",
       "name": "Danno collaterale",
       "requirements": [
-        "talent-demolition"
+        "talent-demolition-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["cover", "heavy", "special"]
+      "tags": ["talent", "cover", "heavy", "special"]
     },
     {
       "action": 1,
@@ -474,9 +486,9 @@
       "id": "mark",
       "name": "Designare il bersaglio",
       "requirements": [
-        "talent-networking"
+        "talent-networking-1"
       ],
-      "tags": ["aim"]
+      "tags": ["talent", "aim"]
     },
     {
       "action": -1,
@@ -538,9 +550,11 @@
       "id": "directive",
       "name": "Dirigere",
       "requirements": [
-        "talent-networking"
+        "talent-networking-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["actions"]
+      "tags": ["talent", "actions"]
     },
     {
       "action": -1,
@@ -552,9 +566,13 @@
       "id": "low-profile",
       "name": "Discrezione",
       "requirements": [
-        "talent-infiltration"
+        "talent-infiltration-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["cover", "defensive"]
+      "tags": ["talent", "cover", "defensive"]
     },
     {
       "action": -1,
@@ -568,9 +586,9 @@
       "id": "controlled-explosion",
       "name": "Esplosioni controllate",
       "requirements": [
-        "talent-demolition"
+        "talent-demolition-1"
       ],
-      "tags": ["items"]
+      "tags": ["talent", "items"]
     },
     {
       "action": -1,
@@ -582,9 +600,9 @@
       "id": "do-or-do-not",
       "name": "Fare o Non fare",
       "requirements": [
-        "talent-knowledge"
+        "talent-knowledge-1"
       ],
-      "tags": ["special"]
+      "tags": ["talent", "special"]
     },
     {
       "action": -1,
@@ -675,9 +693,11 @@
       "id": "sapper",
       "name": "Geniere",
       "requirements": [
-        "talent-demolition",
+        "talent-demolition-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["items", "cover"]
+      "tags": ["talent", "items", "cover"]
     },
     {
       "action": -1,
@@ -715,9 +735,11 @@
       "id": "go-go-gadget",
       "name": "Hop hop Gadget",
       "requirements": [
-        "talent-engineering"
+        "talent-engineering-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["overwatch", "items"]
+      "tags": ["talent", "overwatch", "items"]
     },
     {
       "action": -1,
@@ -792,9 +814,13 @@
       "id": "field-engineering",
       "name": "Ingegneria militare",
       "requirements": [
-        "talent-engineering"
+        "talent-engineering-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["items"]
+      "tags": ["talent", "items"]
     },
     {
       "action": 1,
@@ -868,9 +894,13 @@
       "id": "macro-scripting",
       "name": "Macro Scripting",
       "requirements": [
-        "talent-interfacing"
+        "talent-interfacing-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["special"]
+      "tags": ["talent", "special"]
     },
     {
       "action": -1,
@@ -882,9 +912,13 @@
       "id": "martial-master",
       "name": "Maestro marziale",
       "requirements": [
-        "talent-athletics"
+        "talent-athletics-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["critical", "melee"]
+      "tags": ["talent", "critical", "melee"]
     },
     {
       "action": -1,
@@ -910,9 +944,9 @@
       "id": "weapon-master",
       "name": "Mastro d'arme",
       "requirements": [
-        "talent-engineering"
+        "talent-engineering-1"
       ],
-      "tags": ["heavy"]
+      "tags": ["talent", "heavy"]
     },
     {
       "action": 1,
@@ -952,9 +986,11 @@
       "id": "field-medicine",
       "name": "Medicina da campo",
       "requirements": [
-        "talent-medicine"
+        "talent-medicine-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["items"]
+      "tags": ["talent", "items"]
     },
     {
       "action": -1,
@@ -966,9 +1002,9 @@
       "id": "wary-mind",
       "name": "Mente all'erta",
       "requirements": [
-        "talent-survival"
+        "talent-survival-1"
       ],
-      "tags": ["dodge", "defensive"]
+      "tags": ["talent", "dodge", "defensive"]
     },
     {
       "action": -1,
@@ -1009,9 +1045,9 @@
       "id": "no-waste",
       "name": "Nessuno spreco",
       "requirements": [
-        "talent-medicine"
+        "talent-medicine-1"
       ],
-      "tags": ["items"]
+      "tags": ["talent", "items"]
     },
     {
       "action": -1,
@@ -1059,9 +1095,13 @@
       "id": "nootropics",
       "name": "Nootropi",
       "requirements": [
-        "talent-medicine"
+        "talent-medicine-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["items"]
+      "tags": ["talent", "items"]
     },
     {
       "action": 0,
@@ -1120,9 +1160,11 @@
       "id": "parkour",
       "name": "Parkour",
       "requirements": [
-        "talent-athletics"
+        "talent-athletics-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["special"]
+      "tags": ["talent", "special"]
     },
     {
       "action": -1,
@@ -1224,9 +1266,13 @@
       "id": "ready-for-anything",
       "name": "Pronto a tutto",
       "requirements": [
-        "talent-knowledge"
+        "talent-knowledge-3",
+        "*1",
+        "*2",
+        "*3",
+        "*4"
       ],
-      "tags": ["overwatch"]
+      "tags": ["talent", "overwatch"]
     },
     {
       "action": 1,
@@ -1240,9 +1286,9 @@
       "id": "sting",
       "name": "Pungiglione",
       "requirements": [
-        "talent-infiltration"
+        "talent-infiltration-1"
       ],
-      "tags": ["special"]
+      "tags": ["talent", "special"]
     },
     {
       "action": 1,
@@ -1305,9 +1351,11 @@
       "id": "resilience",
       "name": "Resilienza",
       "requirements": [
-        "talent-survival"
+        "talent-survival-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["status"]
+      "tags": ["talent", "status"]
     },
     {
       "action": -1,
@@ -1415,9 +1463,9 @@
       "id": "sabotage",
       "name": "Sabotare",
       "requirements": [
-        "talent-interfacing"
+        "talent-interfacing-1"
       ],
-      "tags": ["special", "status"]
+      "tags": ["talent", "special", "status"]
     },
     {
       "action": -1,
@@ -1444,9 +1492,11 @@
       "id": "shadow-leap",
       "name": "Salto nell'ombra",
       "requirements": [
-        "talent-infiltration"
+        "talent-infiltration-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["special"]
+      "tags": ["talent", "special"]
     },
     {
       "action": 1,
@@ -1579,9 +1629,11 @@
       "id": "tactician",
       "name": "Stratega",
       "requirements": [
-        "talent-knowledge"
+        "talent-knowledge-2",
+        "*1",
+        "*2"
       ],
-      "tags": ["actions"]
+      "tags": ["talent", "actions"]
     },
     {
       "action": -1,
@@ -1640,8 +1692,12 @@
       "modifiers": {},
       "id": "trojan-horse",
       "name": "Trojan Horse",
-      "requirements": ["talent-interfacing"],
-      "tags": ["special"]
+      "requirements": [
+        "talent-interfacing-2",
+        "*1",
+        "*2"
+      ],
+      "tags": ["talent", "special"]
     },
     {
       "action": -1,
