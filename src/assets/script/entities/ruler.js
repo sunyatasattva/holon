@@ -16,7 +16,9 @@ const Ruler = fabric.util.createClass(Line, {
    */
   type: 'ruler',
   
+  highlightedTiles: {},
   label: null,
+  length: 0,
   
   rulerKey: 'shiftKey',
   showLabel: true,
@@ -90,6 +92,26 @@ const Ruler = fabric.util.createClass(Line, {
       Math.sqrt( Math.pow(length, 2) + Math.pow(hDiff, 2) )
     );
   },
+
+  highlightAreaOfEffect() {
+    if(this.highlightedTiles.length === this.length)
+      return;
+
+    this._destroyTilesHighlightedByThis();
+
+    const area = this.canvas.calculateRange(
+      this.gridPosition.start,
+      this.length
+    );
+
+    this.highlightedTiles = {
+      length: this.length,
+      tiles: this.canvas.highlightTiles(area[0], {
+        color: '#000',
+        opacity: 0.1
+      })
+    };
+  },
   
   highlightCovers() {
     let covers = this.canvas.getObjects('cover');
@@ -121,6 +143,14 @@ const Ruler = fabric.util.createClass(Line, {
     
     this.lockedTarget = target;
   },
+
+  _destroyTilesHighlightedByThis() {
+    if(this.highlightedTiles.tiles) {
+      this.canvas.remove(this.highlightedTiles.tiles);
+
+      this.canvas.renderAll();
+    }
+  },
   
   _onObjectAdded() {
     let boundingRect = this.canvas.wrapperEl.getBoundingClientRect();
@@ -142,6 +172,7 @@ const Ruler = fabric.util.createClass(Line, {
   _removeAndUnlock() {
     this._unlockLockedTarget();
     this._unHighlightAllCoverLines();
+    this._destroyTilesHighlightedByThis();
     this.label.remove();
     this.canvas.activeRuler = null;
     this.remove();
@@ -174,6 +205,9 @@ const Ruler = fabric.util.createClass(Line, {
     this._updateCoords(e);
     this._updateLabel();
     this.highlightCovers();
+
+    if(e.altKey)
+      this.highlightAreaOfEffect();
     
     return this;
   },
@@ -192,6 +226,7 @@ const Ruler = fabric.util.createClass(Line, {
   
   _updateLabel() {
     let length = this.calculateOctileLengthWithHeight();
+    this.length = length;
     
     if(this.label){
       if(+this.label.text === length){
