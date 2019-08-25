@@ -834,12 +834,8 @@
       "description": "Conferisce un <em class='plus'>bonus di +1</em> alla probabilità di <em>successo critico</em> ed al <em>danno</em>.",
       "icon": "ico-killerinstinct",
       "modifiers": {
-        "criticalHitChance": {
-          "bonus": 1
-        },
-        "damage": {
-          "bonus": 1
-        }
+        "equipment|activeWeapon|criticalHitChance": 1,
+        "equipment|activeWeapon|damage": 1
       },
       "id": "killer-instinct",
       "name": "Istinto Omicida",

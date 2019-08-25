@@ -262,7 +262,7 @@ export default {
     characterPoints() {
       return Object.values(this.attributes)
         .reduce(
-        (sum, curr) => sum + curr.totalCost,
+        (sum, curr) => sum + (curr.totalCost || 0),
         this.skillPoints
       );
     },
@@ -368,7 +368,13 @@ export default {
 
       Object.keys(character.baseAttributes)
         .forEach((attr) => {
-        this.attributes[attr].value = character.baseAttributes[attr];
+          const attribute = this.attributes[attr];
+          const base = character.baseAttributes[attr];
+
+          if(!attribute)
+            this.attributes[attr] = {};
+
+          this.attributes[attr].value = character.baseAttributes[attr];
       });
 
       this.name = character.attributes.name;
