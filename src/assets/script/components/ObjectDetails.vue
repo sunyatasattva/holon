@@ -94,6 +94,7 @@
                   <md-icon>settings_input_component</md-icon>
                   <health-bar
                     class="ammo-tracker"
+                    v-if="weapon.ammo.capacity !== -1"
                     :health="weapon.ammo.capacity"
                     :wounds="weapon.ammo.capacity - weapon.currentAmmo"
                     @update="modifyAmmo(weapon, ...arguments)"
