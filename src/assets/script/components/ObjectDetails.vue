@@ -17,6 +17,7 @@
           v-for='attribute in $options.mechanics.attributes'
           v-if='attribute.id !== "resources"'>
           <dt
+           :key='attribute.id'
            :class="{ 'is-modified': object.attributes[attribute.id] !== object.baseAttributes[attribute.id] }"
          >
           <md-icon class="md-primary">{{ attribute.icon }}</md-icon>

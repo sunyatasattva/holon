@@ -82,14 +82,22 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           else
             return skill;
         });
+    else
+      this.attributes.skills = [];
 
-    if(this.equipment.weapons.length) {
+    if(this.equipment.weapons && this.equipment.weapons.length) {
       this.equipment.weapons = this.equipment.weapons
         .map(weapon => new Weapon(weapon));
 
       this.equipment.activeWeapon = this.equipment.weapons
         .find(weapon => this.equipment.activeWeapon.id === weapon.id);
+    } else {
+      this.equipment.weapons = [];
+      this.equipment.activeWeapon = null;
     }
+
+    if(!this.equipment.items)
+      this.equipment.items = [];
     
     if(this.showRangeOnSelected) {
       this.on('selected', () => {
@@ -126,7 +134,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       this.equipment.armor,
       this.equipment.activeWeapon
     ];
-    
+
     equipment
       .filter(x => x)
       .forEach(item => {

@@ -390,7 +390,7 @@ export default {
           );
         }
 
-        if(character.equipment.items)
+        if(character.equipment.items.length)
           this.updateInventory(character.equipment.items);
       }
 

@@ -50,12 +50,15 @@ export default class Weapon extends Item {
     if(!this.mods)
       this.mods = [];
 
-    this.baseAttributes = {
-      ammoCapacity: get(opts, "ammo.capacity") || -1,
-      criticalHitChance: this.criticalHitChance,
-      damage: this.damage,
-      modifiers: { ...this.modifiers }
-    }
+    if(this.baseAttributes)
+      this.resetBaseAttributes();
+    else
+      this.baseAttributes = {
+        ammoCapacity: get(opts, "ammo.capacity") || -1,
+        criticalHitChance: this.criticalHitChance,
+        damage: this.damage,
+        modifiers: { ...this.modifiers }
+      }
 
     this.calculateModifiedAttributes();
   }
