@@ -2,10 +2,10 @@
   <div class="turn-controls">
     <transition-group name="turn-list" tag="ul">
       <turn-list-item
-        v-for="(character, i) in sortedCharacters"
+        v-for="character in sortedCharacters"
         :character="character"
         :isCurrent="activeCharacters.length && character.attributes.name === activeCharacters[0].attributes.name"
-        :key="character.attributes.name.toLowerCase() + i"
+        :key="character.id"
         @click.native.stop="selectCharacter(character)"
       />
     </transition-group>

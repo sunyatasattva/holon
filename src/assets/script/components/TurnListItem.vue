@@ -12,7 +12,7 @@
     <span class="character-name">{{ character.attributes.name }}</span>
     <md-button
      class="md-dense md-icon-button md-mini"
-     v-if="isCurrent && !character.isDelaying"
+     v-if="isCurrent"
      @click.stop="delayAction"
      >
       <md-icon>subdirectory_arrow_left</md-icon>
@@ -32,7 +32,7 @@ export default {
   props: ['character', 'isCurrent'],
   computed: {
     isDelaying() {
-      return this.character.isDelaying();
+      return this.character.isDelaying;
     }
   },
   data() {

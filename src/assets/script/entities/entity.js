@@ -1,6 +1,7 @@
 const fabric = require('fabric').fabric;
 const extend = fabric.util.object.extend;
 const Label = require('./label');
+const uniqId = require('uniqId');
 
 /**
  * Cover class
@@ -27,6 +28,8 @@ const Entity = fabric.util.createClass(fabric.Object, {
    */
   initialize(options = {}) {
     this.callSuper('initialize', options);
+
+    this.id = uniqId();
     
     this.gridPosition = [];
 
