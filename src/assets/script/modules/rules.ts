@@ -34,9 +34,9 @@ export class Rules {
       attr = attr.split("|").join(".");
       mod = this._parseModifier(mod, target);
 
-      const basePath = get(target, attr)
-        || get(target, attr) === 0 ? target : target.attributes;
-
+      const basePath = get(target, ['attributes', 'attr']) ?
+        target.attributes : target;
+      
       const baseAttribute: string | number = get(basePath, attr)
         || 0;
       let separator: string;
