@@ -24,6 +24,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     skills: [],
     status: []
   },
+  children: [],
   equipment: {
     activeWeapon: {},
     armor: {},
@@ -68,6 +69,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     this.attributes.skills = this.attributes.skills || [];
     this.attributes.status = this.attributes.status || [];
     this.attributes.wounds = this.attributes.wounds || 0;
+    this.children = [];
     this.set('defaultFill', this.teamFills[this.team]);
     this.set('fill', this.defaultFill);
     this._allowRotationOnly();
@@ -122,6 +124,10 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       // @todo labels should be grouped
       this.displayStatus();
     });
+  },
+
+  addChild(object) {
+    this.children.push(object);
   },
   
   // @todo refactor this in a mixin
@@ -245,6 +251,11 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
     
     return this;
   },
+
+  endTurn() {
+    this.setProp('hasActed', !this.hasActed);
+    this.reduceCountdowns();
+  },
   
   executeCommand(command, ...options) {
     console.log(`${this.attributes.name} is executing ${command.name}.`, options);
@@ -334,6 +345,7 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
         }
       });
     
+    this.children.forEach(child => child.tick());
     
     this._update();
     

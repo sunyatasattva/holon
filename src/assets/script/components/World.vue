@@ -5,6 +5,8 @@
 <script>
 import debounce from 'lodash.debounce';
 
+import AreaOfEffect from '../entities/aoe';
+import Ruler from '../entities/ruler';
 import World from '../entities/world';
 
 const component = {
@@ -21,6 +23,8 @@ const component = {
     const world = new World('c', { activeObjects: this.activeObjects });
     
     this.canvas = world;
+
+    this._setupRuler();
     
     window.addEventListener('resize', () => {
       debounce( world._resizeToFullScreen(), 1000 );
@@ -180,6 +184,9 @@ const component = {
         else
           return;
       }
+      else if(addingObject instanceof AreaOfEffect) {
+        this.canvas.createRuler(opts);
+      }
       else {
         coords = this.canvas.getCoordinatesOfTile(tile);
         
@@ -246,6 +253,50 @@ const component = {
         let currentSelectableState = o.get('selectable');
 
         o.set('selectable', !currentSelectableState);
+      });
+    },
+
+    _setupRuler() {
+      this.canvas.on('mouse:down', (opts) => {
+        const rulerKey = Ruler.prototype.rulerKey;
+
+        if(!opts.e[rulerKey])
+          return;
+        
+        this.canvas.createRuler(opts);
+      });
+      
+      this.canvas.on('mouse:move', (opts) => {
+        const newObject = this.options.isAddingObject;
+
+        if(!this.canvas.activeRuler)
+          return;
+
+        if(newObject instanceof AreaOfEffect)
+          opts.e.highlightTiles = true;
+        
+        this.canvas.activeRuler._update(opts.e);
+      });
+
+      this.canvas.on('mouse:up', (opts) => {
+        const newObject = this.options.isAddingObject;
+        const ruler = this.canvas.activeRuler;
+
+        if(newObject) {
+          if(newObject instanceof AreaOfEffect && ruler) {
+            newObject.set({ 
+              area: ruler.highlightedTiles.area,
+              group: ruler.highlightedTiles.tiles
+            });
+
+            ruler.highlightedTiles = {};
+          }
+
+          this.$emit('toggle', 'isAddingObject');
+        }
+
+        if(ruler)
+          ruler._removeAndUnlock();
       });
     }
   }

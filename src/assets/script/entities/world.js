@@ -78,7 +78,6 @@ const World = fabric.util.createClass(fabric.Canvas, {
     this._resizeToFullScreen();
     this._createGrid();
     this._createMatrix();
-    this._setupRuler();
   },
   
   addAsActiveObject(...objects) {
@@ -176,6 +175,12 @@ const World = fabric.util.createClass(fabric.Canvas, {
                     tileA.x > tileB.x ? 'W' : 'E';
     
     return direction;
+  },
+
+  createRuler(opts) {
+    const p = this.getPointer();
+      
+    this.add( new Ruler([p.x,p.y,p.x,p.y], { e: opts.e }) );
   },
   
   getActiveObjects(type) {
@@ -418,34 +423,6 @@ const World = fabric.util.createClass(fabric.Canvas, {
     this.setWidth(window.innerWidth);
     
     this.renderAll()
-  },
-  
-  _setupRuler() {
-    this.on('mouse:down', (opts) => {
-      let rulerKey = Ruler.prototype.rulerKey,
-          p = this.getPointer();
-
-      if(!opts.e[rulerKey])
-        return;
-      
-      this.add( new Ruler([p.x,p.y,p.x,p.y], { e: opts.e }) );
-    });
-    
-    this.on('mouse:move', (opts) => {
-      let rulerKey = Ruler.prototype.rulerKey;
-      
-      if(!opts.e.which || !opts.e[rulerKey] || !this.activeRuler)
-        return;
-      
-      this.activeRuler._update(opts.e);
-    });
-    
-    this.on('mouse:up', () => {
-      if (!this.activeRuler)
-        return;
-      
-      this.activeRuler._removeAndUnlock();
-    });
   }
 
 });

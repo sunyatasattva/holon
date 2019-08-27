@@ -14,7 +14,8 @@
     <md-drawer class="md-right" ref="sidebar" :md-active.sync="editMode">
       <md-tabs md-alignment="fixed">
         <md-tab md-label="Create" md-icon="add_box">
-          <create-object 
+          <create-object
+            :characters='activeObjects.filter(o => o.attributes)'
             :isAddingObject='options.isAddingObject'
             v-on:add='toggleOption'
             v-on:cancel='toggleOption("isAddingObject")'
@@ -269,8 +270,7 @@ export default {
         this.saveGame();
     },
     endCharacterTurn(character) {
-      character.setProp('hasActed', !character.hasActed);
-      character.reduceCountdowns();
+      character.endTurn();
     },
     endTurn() {
       console.log(`Ending turn ${this.currentTurn}`);

@@ -105,6 +105,7 @@ const Ruler = fabric.util.createClass(Line, {
     );
 
     this.highlightedTiles = {
+      area,
       length: this.length,
       tiles: this.canvas.highlightTiles(area[0], {
         color: '#000',
@@ -206,7 +207,7 @@ const Ruler = fabric.util.createClass(Line, {
     this._updateLabel();
     this.highlightCovers();
 
-    if(e.altKey)
+    if(e.altKey || e.highlightTiles)
       this.highlightAreaOfEffect();
     
     return this;
