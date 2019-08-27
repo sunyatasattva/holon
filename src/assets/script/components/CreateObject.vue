@@ -5,55 +5,13 @@
         <md-icon>album</md-icon>
         <span class="md-list-item-text">Add area of effect</span>
 
-        <div class="add-cover" slot="md-expand">
-          <div class="aoe-options">
-            <div class="aoe-basic-details">
-              <div class="color-input">
-                <span class="aoe-color-label">Color</span>
-                <swatches 
-                  :colors="newAoEColors" 
-                  v-model="newAoEColor" 
-                  swatch-size="20" 
-                  row-length="6" />
-              </div>
-              <md-switch v-model="newAoEIsTimed" class="md-primary">Add a timer</md-switch>
-            </div>
-            <div class="aoe-time-details" v-if="newAoEIsTimed">
-              <md-field class="aoe-duration">
-                <md-icon>timer</md-icon>
-                <label>Duration</label>
-                <md-input v-model="newAoELife" type="number"></md-input>
-              </md-field>
-              <md-field class="aoe-parent" v-if="characters.length">
-                <label for="character-load">Select parent character</label>
-                <md-select
-                  id="character-load"
-                  v-model="newAoEParent">
-                  <md-option
-                    v-for="character of sortedCharacters"
-                    :key="character.id"
-                    :value="character.id">
-                    {{ character.attributes.name }}
-                  </md-option>
-                </md-select>
-              </md-field>
-            </div>
-            
-          </div>
-          <md-button
-            v-if='!isAddingObject'
-            class='md-raised md-primary'
-            @click='addObject("aoe")'>
-            <md-icon>add_circle_outline</md-icon>
-            Add area of effect
-          </md-button>
-          <md-button
-            v-else
-            class='md-raised md-warn'
-            @click='cancel'>
-            Cancel
-          </md-button>
-        </div>
+        <aoe-creation 
+          :characters="characters"
+          :isAddingObject="isAddingObject"
+          slot="md-expand"
+          @add="addObject('aoe', ...arguments)"
+          @cancel="cancel"
+        />
       </md-list-item>
       <md-list-item md-expand>
         <md-icon>security</md-icon>
@@ -110,8 +68,7 @@
 </template>
 
 <script>
-import Swatches from 'vue-swatches';
-
+import AoeCreation from './AoeCreation.vue';
 import CharacterCreation from './CharacterCreation.vue';
 
 import AreaOfEffect from '../entities/aoe';
@@ -123,25 +80,11 @@ import Skills from '_skills';
 export default {
   name: 'create-object',
   components: {
-    CharacterCreation,
-    Swatches
-  },
-  computed: {
-    sortedCharacters() {
-      return this.characters.sort((a, b) => {
-        if(a.attributes.name < b.attributes.name) { return -1; }
-        if(a.attributes.name > b.attributes.name) { return 1; }
-        return 0;
-      });
-    }
+    AoeCreation,
+    CharacterCreation
   },
   data() {
     return {
-      newAoEColor: '#000',
-      newAoEColors: ['#1ebc9c', '#48a2de', '#a463bf', '#f2c510', '#c0382a', '#000'],
-      newAoEIsTimed: false,
-      newAoELife: 1,
-      newAoEParent: null,
       newCoverType: 'full',
       newCoverPathable: false
     }
@@ -165,9 +108,9 @@ export default {
       else if(type === 'aoe') {
         obj = new AreaOfEffect({
           world,
-          color: this.newAoEColor,
-          lifeTime: this.newAoELife,
-          parentId: this.newAoEParent
+          color: data.color,
+          lifeTime: data.duration,
+          parentId: data.parent
         });
       }
       else if(type === 'character'){
@@ -233,32 +176,6 @@ export default {
   .add-character,
   .add-cover {
     padding: 16px;
-  }
-
-  .aoe-basic-details,
-  .aoe-time-details,
-  .color-input {
-    align-items: center;
-    display:     flex;
-  }
-
-  .aoe-duration,
-  .color-input {
-    margin-right: 5%;
-    width:        35%;
-
-    input {
-      width: 100%;
-    }
-  }
-
-  .aoe-parent {
-    width: 60%;
-  }
-
-  .color-input {
-    font-weight:     bold;
-    justify-content: space-between;
   }
 
   .md-tab {
