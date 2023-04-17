@@ -62,7 +62,7 @@
     "cross-env": "^2.0.0",
     "dotenv": "^6.0.0",
     "envify": "^3.4.1",
-    "ftp-deploy": "^2.1.1",
+    "ftp-deploy": "^2.4.3",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
