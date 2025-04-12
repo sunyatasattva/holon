@@ -1140,7 +1140,7 @@
 </template>
 
 <script>
-import groupBy from "lodash.groupby";
+import { groupBy } from "lodash";
 import AttributeModifiers from "./components/AttributeModifiers.vue";
 import Card from "./components/Card.vue";
 import Skill from "./components/Skill.vue";

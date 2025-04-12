@@ -1,6 +1,6 @@
-const fabric = require('fabric').fabric;
-const Entity = require('./entity');
-const Line   = require('./line'); 
+import { fabric } from 'fabric';
+import Entity from './entity';
+import Line from './line'; 
 
 /**
  * Cover class
@@ -184,4 +184,4 @@ Cover.fromObject = function(object) {
 
 fabric.Cover = Cover;
 
-module.exports = Cover;
+export default Cover;

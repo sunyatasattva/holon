@@ -1,7 +1,10 @@
-import get from "lodash.get";
+import {
+  get,
+  set,
+  xorBy
+} from 'lodash';
 import { statii } from "../../../../rulebook/rules/mechanics.json";
 import { Modifiers, isNumber, Modifier, isConditionalModifier, ConditionalModifier } from "../types";
-import { set } from "lodash";
 
 /*
  * These are to be called bound.

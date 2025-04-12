@@ -186,8 +186,7 @@
 </template>
 
 <script>
-import get from 'lodash.get';
-import groupBy from 'lodash.groupBy';
+import { get, groupBy } from 'lodash';
 
 import AttributeInput from './AttributeInput.vue';
 import ItemSelectionMenu from './ItemSelectionMenu.vue';

@@ -1,4 +1,5 @@
-import 'babel-polyfill';
+import 'vue-material/dist/vue-material.min.css';
+import 'vue-material/dist/theme/default.css';
 
 import Vue from 'vue';
 import Game from './Game.vue';
@@ -42,8 +43,8 @@ Vue.component('icon-pistol', IconPistol);
 import VueFire from 'vuefire';
 Vue.use(VueFire);
 
-const Cover  = require('./entities/cover');
-const Walker = require('./entities/walker');
+import Cover  from './entities/cover';
+import Walker from './entities/walker';
 
 const game = new Vue({
   el: '#Game',

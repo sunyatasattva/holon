@@ -1,5 +1,5 @@
-const fabric = require('fabric').fabric;
-const Line   = require('./line'); 
+import { fabric } from 'fabric';
+import Line from './line';
 
 /**
  * Ruler class
@@ -250,4 +250,4 @@ const Ruler = fabric.util.createClass(Line, {
   }
 });
 
-module.exports = Ruler;
+export default Ruler;

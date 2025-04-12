@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import debounce from 'lodash.debounce';
+import { fabric } from 'fabric';
+import { debounce } from 'lodash';
 
 import AreaOfEffect from '../entities/aoe';
 import Ruler from '../entities/ruler';

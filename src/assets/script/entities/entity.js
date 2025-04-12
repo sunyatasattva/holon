@@ -1,7 +1,7 @@
-const fabric = require('fabric').fabric;
-const extend = fabric.util.object.extend;
-const Label = require('./label');
-const uniqId = require('uniqId');
+import { fabric } from 'fabric';
+// import extend from 'fabric/lib/util/object'; // Unused import removed
+import Label from './label';
+import uniqId from 'uniqId';
 
 /**
  * Cover class
@@ -262,4 +262,4 @@ Entity.fromObject = function(object) {
 // but in that case will need to change the load function
 fabric.Entity = Entity;
 
-module.exports = Entity;
+export default Entity;

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import groupBy from 'lodash.groupby';
+import { groupBy } from 'lodash';
 
 import AttributeInput from './AttributeInput.vue';  
 

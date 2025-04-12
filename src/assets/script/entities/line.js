@@ -1,4 +1,4 @@
-const fabric = require('fabric').fabric;
+import { fabric } from 'fabric';
 
 /**
  * Line class
@@ -25,4 +25,4 @@ const Line = fabric.util.createClass(fabric.Line, {
   }
 });
 
-module.exports = Line;
+export default Line;

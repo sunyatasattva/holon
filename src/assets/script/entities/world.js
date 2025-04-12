@@ -1,7 +1,7 @@
-const fabric = require('fabric').fabric;
-const Line   = require('./line');
-const Ruler  = require('./ruler');
-const Tile   = require('./tile');
+import { fabric } from 'fabric';
+import Line from './line';
+import Ruler from './ruler';
+import Tile from './tile';
 
 /**
  * Cover class
@@ -427,4 +427,4 @@ const World = fabric.util.createClass(fabric.Canvas, {
 
 });
 
-module.exports = World;
+export default World;

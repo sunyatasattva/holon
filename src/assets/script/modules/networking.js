@@ -1,6 +1,6 @@
-import Firebase from 'firebase';
+// import Firebase from 'firebase'; // Remove import, assume global
 
-export default Firebase.initializeApp({
+export default firebase.initializeApp({
   apiKey: "AIzaSyBTDrHVuboDf6MDaVxGV-4OWeWFhBuircY",
   authDomain: "emergence-9f6f6.firebaseapp.com",
   databaseURL: "https://emergence-9f6f6.firebaseio.com",

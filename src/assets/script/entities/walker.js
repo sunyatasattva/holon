@@ -1,16 +1,14 @@
-const fabric = require('fabric').fabric;
-const extend = fabric.util.object.extend;
-const Entity = require('./entity');
-const Label  = require('./label');
+import { fabric } from 'fabric';
+import Entity from './entity';
+import Label  from './label';
 
 import Vue from 'vue';
 
-import get from 'lodash.get';
-import xorBy from 'lodash.xorby';
+import { get, xorBy } from 'lodash';
 
 import Mechanics from '_mechanics';
 import { Rules } from '../modules/rules';
-import { prototype as Cover } from './cover'; 
+import Cover from './cover'; 
 import Weapon from './weapon';
 
 /**
@@ -33,8 +31,8 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   coveredSides: {},
-  fullyCoveredColor: Cover._coverOpts.fullFill,
-  partiallyCoveredColor: Cover._coverOpts.partialFill,
+  fullyCoveredColor: Cover.prototype._coverOpts.fullFill,
+  partiallyCoveredColor: Cover.prototype._coverOpts.partialFill,
   includeDefaultValues: false,
   originX: 'left',
   originY: 'top',
@@ -655,4 +653,4 @@ Walker.fromObject = function(object) {
 
 fabric.Walker = Walker;
 
-module.exports = Walker;
+export default Walker;

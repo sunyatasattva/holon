@@ -194,8 +194,7 @@
 </template>
 
 <script>
-import get from 'lodash.get';
-import pick from 'lodash.pick';
+import { get, pick } from 'lodash';
 import Vue from 'vue';
   
 import Mechanics from '_mechanics';

@@ -1,5 +1,4 @@
-const fabric = require('fabric').fabric;
-const extend = fabric.util.object.extend;
+import { fabric } from 'fabric';
 
 /**
  * Label class
@@ -46,9 +45,9 @@ const Label = fabric.util.createClass(fabric.Group, {
   },
   
   setOptions(options) {
-    options.icon = extend(this.icon, options.icon);
-    options.label = extend(this.label, options.label);
-    options.text = extend(this.text, options.text);
+    options.icon = Object.assign(this.icon, options.icon);
+    options.label = Object.assign(this.label, options.label);
+    options.text = Object.assign(this.text, options.text);
     
     this.callSuper('setOptions', options);
   },
@@ -99,4 +98,4 @@ const Label = fabric.util.createClass(fabric.Group, {
   }
 });
 
-module.exports = Label;
+export default Label;

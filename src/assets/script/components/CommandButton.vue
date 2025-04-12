@@ -39,9 +39,6 @@ import { skills } from '_skills';
 export default {
   name: 'command-button',
   props: ['character', 'commandId', 'currentCooldown', 'options'],
-  components: {
-    CommandButton
-  },
   computed: {
     command() {
       return commands
