@@ -225,6 +225,7 @@ export default {
       editMode: false,
       selectedObject: false,
       showSnackbar: false,
+      snackbarMessage: "",
       options: {
         autoPan: false,
         autoSync: true,
