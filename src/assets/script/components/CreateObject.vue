@@ -19,30 +19,51 @@
         
         <div class="add-cover" slot="md-expand">
           <div class="cover-options">
-            <md-radio
-              v-model="newCoverType"
-              id="new-cover-full"
-              value="full">
-              Full
-            </md-radio>
-            <md-radio
-              v-model="newCoverType"
-              id="new-cover-partial"
-              value="partial">
-              Partial
-            </md-radio>
-            <md-switch 
-              v-model="newCoverPathable"
-              class="md-primary">
-              Pathable
-            </md-switch>
+            <div class="cover-type-selection">
+              <md-radio
+                v-model="coverVariant"
+                id="cover-variant-block"
+                value="block">
+                Block Cover
+              </md-radio>
+              <md-radio
+                v-model="coverVariant"
+                id="cover-variant-thin"
+                value="thin">
+                Thin Cover
+              </md-radio>
+            </div>
+
+            <div class="cover-strength">
+              <md-radio
+                v-model="newCoverType"
+                id="new-cover-full"
+                value="full">
+                Full
+              </md-radio>
+              <md-radio
+                v-model="newCoverType"
+                id="new-cover-partial"
+                value="partial">
+                Partial
+              </md-radio>
+            </div>
+            
+            <div class="block-cover-options">
+              <md-switch 
+                v-model="newCoverPathable"
+                class="md-primary">
+                Pathable
+              </md-switch>
+            </div>
           </div>
+          
           <md-button
             v-if='!isAddingObject'
             class='md-raised md-primary'
-            @click='addObject("cover")'>
+            @click='addObject(coverVariant === "thin" ? "thincover" : "cover")'>
             <md-icon>add_circle_outline</md-icon>
-            Add cover
+            Add {{ coverVariant === "thin" ? "thin cover" : "cover" }}
           </md-button>
           <md-button
             v-else
@@ -85,6 +106,7 @@ export default {
   },
   data() {
     return {
+      coverVariant: 'block',
       newCoverType: 'full',
       newCoverPathable: false
     }
@@ -101,7 +123,18 @@ export default {
           width: world.tileSize,
           height: world.tileSize,
           coverType: this.newCoverType,
+          coverMode: 'block',
           pathable: this.newCoverPathable,
+          selectable: true
+        });
+      }
+      else if(type === 'thincover') {
+        const tileSize = world.tileSize;
+        
+        obj = new Cover({
+          points: [0, 0, tileSize, 0],
+          coverType: this.newCoverType,
+          coverMode: 'edge',
           selectable: true
         });
       }

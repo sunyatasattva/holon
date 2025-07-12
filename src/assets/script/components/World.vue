@@ -18,6 +18,12 @@ const component = {
       this.canvas.activeObjects = activeObjects;
       this.canvas.updateActiveObjectsStatus();
       this.canvas.renderAll();
+    },
+    'options.isAddingObject'(newVal, oldVal) {
+      // Clear edge highlights when exiting edge cover placement mode
+      if (oldVal && oldVal.coverMode === 'edge' && !newVal) {
+        this._clearEdgeHighlights();
+      }
     }
   },
   mounted() {
@@ -147,6 +153,15 @@ const component = {
       this.$emit('select', false);
     });
     
+    world.on('mouse:move', (opts) => {
+      let addingObject = this.options.isAddingObject,
+          pointer = this.canvas.getPointer(opts.e);
+
+      if (addingObject && addingObject.coverMode === 'edge') {
+        this.highlightNearestEdge(pointer);
+      }
+    });
+
     world.on('mouse:down', (opts) => {
       let addingObject = this.options.isAddingObject,
           e = opts.e,
@@ -189,14 +204,47 @@ const component = {
         this.canvas.createRuler(opts);
       }
       else {
-        coords = this.canvas.getCoordinatesOfTile(tile);
-        
-        addingObject.set({
-          left: coords.topLeft[0],
-          top: coords.topLeft[1]
-        });
+        if (addingObject.coverMode === 'edge') {
+          const edge = this.canvas.calculateEdgeCoordinates(
+            this.canvas.findNearestEdge(p)
+          );
+          
+          if (edge) {
+            const { x1, y1, x2, y2 } = edge;
+            
+            const isHorizontal = Math.abs(x2 - x1) > Math.abs(y2 - y1);
+            const thickness = addingObject._coverOpts.edgeThickness;
+            
+            if (isHorizontal) {
+              addingObject.set({
+                left: Math.min(x1, x2),
+                top: Math.min(y1, y2) - thickness / 2,
+                width: Math.abs(x2 - x1),
+                height: thickness
+              });
+            } else {
+              addingObject.set({
+                left: Math.min(x1, x2) - thickness / 2,
+                top: Math.min(y1, y2),
+                width: thickness,
+                height: Math.abs(y2 - y1)
+              });
+            }
+          } else {
+            throw new Error('No edge found');
+          }
+        } else {
+          coords = this.canvas.getCoordinatesOfTile(tile);
+          
+          addingObject.set({
+            left: coords.topLeft[0],
+            top: coords.topLeft[1]
+          });
+        }
         
         this.canvas.addAsActiveObject(addingObject);
+        
+        this._clearEdgeHighlights();
         
         this.$emit('toggle', 'isAddingObject');
       }
@@ -256,7 +304,41 @@ const component = {
         o.set('selectable', !currentSelectableState);
       });
     },
+    
+    /**
+     * Highlight the nearest edge to the pointer position
+     * @param {Object} pointer Pointer coordinates from canvas
+     */
+    highlightNearestEdge(pointer) {
+      this._clearEdgeHighlights();
+      
+      const highlight = this.canvas.highlightNearestEdge(pointer);
+      
+      this.currentEdgeHighlight = highlight;
+    },
 
+    /**
+     * Clear all edge highlights
+     */
+    _clearEdgeHighlights() {
+      if (this.currentEdgeHighlight) {
+        this.canvas.removeEdgeHighlights();
+        this.currentEdgeHighlight = null;
+      }
+    },
+    
+    /**
+     * Create an edge highlight (delegated to World)
+     * @param {Object} tile Tile coordinates
+     * @param {String} edgeType Type of edge (top, bottom, left, right)
+     * @param {Object} opts Optional styling options
+     */
+    _createEdgeHighlight(tile, edgeType, opts = {}) {
+      const highlight = this.canvas.createEdgeHighlight(tile, edgeType, opts);
+      this.currentEdgeHighlight = highlight;
+      return highlight;
+    },
+    
     _setupRuler() {
       this.canvas.on('mouse:down', (opts) => {
         const rulerKey = Ruler.prototype.rulerKey;

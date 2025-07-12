@@ -144,26 +144,12 @@ const Entity = fabric.util.createClass(fabric.Object, {
   },
   
   updateGridCoordinates() {
-    // fabric calculates widths a bit badly, with an error, should
-    // dive into it
-    let tileSize = this.canvas.tileSize + 1,
-        startTile = this.canvas.getTileFromCoordinates(
-                       this.left, this.top),
-        size = {
-          x: Math.round(this.getWidth() / tileSize),
-          y: Math.round(this.getHeight() / tileSize)
-        },
-        occupiedTiles = [];
-    
-    for(let w = 0; w < size.x; w++) {
-      occupiedTiles.push(
-        { x: startTile.x + w, y: startTile.y });
-
-      for(let h = 1; h < size.y; h++) {
-        occupiedTiles.push(
-          { x: startTile.x + w, y: startTile.y + h});
-      }
-    }
+    const occupiedTiles = this._getTilesSpannedByRect(
+      this.left, 
+      this.top, 
+      this.getWidth(), 
+      this.getHeight()
+    );
     
     if(this.gridPosition.length) {
       this.gridPosition.forEach(({ x, y }) => {
@@ -178,6 +164,42 @@ const Entity = fabric.util.createClass(fabric.Object, {
     });
     
     return this.gridPosition;
+  },
+  
+  /**
+   * Get all tiles spanned by a rectangle
+   * @param {Number} left Left coordinate
+   * @param {Number} top Top coordinate  
+   * @param {Number} width Width of rectangle
+   * @param {Number} height Height of rectangle
+   * @returns {Array} Array of tile coordinates {x, y}
+   * @private
+   */
+  _getTilesSpannedByRect(left, top, width, height) {
+    // The +1 adjustment compensates for Fabric's width calculation issues
+    const adjustedTileSize = this.canvas.tileSize + 1;
+    const startTile = this.canvas.getTileFromCoordinates(left, top);
+    
+    const tileSpan = {
+      x: Math.round(width / adjustedTileSize),
+      y: Math.round(height / adjustedTileSize)
+    };
+    
+    const spanX = Math.max(1, tileSpan.x);
+    const spanY = Math.max(1, tileSpan.y);
+    
+    const occupiedTiles = [];
+
+    for (let x = 0; x < spanX; x++) {
+      for (let y = 0; y < spanY; y++) {
+        occupiedTiles.push({ 
+          x: startTile.x + x, 
+          y: startTile.y + y 
+        });
+      }
+    }
+    
+    return occupiedTiles;
   },
   
   _allowRotationOnly() {

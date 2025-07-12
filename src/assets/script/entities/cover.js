@@ -26,6 +26,13 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
    */
   coverType: 'full',
   
+  /**
+   * Mode of the cover.
+   *
+   * @type {String} ['block','edge']
+   * @default
+   */
+  coverMode: 'block',
   // @todo ? Currently we don't want cover rotating, it's a bit
   // hard to calculate and we probably don't need it.
   hasRotatingPoint: false,
