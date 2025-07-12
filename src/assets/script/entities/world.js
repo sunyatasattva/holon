@@ -1,15 +1,8 @@
 import { fabric } from 'fabric';
+import Edge from './edge';
 import Line from './line';
 import Ruler from './ruler';
 import Tile from './tile';
-
-/**
- * EdgeInfo
- * @typedef {Object} EdgeInfo
- * @property {Object} tile Tile object {x, y}
- * @property {String} edgeType Type of edge (top, bottom, left, right)
- * @property {Number} distance Distance from the edge to the pointer
- */
 
 /**
  * EdgeInfo
@@ -99,17 +92,6 @@ const World = fabric.util.createClass(fabric.Canvas, {
     this.callSuper('initialize', options);
     
     this._resizeToFullScreen();
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    return coordinateMap[edgeType] || null;
-  },
-  
     this._createGrid();
     this._createMatrix();
   },
@@ -125,7 +107,7 @@ const World = fabric.util.createClass(fabric.Canvas, {
     this.add.apply(this, objects);
     this.fire('object:addedAsActive', {
       objects: objects,
-
+      save: save
     });
     
     console.log('Added as active objects:', objects);
@@ -140,131 +122,6 @@ const World = fabric.util.createClass(fabric.Canvas, {
    */
   calculateEdgeCoordinates(edgeInfo) {
     const { tile, edgeType } = edgeInfo;
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-  highlightNearestEdge(pointer, opts = {}) {
-    const edgeInfo = this.findNearestEdge(pointer);
-    if (!edgeInfo) {
-      return null;
-    }
-
-    return this.createEdgeHighlight(edgeInfo, opts);
-  },
-
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-  /**
-   * Calculate the coordinates of an edge
-   * @param {EdgeInfo} edgeInfo 
-   * @returns {Object|null} Object with x1, y1, x2, y2 coordinates or null if edge type is invalid
-   */
-  calculateEdgeCoordinates(edgeInfo) {
-    const { tile, edgeType } = edgeInfo;
-    
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
     
     const tileSize = this.tileSize;
     const tileX = tile.x * tileSize;
@@ -378,981 +235,6 @@ const World = fabric.util.createClass(fabric.Canvas, {
     return direction;
   },
 
-  createEdgeHighlight(edgeInfo, opts = {}) {
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-  /**
-   * Calculate the coordinates of an edge
-   * @param {EdgeInfo} edgeInfo 
-   * @returns {Object|null} Object with x1, y1, x2, y2 coordinates or null if edge type is invalid
-   */
-  calculateEdgeCoordinates(edgeInfo) {
-    const { tile, edgeType } = edgeInfo;
-    
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    return coordinateMap[edgeType] || null;
-  },
-  
-  calculateManhattanDistance(from, to) {
-    return Math.abs(to.x - from.x)
-           + Math.abs(to.y - from.y);
-  },
-  
-  calculateOctileDistance(from, to, round) {
-    let xDiff = Math.abs(to.x - from.x);
-    let yDiff = Math.abs(to.y - from.y);
-    let octileDistance = 0.5 * Math.min(xDiff, yDiff) + 1 * Math.max(xDiff, yDiff);
-    
-    return round ? Math[round](octileDistance) : octileDistance;
-  },
-  
-  calculateRange: function (from, range, min = 0, rangeType = 'all', repeat = 1) {
-    console.group(`Calculating ${range} range from ${JSON.stringify(from)}`);
-    
-    let area = [],
-        currentCost = 0,
-        i = 1,
-        search = this.searchAroundTile(
-          { ...from, cost: 0 },
-          rangeType
-        ),
-        currentValue,
-        visitedTiles;
-    
-    while(repeat) {
-      console.time(`Area ${i}`);
-      
-      visitedTiles = [];
-      
-      while(currentCost < range * i) {
-        currentValue = search.next().value;
-        visitedTiles = currentValue.visitedTiles;
-        
-        currentCost = currentValue.tilesCosts.get(
-          visitedTiles[visitedTiles.length - 1]
-        );
-      }
-      
-      area.push(
-        visitedTiles.filter(tile => {
-          const cost = currentValue.tilesCosts.get(tile);
-          
-          return cost >= min && cost > range * (i - 1);
-        })
-      );
-      
-      console.log(`Area ${i}: `, area);
-      console.timeEnd(`Area ${i}`);
-      
-      i++;
-      repeat -= 1;
-    }
-    
-    console.groupEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
-
-    return area;
-  },
-  
-  calculateRelativeDirection(from, to, center = true) {
-    let tileA,
-        tileB,
-        direction;
-    
-    tileA = !from.gridPosition ? from : 
-            !center ? from[0] : from._calculateCenterCoordinates();
-    tileB = !to.gridPosition ? to :
-            !center ? to[0] : to._calculateCenterCoordinates();
-    
-    direction =  tileA.y === tileB.y ? '' : 
-                    tileA.y > tileB.y ? 'N' : 'S';
-    direction += tileA.x === tileB.x ? '' : 
-                    tileA.x > tileB.x ? 'W' : 'E';
-    
-    return direction;
-  },
-
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-  /**
-   * Calculate the coordinates of an edge
-   * @param {EdgeInfo} edgeInfo 
-   * @returns {Object|null} Object with x1, y1, x2, y2 coordinates or null if edge type is invalid
-   */
-  calculateEdgeCoordinates(edgeInfo) {
-    const { tile, edgeType } = edgeInfo;
-    
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    return coordinateMap[edgeType] || null;
-  },
-  
-  calculateManhattanDistance(from, to) {
-    return Math.abs(to.x - from.x)
-           + Math.abs(to.y - from.y);
-  },
-  
-  calculateOctileDistance(from, to, round) {
-    let xDiff = Math.abs(to.x - from.x);
-    let yDiff = Math.abs(to.y - from.y);
-    let octileDistance = 0.5 * Math.min(xDiff, yDiff) + 1 * Math.max(xDiff, yDiff);
-    
-    return round ? Math[round](octileDistance) : octileDistance;
-  },
-  
-  calculateRange: function (from, range, min = 0, rangeType = 'all', repeat = 1) {
-    console.group(`Calculating ${range} range from ${JSON.stringify(from)}`);
-    
-    let area = [],
-        currentCost = 0,
-        i = 1,
-        search = this.searchAroundTile(
-          { ...from, cost: 0 },
-          rangeType
-        ),
-        currentValue,
-        visitedTiles;
-    
-    while(repeat) {
-      console.time(`Area ${i}`);
-      
-      visitedTiles = [];
-      
-      while(currentCost < range * i) {
-        currentValue = search.next().value;
-        visitedTiles = currentValue.visitedTiles;
-        
-        currentCost = currentValue.tilesCosts.get(
-          visitedTiles[visitedTiles.length - 1]
-        );
-      }
-      
-      area.push(
-        visitedTiles.filter(tile => {
-          const cost = currentValue.tilesCosts.get(tile);
-          
-          return cost >= min && cost > range * (i - 1);
-        })
-      );
-      
-      console.log(`Area ${i}: `, area);
-      console.timeEnd(`Area ${i}`);
-      
-      i++;
-      repeat -= 1;
-    }
-    
-    console.groupEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
-
-    return area;
-  },
-  
-  calculateRelativeDirection(from, to, center = true) {
-    let tileA,
-        tileB,
-        direction;
-    
-    tileA = !from.gridPosition ? from : 
-            !center ? from[0] : from._calculateCenterCoordinates();
-    tileB = !to.gridPosition ? to :
-            !center ? to[0] : to._calculateCenterCoordinates();
-    
-    direction =  tileA.y === tileB.y ? '' : 
-                    tileA.y > tileB.y ? 'N' : 'S';
-    direction += tileA.x === tileB.x ? '' : 
-                    tileA.x > tileB.x ? 'W' : 'E';
-    
-    return direction;
-  },
-
-  createEdgeHighlight(edgeInfo, opts = {}) {
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-  /**
-   * Calculate the coordinates of an edge
-   * @param {EdgeInfo} edgeInfo 
-   * @returns {Object|null} Object with x1, y1, x2, y2 coordinates or null if edge type is invalid
-   */
-  calculateEdgeCoordinates(edgeInfo) {
-    const { tile, edgeType } = edgeInfo;
-    
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    return coordinateMap[edgeType] || null;
-  },
-  
-  calculateManhattanDistance(from, to) {
-    return Math.abs(to.x - from.x)
-           + Math.abs(to.y - from.y);
-  },
-  
-  calculateOctileDistance(from, to, round) {
-    let xDiff = Math.abs(to.x - from.x);
-    let yDiff = Math.abs(to.y - from.y);
-    let octileDistance = 0.5 * Math.min(xDiff, yDiff) + 1 * Math.max(xDiff, yDiff);
-    
-    return round ? Math[round](octileDistance) : octileDistance;
-  },
-  
-  calculateRange: function (from, range, min = 0, rangeType = 'all', repeat = 1) {
-    console.group(`Calculating ${range} range from ${JSON.stringify(from)}`);
-    
-    let area = [],
-        currentCost = 0,
-        i = 1,
-        search = this.searchAroundTile(
-          { ...from, cost: 0 },
-          rangeType
-        ),
-        currentValue,
-        visitedTiles;
-    
-    while(repeat) {
-      console.time(`Area ${i}`);
-      
-      visitedTiles = [];
-      
-      while(currentCost < range * i) {
-        currentValue = search.next().value;
-        visitedTiles = currentValue.visitedTiles;
-        
-        currentCost = currentValue.tilesCosts.get(
-          visitedTiles[visitedTiles.length - 1]
-        );
-      }
-      
-      area.push(
-        visitedTiles.filter(tile => {
-          const cost = currentValue.tilesCosts.get(tile);
-          
-          return cost >= min && cost > range * (i - 1);
-        })
-      );
-      
-      console.log(`Area ${i}: `, area);
-      console.timeEnd(`Area ${i}`);
-      
-      i++;
-      repeat -= 1;
-    }
-    
-    console.groupEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
-
-    return area;
-  },
-  
-  calculateRelativeDirection(from, to, center = true) {
-    let tileA,
-        tileB,
-        direction;
-    
-    tileA = !from.gridPosition ? from : 
-            !center ? from[0] : from._calculateCenterCoordinates();
-    tileB = !to.gridPosition ? to :
-            !center ? to[0] : to._calculateCenterCoordinates();
-    
-    direction =  tileA.y === tileB.y ? '' : 
-                    tileA.y > tileB.y ? 'N' : 'S';
-    direction += tileA.x === tileB.x ? '' : 
-                    tileA.x > tileB.x ? 'W' : 'E';
-    
-    return direction;
-  },
-
-  createEdgeHighlight(tile, edgeType, opts = {}) {
-  createEdgeHighlight(edgeInfo, opts = {}) {
-    const { 
-      stroke = this.style.edgeHighlight.stroke,
-      strokeWidth = this.style.edgeHighlight.strokeWidth
-    } = opts;
-    
-    const { x1, y1, x2, y2 } = this.calculateEdgeCoordinates(edgeInfo);
-      
-    const highlight = new fabric.Line([x1, y1, x2, y2], {
-      stroke,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-  /**
-   * Calculate the coordinates of an edge
-   * @param {EdgeInfo} edgeInfo 
-   * @returns {Object|null} Object with x1, y1, x2, y2 coordinates or null if edge type is invalid
-   */
-  calculateEdgeCoordinates(edgeInfo) {
-    const { tile, edgeType } = edgeInfo;
-    
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    return coordinateMap[edgeType] || null;
-  },
-  
-  calculateManhattanDistance(from, to) {
-    return Math.abs(to.x - from.x)
-           + Math.abs(to.y - from.y);
-  },
-  
-  calculateOctileDistance(from, to, round) {
-    let xDiff = Math.abs(to.x - from.x);
-    let yDiff = Math.abs(to.y - from.y);
-    let octileDistance = 0.5 * Math.min(xDiff, yDiff) + 1 * Math.max(xDiff, yDiff);
-    
-    return round ? Math[round](octileDistance) : octileDistance;
-  },
-  
-  calculateRange: function (from, range, min = 0, rangeType = 'all', repeat = 1) {
-    console.group(`Calculating ${range} range from ${JSON.stringify(from)}`);
-    
-    let area = [],
-        currentCost = 0,
-        i = 1,
-        search = this.searchAroundTile(
-          { ...from, cost: 0 },
-          rangeType
-        ),
-        currentValue,
-        visitedTiles;
-    
-    while(repeat) {
-      console.time(`Area ${i}`);
-      
-      visitedTiles = [];
-      
-      while(currentCost < range * i) {
-        currentValue = search.next().value;
-        visitedTiles = currentValue.visitedTiles;
-        
-        currentCost = currentValue.tilesCosts.get(
-          visitedTiles[visitedTiles.length - 1]
-        );
-      }
-      
-      area.push(
-        visitedTiles.filter(tile => {
-          const cost = currentValue.tilesCosts.get(tile);
-          
-          return cost >= min && cost > range * (i - 1);
-        })
-      );
-      
-      console.log(`Area ${i}: `, area);
-      console.timeEnd(`Area ${i}`);
-      
-      i++;
-      repeat -= 1;
-    }
-    
-    console.groupEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
-
-    return area;
-  },
-  
-  calculateRelativeDirection(from, to, center = true) {
-    let tileA,
-        tileB,
-        direction;
-    
-    tileA = !from.gridPosition ? from : 
-            !center ? from[0] : from._calculateCenterCoordinates();
-    tileB = !to.gridPosition ? to :
-            !center ? to[0] : to._calculateCenterCoordinates();
-    
-    direction =  tileA.y === tileB.y ? '' : 
-                    tileA.y > tileB.y ? 'N' : 'S';
-    direction += tileA.x === tileB.x ? '' : 
-                    tileA.x > tileB.x ? 'W' : 'E';
-    
-    return direction;
-  },
-
-  createEdgeHighlight(edgeInfo, opts = {}) {
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-  /**
-   * Calculate the coordinates of an edge
-   * @param {EdgeInfo} edgeInfo 
-   * @returns {Object|null} Object with x1, y1, x2, y2 coordinates or null if edge type is invalid
-   */
-  calculateEdgeCoordinates(edgeInfo) {
-    const { tile, edgeType } = edgeInfo;
-    
-    this._createGrid();
-    this._createMatrix();
-  },
-  
-  addAsActiveObject(...objects) {
-    let save;
-    
-    if(typeof objects[0] === 'boolean') {
-      save = objects[0];
-      objects.shift();
-    }
-
-    this.add.apply(this, objects);
-    this.fire('object:addedAsActive', {
-      objects: objects,
-
-    });
-    
-    console.log('Added as active objects:', objects);
-    
-    return this;
-  },
-
-  calculateEdgeCoordinates(tile, edgeType) {
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    const tileSize = this.tileSize;
-    const tileX = tile.x * tileSize;
-    const tileY = tile.y * tileSize;
-    
-    const coordinateMap = {
-      top: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY
-      },
-      bottom: {
-        x1: tileX,
-        y1: tileY + tileSize,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      },
-      left: {
-        x1: tileX,
-        y1: tileY,
-        x2: tileX,
-        y2: tileY + tileSize
-      },
-      right: {
-        x1: tileX + tileSize,
-        y1: tileY,
-        x2: tileX + tileSize,
-        y2: tileY + tileSize
-      }
-    };
-    
-    return coordinateMap[edgeType] || null;
-  },
-  
-  calculateManhattanDistance(from, to) {
-    return Math.abs(to.x - from.x)
-           + Math.abs(to.y - from.y);
-  },
-  
-  calculateOctileDistance(from, to, round) {
-    let xDiff = Math.abs(to.x - from.x);
-    let yDiff = Math.abs(to.y - from.y);
-    let octileDistance = 0.5 * Math.min(xDiff, yDiff) + 1 * Math.max(xDiff, yDiff);
-    
-    return round ? Math[round](octileDistance) : octileDistance;
-  },
-  
-  calculateRange: function (from, range, min = 0, rangeType = 'all', repeat = 1) {
-    console.group(`Calculating ${range} range from ${JSON.stringify(from)}`);
-    
-    let area = [],
-        currentCost = 0,
-        i = 1,
-        search = this.searchAroundTile(
-          { ...from, cost: 0 },
-          rangeType
-        ),
-        currentValue,
-        visitedTiles;
-    
-    while(repeat) {
-      console.time(`Area ${i}`);
-      
-      visitedTiles = [];
-      
-      while(currentCost < range * i) {
-        currentValue = search.next().value;
-        visitedTiles = currentValue.visitedTiles;
-        
-        currentCost = currentValue.tilesCosts.get(
-          visitedTiles[visitedTiles.length - 1]
-        );
-      }
-      
-      area.push(
-        visitedTiles.filter(tile => {
-          const cost = currentValue.tilesCosts.get(tile);
-          
-          return cost >= min && cost > range * (i - 1);
-        })
-      );
-      
-      console.log(`Area ${i}: `, area);
-      console.timeEnd(`Area ${i}`);
-      
-      i++;
-      repeat -= 1;
-    }
-    
-    console.groupEnd(`Calculating ${range} range from ${JSON.stringify(from)}`);
-
-    return area;
-  },
-  
-  calculateRelativeDirection(from, to, center = true) {
-    let tileA,
-        tileB,
-        direction;
-    
-    tileA = !from.gridPosition ? from : 
-            !center ? from[0] : from._calculateCenterCoordinates();
-    tileB = !to.gridPosition ? to :
-            !center ? to[0] : to._calculateCenterCoordinates();
-    
-    direction =  tileA.y === tileB.y ? '' : 
-                    tileA.y > tileB.y ? 'N' : 'S';
-    direction += tileA.x === tileB.x ? '' : 
-                    tileA.x > tileB.x ? 'W' : 'E';
-    
-    return direction;
-  },
-
-  createEdgeHighlight(tile, edgeType, opts = {}) {
   createEdgeHighlight(edgeInfo, opts = {}) {
     const { 
       stroke = this.style.edgeHighlight.stroke,
@@ -1488,8 +370,31 @@ const World = fabric.util.createClass(fabric.Canvas, {
     
     return offsets
       .map(([x,y]) => {
+        const targetTile = this.matrix[tile.x + x] ? this.matrix[tile.x + x][tile.y + y] : null;
         
-        return this.matrix[tile.x + x] ? this.matrix[tile.x + x][tile.y + y] : null;
+        if (!targetTile) return null;
+        
+        // For diagonal movement, check if we can move diagonally
+        if (diagonal) {
+          // For diagonal movement, we need to check if both adjacent edges are clear
+          // This prevents "corner cutting" through blocked edges
+          const intermediateX = { x: tile.x + x, y: tile.y };
+          const intermediateY = { x: tile.x, y: tile.y + y };
+          
+          // Check if we can move to both intermediate positions
+          if (this.matrix[intermediateX.x] && this.matrix[intermediateX.x][intermediateX.y] &&
+              this.matrix[intermediateY.x] && this.matrix[intermediateY.x][intermediateY.y]) {
+            
+            const canMoveX = !this.isEdgeBlocked(tile, intermediateX);
+            const canMoveY = !this.isEdgeBlocked(tile, intermediateY);
+            
+            return (canMoveX && canMoveY) ? targetTile : null;
+          }
+          return null;
+        }
+        
+        // For orthogonal movement, check if the edge is blocked
+        return !this.isEdgeBlocked(tile, targetTile) ? targetTile : null;
       })
       .filter(_ => _);
   },
@@ -1680,6 +585,82 @@ const World = fabric.util.createClass(fabric.Canvas, {
         this.matrix[x][y] = new Tile(x, y);
       }
     }
+    
+    this.edges = new Map();
+    
+    // Create horizontal edges (between tiles vertically)
+    for(let x = 0; x < this.size.x; x++) {
+      for(let y = 0; y <= this.size.y; y++) {
+        const edgeKey = `${x},${y}_N`;
+        this.edges.set(edgeKey, new Edge(x, y, 'horizontal'));
+      }
+    }
+    
+    // Create vertical edges (between tiles horizontally)  
+    for(let x = 0; x <= this.size.x; x++) {
+      for(let y = 0; y < this.size.y; y++) {
+        const edgeKey = `${x},${y}_W`;
+        this.edges.set(edgeKey, new Edge(x, y, 'vertical'));
+      }
+    }
+  },
+  
+  /**
+   * Get edge between two adjacent tiles
+   * @param {Object} tile1 First tile {x, y}
+   * @param {Object} tile2 Second tile {x, y}
+   * @return {Edge|null} Edge object or null if not adjacent
+   */
+  getEdgeBetween(tile1, tile2) {
+    const dx = tile2.x - tile1.x;
+    const dy = tile2.y - tile1.y;
+    
+    // Check if tiles are adjacent
+    if (Math.abs(dx) + Math.abs(dy) !== 1) {
+      return null;
+    }
+    
+    // For horizontal edges (N), use min y coordinate
+    // For vertical edges (W), use min x coordinate
+    const edgeKey = dx === 0
+      ? `${tile1.x},${Math.min(tile1.y, tile2.y)}_N`
+      : `${Math.min(tile1.x, tile2.x)},${tile1.y}_W`;
+    
+    return this.edges.get(edgeKey);
+  },
+  
+  /**
+   * Get all edges adjacent to a tile
+   * @param {Object} tile Tile object {x, y}
+   * @return {Array} Array of edge objects with direction info
+   */
+  getEdgesOfTile(tile) {
+    const edgeConfigs = [
+      { key: `${tile.x},${tile.y}_N`, direction: 'N' },
+      { key: `${tile.x},${tile.y + 1}_N`, direction: 'S' },
+      { key: `${tile.x},${tile.y}_W`, direction: 'W' },
+      { key: `${tile.x + 1},${tile.y}_W`, direction: 'E' }
+    ];
+
+    return edgeConfigs
+      .map(({ key, direction }) => {
+        const edge = this.edges.get(key);
+        return edge ? { edge, direction } : null;
+      })
+      .filter(Boolean);
+  },
+  
+  /**
+   * Check if an edge is blocked by covers
+   * @param {Object} fromTile Source tile {x, y}
+   * @param {Object} toTile Target tile {x, y}
+   * @return {Boolean} Whether the edge is blocked
+   */
+  isEdgeBlocked(fromTile, toTile) {
+    const edge = this.getEdgeBetween(fromTile, toTile);
+    if (!edge) return false;
+
+    return !edge.pathable || edge.getChildren().some(cover => !cover.pathable);
   },
   
   _resizeToFullScreen() {
