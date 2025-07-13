@@ -81,8 +81,11 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
     this.set('opacity', this.pathable ? 0.5 : 1);
     this.set('strokeWidth', 0);
     
-    if (this.coverMode === 'edge')
-      this._setupEdgeControls();
+    if (this.coverMode === 'edge') {
+      this.on('added', () => {
+        this._setupEdgeControls();
+      });
+    }
   },
   
   toObject: function(props = []) {
