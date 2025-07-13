@@ -23,6 +23,11 @@ class Edge extends Tile {
   
   /**
    * Get the compass direction this edge blocks movement from
+   * 
+   * @example
+   * The `0,5` edge is the `N` edge of tile `0,5` and the `S` edge of tile `0,4`.
+   * The `5,0` edge is the `W` edge of tile `5,0` and the `E` edge of tile `4,0`.
+   * 
    * @param {object} fromTile - The tile coordinates {x, y} we're moving from
    * @returns {string|null} Compass direction ('N', 'S', 'E', 'W') or null
    */
