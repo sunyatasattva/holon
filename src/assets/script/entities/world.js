@@ -162,6 +162,19 @@ const World = fabric.util.createClass(fabric.Canvas, {
            + Math.abs(to.y - from.y);
   },
   
+  /**
+   * Calculate the octile distance between two tiles.
+   * 
+   * Note that this is not the “true” octile distance, but a modified version
+   * that uses 0.5 instead √2 (0.4142) for diagonal movement. This is slightly
+   * inexact, but it's much more intuitive (i.e. “every diagonal step is 1.5
+   * steps”).
+   * 
+   * @param {Tile} from - The starting tile {x, y}
+   * @param {Tile} to - The ending tile {x, y}
+   * @param {String} round - The rounding method to use ('round', 'floor', 'ceil')
+   * @returns {Number} The octile distance between the two tiles
+   */
   calculateOctileDistance(from, to, round) {
     let xDiff = Math.abs(to.x - from.x);
     let yDiff = Math.abs(to.y - from.y);
