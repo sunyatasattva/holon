@@ -610,10 +610,12 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
   },
   
   _updateCoverStatus() {
-    let covers = this.canvas.activeObjects.filter(
-      (obj) => obj.type === 'cover'
+    this.set('coveredSides', { N: 0, E: 0, S: 0, W: 0 });
+    
+    let blockCovers = this.canvas.activeObjects.filter(
+      (obj) => obj.type === 'cover' && obj.coverMode === 'block'
     ),
-        covering = covers.filter((cover) => {
+        covering = blockCovers.filter((cover) => {
           return this.isAdjacentToObject(cover);
         })
         .map((cover) => {
@@ -632,8 +634,6 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
           }
         });
     
-    this.set('coveredSides', { N: 0, E: 0, S: 0, W: 0 });
-    
     covering.forEach((cover) => {
       // @todo this is a bit of a hack that is going to work
       // only as long as walkers are not bigger than one
@@ -642,6 +642,20 @@ const Walker = fabric.util.createClass(Entity, fabric.Circle.prototype, {
       this.coveredSides[cover.side] += 
         cover.cover.coverType === 'partial' ? 1 : 2;
     });
+
+    if (this.gridPosition.length > 0) {
+      const currentTile = this.gridPosition[0]; // Assuming single-tile walker
+      const edgeData = this.canvas.getEdgesOfTile(currentTile);
+      
+      edgeData.forEach(({ edge, direction }) => {
+        const edgeCovers = edge.getChildren().filter(child => child.type === 'cover');
+        
+        edgeCovers.forEach(cover => {
+          this.coveredSides[direction] += 
+            cover.coverType === 'partial' ? 1 : 2;
+        });
+      });
+    }
     
     console.log('Cover status updated:', this.coveredSides);
   }

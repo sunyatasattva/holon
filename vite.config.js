@@ -4,6 +4,11 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [vue()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./test/setup.js'],
+  },
   // optimizeDeps: { // No longer needed as Firebase is loaded globally
   //   exclude: ['firebase']
   // },

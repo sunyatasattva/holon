@@ -8,8 +8,10 @@
     "dev": "vite dev",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "eslint --ext .js,.vue src test/unit",
-    "test": "karma start karma.conf.js"
+    "lint": "eslint --ext .js,.vue src test",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "author": "M. L. Giannotta <sunyatasattva@gmail.com>",
   "license": "ISC",
@@ -47,14 +49,17 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue2": "^2.3.3",
+    "@vitest/ui": "^3.2.4",
     "cross-env": "2.0.0",
     "dotenv": "6.0.0",
     "ftp-deploy": "2.1.1",
     "http-server": "0.9.0",
+    "jsdom": "^26.1.0",
     "lodash.assign": "4.2.0",
     "npm-run-all": "2.3.0",
     "sass": "^1.86.3",
     "typescript": "3.5.3",
-    "vite": "^6.2.6"
+    "vite": "^6.2.6",
+    "vitest": "^3.2.4"
   }
 }
