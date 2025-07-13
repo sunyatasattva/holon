@@ -30,6 +30,13 @@ class Tile {
   isOccupiedBy(el) {
     return this._children.has(el);
   }
+
+  isPathable() {
+    const objectsOccupyingTheTile = this.getChildren();
+
+    return this.pathable
+           && objectsOccupyingTheTile.every(o => o.pathable);
+  }
 }
 
 export default Tile;

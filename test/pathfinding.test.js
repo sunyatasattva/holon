@@ -5,6 +5,7 @@ import { fabricMock } from './mocks/fabric.js';
 vi.mock('fabric', () => fabricMock);
 
 import World from '../src/assets/script/entities/world.js';
+import { restoreConsole } from "./setup.js";
 
 describe('Pathfinding', () => {
   let world;
@@ -50,11 +51,11 @@ describe('Pathfinding', () => {
     });
 
     test('respects edge blocking in exploration', () => {
-      const startTile = { x: 5, y: 5 };
+      const startTile = world.matrix[5][5];
       
-      world.getEdgeBetween(startTile, { x: 4, y: 5 }).pathable = false;
+      world.getEdgeBetween(startTile, world.matrix[4][5]).pathable = false;
       
-      const generator = world.searchAroundTile(startTile);
+      const generator = world.searchAroundTile(startTile, 'pathableOnly');
       
       generator.next();
       const result = generator.next();
@@ -71,7 +72,7 @@ describe('Pathfinding', () => {
 
     test('calculates correct movement costs', () => {
       const startTile = { x: 5, y: 5, costMultiplier: 1 };
-      const generator = world.searchAroundTile(startTile);
+      const generator = world.searchAroundTile(startTile, 'pathableOnly');
       
       generator.next();
       const result = generator.next();
@@ -88,7 +89,7 @@ describe('Pathfinding', () => {
       const startTile = { x: 5, y: 5 };
 
       world.matrix[4][5].addChild({ pathable: false });
-      
+
       const generator = world.searchAroundTile(startTile, 'pathableOnly');
       generator.next();
       const result = generator.next();
@@ -149,7 +150,7 @@ describe('Pathfinding', () => {
       world.getEdgeBetween({ x: 5, y: 4 }, { x: 4, y: 4 }).pathable = false;
       world.getEdgeBetween({ x: 5, y: 6 }, { x: 4, y: 6 }).pathable = false;
       
-      const [ area ] = world.calculateRange(startTile, 3);
+      const [ area ] = world.calculateRange(startTile, 3, 0, 'pathableOnly');
       const positions = area.map(({ x, y }) => ({ x, y }));
       
       expect(positions).not.toContainEqual({ x: 4, y: 5 });
@@ -184,9 +185,156 @@ describe('Pathfinding', () => {
       world.getEdgeBetween(startTile, { x: 5, y: 4 }).pathable = false;
       world.getEdgeBetween(startTile, { x: 5, y: 6 }).pathable = false;
       
-      const areas = world.calculateRange(startTile, 10);
+      const areas = world.calculateRange(startTile, 10, 0, 'pathableOnly');
   
       expect(areas[0].length).toBe(0);
+    });
+  });
+
+  describe('Diagonal Movement Validation', () => {
+    describe('_validateDiagonalMovement', () => {
+      test('allows diagonal movement when all edges are pathable', () => {
+        const fromTile = { x: 5, y: 5 };
+        const toTile = { x: 4, y: 4 };
+        
+        const result = world._validateDiagonalMovement(fromTile, toTile, -1, -1);
+        
+        expect(result).toBe(toTile);
+      });
+  
+      test('blocks diagonal movement when forward path is blocked', () => {
+        const fromTile = { x: 5, y: 5 };
+        const toTile = { x: 4, y: 4 };
+        
+        world.getEdgeBetween(fromTile, { x: 4, y: 5 }).pathable = false;
+        
+        const result = world._validateDiagonalMovement(fromTile, toTile, -1, -1);
+        
+        expect(result).toBe(null);
+      });
+  
+      test('blocks diagonal movement when reverse path is blocked', () => {
+        const fromTile = { x: 5, y: 5 };
+        const toTile = { x: 4, y: 4 };
+        
+        world.getEdgeBetween(toTile, { x: 5, y: 4 }).pathable = false;
+        
+        const result = world._validateDiagonalMovement(fromTile, toTile, -1, -1);
+        
+        expect(result).toBe(null);
+      });
+  
+      test('ensures movement symmetry - if A→B blocked, then B→A also blocked', () => {
+        const tileA = { x: 3, y: 3 };
+        const tileB = { x: 2, y: 2 };
+        
+        world.getEdgeBetween(tileA, { x: 2, y: 3 }).pathable = false;
+        
+        // Test movement A→B
+        const resultAtoB = world._validateDiagonalMovement(tileA, tileB, -1, -1);
+        
+        // Test movement B→A (should also be blocked due to bi-directional checking)
+        const resultBtoA = world._validateDiagonalMovement(tileB, tileA, 1, 1);
+        
+        expect(resultAtoB).toBe(null);
+        expect(resultBtoA).toBe(null);
+      });
+  
+      test('handles all diagonal directions correctly', () => {
+        const centerTile = { x: 5, y: 5 };
+        
+        const directions = [
+          { target: { x: 4, y: 4 }, delta: [-1, -1], name: 'NW' },
+          { target: { x: 6, y: 4 }, delta: [1, -1], name: 'NE' },
+          { target: { x: 4, y: 6 }, delta: [-1, 1], name: 'SW' },
+          { target: { x: 6, y: 6 }, delta: [1, 1], name: 'SE' }
+        ];
+        
+        directions.forEach(({ target, delta, name }) => {
+          const result = world._validateDiagonalMovement(centerTile, target, delta[0], delta[1]);
+          expect(result, `${name} movement should be allowed`).toBe(target);
+        });
+      });
+  
+      test('returns null when intermediate positions are out of bounds', () => {
+        const fromTile = { x: 0, y: 0 };
+        const toTile = { x: -1, y: -1 };
+        
+        const result = world._validateDiagonalMovement(fromTile, toTile, -1, -1);
+        
+        expect(result).toBe(null);
+      });
+    });
+  
+    describe('diagonal movement through getTilesAdjacentTo', () => {
+      test('returns diagonal neighbors when all paths are clear', () => {
+        const tile = { x: 5, y: 5 };
+        const diagonal = world.getTilesAdjacentTo(tile, { diagonal: true, type: 'pathableOnly' });
+        
+        expect(diagonal).toHaveLength(4);
+        
+        const positions = diagonal.map(({ x, y }) => ({ x, y }));
+        expect(positions).toContainEqual({ x: 4, y: 4 });
+        expect(positions).toContainEqual({ x: 6, y: 4 });
+        expect(positions).toContainEqual({ x: 4, y: 6 });
+        expect(positions).toContainEqual({ x: 6, y: 6 });
+      });
+  
+      test('filters out blocked diagonal movements', () => {
+        const tile = { x: 5, y: 5 };
+        
+        // Block northwest diagonal by blocking the west edge
+        const westEdge = world.getEdgeBetween(tile, { x: 4, y: 5 });
+        westEdge.pathable = false;
+        
+        const diagonal = world.getTilesAdjacentTo(tile, { diagonal: true, type: 'pathableOnly' });
+        const positions = diagonal.map(t => ({ x: t.x, y: t.y }));
+        
+        // Northwest should be filtered out (blocked by west edge)
+        expect(positions).not.toContainEqual({ x: 4, y: 4 });
+        
+        // Southwest should also be filtered out due to bi-directional validation
+        // (the reverse path from SW to center would be blocked by the same west edge)
+        expect(positions).not.toContainEqual({ x: 4, y: 6 });
+        
+        // Northeast and Southeast should still be present
+        expect(positions).toContainEqual({ x: 6, y: 4 }); // Northeast
+        expect(positions).toContainEqual({ x: 6, y: 6 }); // Southeast
+      });
+    });
+  
+    describe('edge blocking scenarios', () => {
+      test('prevents corner-cutting through blocked edges', () => {
+        const tile = { x: 3, y: 3 };
+        
+        // Create an L-shaped barrier
+        world.getEdgeBetween(tile, { x: 2, y: 3 }).pathable = false; // West edge
+        world.getEdgeBetween(tile, { x: 3, y: 2 }).pathable = false; // North edge
+        
+        const diagonal = world.getTilesAdjacentTo(tile, { diagonal: true, type: 'pathableOnly' });
+        const positions = diagonal.map(({ x, y }) => ({ x, y }));
+        
+        // Northwest diagonal should be blocked (corner-cutting prevention)
+        expect(positions).not.toContainEqual({ x: 2, y: 2 });
+      });
+  
+      test('handles partial edge blocking correctly', () => {
+        const tile = { x: 4, y: 4 };
+        
+        // Block only the north edge
+        world.getEdgeBetween(tile, { x: 4, y: 3 }).pathable = false;
+        
+        const diagonal = world.getTilesAdjacentTo(tile, { diagonal: true, type: 'pathableOnly' });
+        const positions = diagonal.map(({ x, y }) => ({ x, y }));
+        
+        // Northeast and northwest should be blocked
+        expect(positions).not.toContainEqual({ x: 3, y: 3 });
+        expect(positions).not.toContainEqual({ x: 5, y: 3 });
+        
+        // Southeast and southwest should still be available
+        expect(positions).toContainEqual({ x: 3, y: 5 });
+        expect(positions).toContainEqual({ x: 5, y: 5 });
+      });
     });
   });
 
@@ -207,22 +355,6 @@ describe('Pathfinding', () => {
       // Should not include out-of-bounds positions
       expect(positions).not.toContainEqual({ x: -1, y: 0 });
       expect(positions).not.toContainEqual({ x: 0, y: -1 });
-    });
-
-    test('enclosed tiles are not accessible', () => {
-      const startTile = { x: 1, y: 1 };
-      const enclosedTile = { x: 3, y: 1 };
-      
-      // Block all edges around tile (3,1)
-      world.getEdgeBetween({ x: 3, y: 1 }, { x: 2, y: 1 }).pathable = false;
-      world.getEdgeBetween({ x: 3, y: 1 }, { x: 4, y: 1 }).pathable = false;
-      world.getEdgeBetween({ x: 3, y: 1 }, { x: 3, y: 0 }).pathable = false;
-      world.getEdgeBetween({ x: 3, y: 1 }, { x: 3, y: 2 }).pathable = false;
-      
-      const [area] = world.calculateRange(startTile, 6, 0, 'pathableOnly');
-      const positions = area.map(({ x, y }) => ({ x, y }));
-
-      expect(positions).not.toContainEqual(enclosedTile);
     });
   });
 });

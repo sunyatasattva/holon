@@ -17,8 +17,7 @@ export default defineConfig({
       input: {
         // Define build entry points
         main: resolve(__dirname, 'src/assets/script/index.js'),
-        // Note: rulebook disabled due to missing assets - can be re-enabled when assets are available
-        // rulebook: resolve(__dirname, 'rulebook/src/assets/script/index.js'),
+        rulebook: resolve(__dirname, 'rulebook/src/assets/script/index.js'),
       },
       // Output configuration can be refined here if needed
       // to match the old dist/bundle.js, rulebook/dist/bundle.js structure

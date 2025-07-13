@@ -194,7 +194,8 @@ const World = fabric.util.createClass(fabric.Canvas, {
           rangeType
         ),
         currentValue,
-        visitedTiles;
+        visitedTiles,
+        searchResult;
     
     while(repeat) {
       console.time(`Area ${i}`);
@@ -202,9 +203,15 @@ const World = fabric.util.createClass(fabric.Canvas, {
       visitedTiles = [];
       
       while(currentCost < range * i) {
-        currentValue = search.next().value;
-        visitedTiles = currentValue.visitedTiles;
+        searchResult = search.next();
+
+        if (searchResult.done) {
+          break;
+        }
         
+        currentValue = searchResult.value;
+        visitedTiles = currentValue.visitedTiles;
+  
         currentCost = currentValue.tilesCosts.get(
           visitedTiles[visitedTiles.length - 1]
         );
@@ -369,13 +376,12 @@ const World = fabric.util.createClass(fabric.Canvas, {
   },
   
   getTileFromCoordinates(x, y) {
-    return {
-      x: Math.floor( x / this.tileSize ),
-      y: Math.floor( y / this.tileSize )
-    }
+    return this.matrix
+      [Math.floor( x / this.tileSize )]
+      [Math.floor( y / this.tileSize )];
   },
   
-  getTilesAdjacentTo(tile, diagonal = false) {
+  getTilesAdjacentTo(tile, { diagonal = false, type = 'all' } = {}) {
     const adjacentOffsets = [ [0, 1], [0, -1], [1, 0], [-1, 0] ],
           diagonalOffsets = [ [1, 1], [-1, -1], [1, -1], [-1, 1] ];
     
@@ -386,36 +392,32 @@ const World = fabric.util.createClass(fabric.Canvas, {
         const targetTile = this.matrix[tile.x + x] ? this.matrix[tile.x + x][tile.y + y] : null;
         
         if (!targetTile) return null;
-        
-        // For diagonal movement, check if we can move diagonally
-        if (diagonal) {
-          // For diagonal movement, we need to check if both adjacent edges are clear
-          // This prevents "corner cutting" through blocked edges
-          const intermediateX = { x: tile.x + x, y: tile.y };
-          const intermediateY = { x: tile.x, y: tile.y + y };
-          
-          // Check if we can move to both intermediate positions
-          if (this.matrix[intermediateX.x] && this.matrix[intermediateX.x][intermediateX.y] &&
-              this.matrix[intermediateY.x] && this.matrix[intermediateY.x][intermediateY.y]) {
-            
-            const canMoveX = !this.isEdgeBlocked(tile, intermediateX);
-            const canMoveY = !this.isEdgeBlocked(tile, intermediateY);
-            
-            return (canMoveX && canMoveY) ? targetTile : null;
+
+        if (type === 'pathableOnly') {
+          if (diagonal) {
+            return this._validateDiagonalMovement(tile, targetTile, x, y);
           }
-          return null;
+  
+          return !this.isEdgeBlocked(tile, targetTile) ? targetTile : null;
         }
-        
-        // For orthogonal movement, check if the edge is blocked
-        return !this.isEdgeBlocked(tile, targetTile) ? targetTile : null;
+
+        return targetTile;
       })
-      .filter(_ => _);
+      .filter(Boolean);
   },
   
-  getTilesDiagonalTo(tile) {
-    return this.getTilesAdjacentTo(tile, true);
+  getTilesDiagonalTo(tile, type = 'all') {
+    return this.getTilesAdjacentTo(tile, { diagonal: true, type });
   },
   
+  /**
+   * Generator function that explores tiles around a starting position using breadth-first search
+   * Handles edge blocking and ensures enclosed walkers always yield at least their current position
+   * 
+   * @param {Object} originalTile Starting tile {x, y, cost?}
+   * @param {String} type Search type: 'all' for any tile, 'pathableOnly' for pathable tiles only
+   * @yields {Object} {tilesCosts: Map, visitedTiles: Array} Current search state
+   */
   searchAroundTile: function* (originalTile, type = 'all') {
     let costStep = 0,
         diagonalTiles = [],
@@ -449,10 +451,10 @@ const World = fabric.util.createClass(fabric.Canvas, {
         frontier.delete(currentTile);
         
         if( canVisitTile(currentTile) ) {
-          this.getTilesAdjacentTo(currentTile)
+          this.getTilesAdjacentTo(currentTile, { type })
             .forEach(frontier.add, frontier);
           
-          diagonalTiles.push( ...this.getTilesDiagonalTo(currentTile) );
+          diagonalTiles.push( ...this.getTilesDiagonalTo(currentTile, type) );
           
           addCostToTiles(tilesCosts, frontier, currentTileCost + 1);
           addCostToTiles(tilesCosts, diagonalTiles, currentTileCost + 1.5);
@@ -470,7 +472,11 @@ const World = fabric.util.createClass(fabric.Canvas, {
         };
       }
     }
-    
+
+    if (visitedTiles.size === 0) {
+      visitedTiles.add(originalTile);
+    }
+
     yield { 
       tilesCosts, 
       visitedTiles: Array.from(visitedTiles)
@@ -525,12 +531,14 @@ const World = fabric.util.createClass(fabric.Canvas, {
     return this.matrix[tile.x][tile.y].getChildren();
   },
   
-  isPathable(tile) {
-    let objectsOccupyingTheTile = this.isOccupied(tile);
-
-    return !this.matrix[tile.x][tile.y].pathable
-           || !objectsOccupyingTheTile.length
-           || objectsOccupyingTheTile.every(o => o.pathable);
+  /**
+   * Check if a tile or edge is pathable.
+   *
+   * @param {Tile|Edge} location 
+   * @returns {Boolean}
+   */
+  isPathable(location) {
+    return location.isPathable();
   },
   
   remove(object) {
@@ -620,6 +628,9 @@ const World = fabric.util.createClass(fabric.Canvas, {
   
   /**
    * Get edge between two adjacent tiles
+   * Returns the same edge regardless of movement direction (A→B vs B→A)
+   * Uses consistent coordinate mapping: larger Y for vertical edges, larger X for horizontal edges
+   * 
    * @param {Object} tile1 First tile {x, y}
    * @param {Object} tile2 Second tile {x, y}
    * @return {Edge|null} Edge object or null if not adjacent
@@ -633,13 +644,28 @@ const World = fabric.util.createClass(fabric.Canvas, {
       return null;
     }
     
-    // For horizontal edges (N), use min y coordinate
-    // For vertical edges (W), use min x coordinate
-    const edgeKey = dx === 0
-      ? `${tile1.x},${Math.min(tile1.y, tile2.y)}_N`
-      : `${Math.min(tile1.x, tile2.x)},${tile1.y}_W`;
+    // Bounds checking
+    if (tile1.x < 0 || tile1.y < 0 || tile2.x < 0 || tile2.y < 0 ||
+        tile1.x >= this.size.x || tile1.y >= this.size.y ||
+        tile2.x >= this.size.x || tile2.y >= this.size.y) {
+      return null;
+    }
     
-    return this.edges.get(edgeKey);
+    let edgeKey;
+    
+    if (dx === 0) {
+      // Vertical movement (north/south)
+      // Use the larger Y coordinate (southern tile's north edge) for direction-independent lookup
+      const edgeY = Math.max(tile1.y, tile2.y);
+      edgeKey = `${tile1.x},${edgeY}_N`;
+    } else {
+      // Horizontal movement (east/west)  
+      // Use the larger X coordinate (eastern tile's west edge) for direction-independent lookup
+      const edgeX = Math.max(tile1.x, tile2.x);
+      edgeKey = `${edgeX},${tile1.y}_W`;
+    }
+    
+    return this.edges.get(edgeKey) || null;
   },
   
   /**
@@ -649,10 +675,10 @@ const World = fabric.util.createClass(fabric.Canvas, {
    */
   getEdgesOfTile(tile) {
     const edgeConfigs = [
-      { key: `${tile.x},${tile.y}_N`, direction: 'N' },
-      { key: `${tile.x},${tile.y + 1}_N`, direction: 'S' },
-      { key: `${tile.x},${tile.y}_W`, direction: 'W' },
-      { key: `${tile.x + 1},${tile.y}_W`, direction: 'E' }
+      { key: `${tile.x},${tile.y}_N`, direction: 'N' },        // North edge of this tile
+      { key: `${tile.x},${tile.y + 1}_N`, direction: 'S' },    // North edge of tile below (= south edge of this tile)
+      { key: `${tile.x},${tile.y}_W`, direction: 'W' },        // West edge of this tile  
+      { key: `${tile.x + 1},${tile.y}_W`, direction: 'E' }     // West edge of tile to right (= east edge of this tile)
     ];
 
     return edgeConfigs
@@ -671,9 +697,78 @@ const World = fabric.util.createClass(fabric.Canvas, {
    */
   isEdgeBlocked(fromTile, toTile) {
     const edge = this.getEdgeBetween(fromTile, toTile);
-    if (!edge) return false;
+    return edge ? !edge.isPathable() : false;
+  },
 
-    return !edge.pathable || edge.getChildren().some(cover => !cover.pathable);
+  /**
+   * Validate diagonal movement with bi-directional checking to ensure symmetry.
+   * 
+   * Diagonal movement is challenging because the grid only has orthogonal edges (N/E/S/W),
+   * not diagonal ones. To move diagonally, a character must traverse through a "corner" 
+   * formed by two orthogonal edges. This method prevents "corner cutting" by ensuring
+   * both orthogonal paths are clear in both directions.
+   * 
+   * For example, to move NE diagonally, we check:
+   * - Forward: Can move North AND East from source
+   * - Reverse: Can move South AND West from destination
+   * 
+   * Movement is only allowed if both directions are valid, ensuring symmetric pathfinding.
+   * 
+   * @param {Object} fromTile Source tile {x, y}
+   * @param {Object} toTile Target tile {x, y}
+   * @param {Number} deltaX X offset (-1, 0, 1)
+   * @param {Number} deltaY Y offset (-1, 0, 1)
+   * @return {Object|null} Target tile if movement allowed, null if blocked
+   */
+  _validateDiagonalMovement(fromTile, toTile, deltaX, deltaY) {
+    const orthogonalPaths = this._getOrthogonalPaths(fromTile, deltaX, deltaY);
+    
+    if (!this._arePositionsInBounds([...orthogonalPaths, toTile])) {
+      return null;
+    }
+    
+    const forwardAllowed = this._canMoveViaBothPaths(fromTile, orthogonalPaths);
+    const reverseAllowed = this._canMoveViaBothPaths(toTile, orthogonalPaths);
+    
+    return forwardAllowed && reverseAllowed ? toTile : null;
+  },
+
+  /**
+   * Get the two orthogonal intermediate positions for diagonal movement
+   * @param {Object} fromTile Source tile {x, y}
+   * @param {Number} deltaX X offset (-1, 0, 1)
+   * @param {Number} deltaY Y offset (-1, 0, 1)
+   * @return {Array} Array of two intermediate positions
+   * @private
+   */
+  _getOrthogonalPaths(fromTile, deltaX, deltaY) {
+    return [
+      { x: fromTile.x + deltaX, y: fromTile.y },  // Horizontal path
+      { x: fromTile.x, y: fromTile.y + deltaY }   // Vertical path
+    ];
+  },
+
+  /**
+   * Check if movement is possible via both orthogonal paths
+   * @param {Object} fromTile Source tile {x, y}
+   * @param {Array} paths Array of two intermediate positions
+   * @return {Boolean} True if both paths are clear
+   * @private
+   */
+  _canMoveViaBothPaths(fromTile, paths) {
+    return paths.every(path => !this.isEdgeBlocked(fromTile, path));
+  },
+
+  /**
+   * Check if all positions are within grid bounds
+   * @param {Array} positions Array of tile positions {x, y}
+   * @return {Boolean} True if all positions are valid
+   * @private
+   */
+  _arePositionsInBounds(positions) {
+    return positions.every(pos => 
+      this.matrix[pos.x] && this.matrix[pos.x][pos.y]
+    );
   },
   
   _resizeToFullScreen() {

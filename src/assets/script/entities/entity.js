@@ -165,6 +165,51 @@ const Entity = fabric.util.createClass(fabric.Object, {
     
     return this.gridPosition;
   },
+
+   /**
+   * Get all edge keys that this entity spans
+   * @returns {Array} Array of edge keys
+   * @private
+   */
+   _getEdgeKeysSpanned: function() {
+    if (!this.canvas?.edges) return [];
+    
+    const isHorizontal = this.getWidth() > this.getHeight();
+    const edgeKeys = [];
+
+    const center = isHorizontal 
+      ? {
+          pos: this.top + this.getHeight() / 2,
+          start: this.left,
+          length: this.getWidth()
+        }
+      : {
+          pos: this.left + this.getWidth() / 2,
+          start: this.top,
+          length: this.getHeight()
+        };
+
+    const startTile = isHorizontal
+      ? this.canvas.getTileFromCoordinates(center.start, center.pos)
+      : this.canvas.getTileFromCoordinates(center.pos, center.start);
+      
+    const endTile = isHorizontal  
+      ? this.canvas.getTileFromCoordinates(center.start + center.length, center.pos)
+      : this.canvas.getTileFromCoordinates(center.pos, center.start + center.length);
+
+    const min = Math.min(startTile[isHorizontal ? 'x' : 'y'], endTile[isHorizontal ? 'x' : 'y']);
+    const max = Math.max(startTile[isHorizontal ? 'x' : 'y'], endTile[isHorizontal ? 'x' : 'y']);
+    const edgePos = Math.round(center.pos / this.canvas.tileSize);
+
+    for (let i = min; i < max; i++) {
+      const key = isHorizontal
+        ? `${i},${edgePos}_N`
+        : `${edgePos},${i}_W`;
+      edgeKeys.push(key);
+    }
+    
+    return edgeKeys;
+  },
   
   /**
    * Get all tiles spanned by a rectangle

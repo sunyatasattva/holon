@@ -165,12 +165,6 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
    */
   updateGridCoordinates: function() {
     if (this.coverMode === 'edge') {
-      if(this.gridPosition?.length) {
-        this.gridPosition.forEach(({ x, y }) => {
-          this.canvas.matrix[x][y].removeChild(this);
-        });
-      }
-
       if(this.edgePositions?.length) {
         this.edgePositions.forEach(edgeKey => {
           const edge = this.canvas.edges.get(edgeKey);
@@ -187,57 +181,11 @@ const Cover = fabric.util.createClass(Entity, fabric.Rect.prototype, {
           edge.addChild(this);
         }
       });
-      
-      // Edge covers occupy no tiles
-      this.gridPosition = [];
-      return this.gridPosition;
+
+      return this.edgePositions;
     } else {
       return this.callSuper('updateGridCoordinates');
     }
-  },
-  
-  /**
-   * Get all edge keys that this cover spans
-   * @returns {Array} Array of edge keys
-   * @private
-   */
-  _getEdgeKeysSpanned: function() {
-    if (!this.canvas?.edges) return [];
-    
-    const isHorizontal = this.getWidth() > this.getHeight();
-    
-    const center = isHorizontal 
-      ? { x: this.left, y: this.top + this.getHeight() / 2 }
-      : { x: this.left + this.getWidth() / 2, y: this.top };
-      
-    const end = isHorizontal
-      ? { x: this.left + this.getWidth(), y: center.y }
-      : { x: center.x, y: this.top + this.getHeight() };
-    
-    const startTile = this.canvas.getTileFromCoordinates(center.x, center.y);
-    const endTile = this.canvas.getTileFromCoordinates(end.x, end.y);
-    
-    // Generate edge keys based on orientation
-    const edgeKeys = [];
-    if (isHorizontal) {
-      const minX = Math.min(startTile.x, endTile.x);
-      const maxX = Math.max(startTile.x, endTile.x);
-      
-      for (let x = minX; x < maxX; x++) {
-        edgeKeys.push(`${x},${startTile.y}_N`);
-      }
-    } else {
-      const minY = Math.min(startTile.y, endTile.y); 
-      const maxY = Math.max(startTile.y, endTile.y);
-      
-      for (let y = minY; y < maxY; y++) {
-        edgeKeys.push(`${startTile.x},${y}_W`);
-      }
-    }
-
-    console.log({edgeKeys});
-    
-    return edgeKeys;
   },
     
   // @deprecated

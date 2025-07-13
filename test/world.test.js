@@ -4,6 +4,7 @@ import { fabricMock } from './mocks/fabric.js';
 // Mock Fabric.js
 vi.mock('fabric', () => fabricMock);
 
+import Tile from '../src/assets/script/entities/tile.js';
 import World from '../src/assets/script/entities/world.js';
 
 describe('World', () => {
@@ -19,10 +20,10 @@ describe('World', () => {
 
   describe('grid coordinate calculations', () => {
     test('getTileFromCoordinates converts pixel coordinates to grid coordinates', () => {
-      expect(world.getTileFromCoordinates(0, 0)).toEqual({ x: 0, y: 0 });
-      expect(world.getTileFromCoordinates(50, 50)).toEqual({ x: 1, y: 1 });
-      expect(world.getTileFromCoordinates(125, 75)).toEqual({ x: 2, y: 1 });
-      expect(world.getTileFromCoordinates(49, 49)).toEqual({ x: 0, y: 0 });
+      expect(world.getTileFromCoordinates(0, 0)).toEqual(new Tile(0, 0));
+      expect(world.getTileFromCoordinates(50, 50)).toEqual(new Tile(1, 1));
+      expect(world.getTileFromCoordinates(125, 75)).toEqual(new Tile(2, 1));
+      expect(world.getTileFromCoordinates(49, 49)).toEqual(new Tile(0, 0));
     });
 
     test('getCoordinatesOfTile converts grid coordinates to pixel boundaries', () => {
